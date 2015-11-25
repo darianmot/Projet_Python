@@ -1,1 +1,1 @@
-__authors__="Darian MOTAMED, Hugo CHOULY"
+__authors__="Darian MOTAMED, Hugo CHOULY, Atime RONDA"
