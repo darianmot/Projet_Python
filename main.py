@@ -1,1 +1,1 @@
-__authors__=Darian MOTAMED
+__authors__="Darian MOTAMED, Hugo CHOULY"
