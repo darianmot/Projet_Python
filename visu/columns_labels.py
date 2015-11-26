@@ -11,7 +11,7 @@ def add(labels,n): #Ajoute n labels a la liste labels
         if k<len(ALPHABET):
             label=ALPHABET[k]
         else:
-            label=labels[k//26-1]+ALPHABET[k%26]
+            label=labels[k//len(ALPHABET)-1]+ALPHABET[k%len(ALPHABET)]
         labels.append(label)
 
 def generate(n): #Henere une liste de  labels
