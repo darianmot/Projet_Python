@@ -7,13 +7,8 @@ CELLHEIGHT=30
 
 
 class Ui_MainWindow(object):
-
-
     def setupUi(self, MainWindow):
-        screen = QtWidgets.QDesktopWidget()
-        verticalCellNumber=int(2*screen.height()/CELLHEIGHT)
-        horizontalCellNumber=int(2*screen.width()/CELLWIDTH)
-
+        #Initialisation
         MainWindow.setObjectName("MainWindow")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -22,18 +17,24 @@ class Ui_MainWindow(object):
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
         self.tableWidget.setObjectName("tableWidget")
 
-        self.tableWidget.setColumnCount(horizontalCellNumber)
+        #On ajuste le nombre de colonnes/lignes en fonction de la taille de l'écran
+        screen = QtWidgets.QDesktopWidget()
+        initalRowsNumber=int(2*screen.height()/CELLHEIGHT)
+        initalColunmsNumber=int(2*screen.width()/CELLWIDTH)
+        self.tableWidget.setColumnCount(initalColunmsNumber)
+        self.tableWidget.setRowCount(initalRowsNumber)
 
-        self.tableWidget.setRowCount(verticalCellNumber)
-
-        for k in range(verticalCellNumber):                         #On attribue un identifiant à chaques colonnes
+        #On attribue un identifiant à chaques colonnes
+        for k in range(initalRowsNumber):
             item = QtWidgets.QTableWidgetItem()
             self.tableWidget.setVerticalHeaderItem(k,item)
 
-        for k in range(horizontalCellNumber):                       #On attribue un identifiant à chaques lignes
+        #On attribue un identifiant à chaques lignes
+        for k in range(initalColunmsNumber):
             item = QtWidgets.QTableWidgetItem()
             self.tableWidget.setHorizontalHeaderItem(k, item)
 
+        #La toolbox et le menu
         self.verticalLayout.addWidget(self.tableWidget)
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -42,7 +43,6 @@ class Ui_MainWindow(object):
         self.toolBar = QtWidgets.QToolBar(MainWindow)
         self.toolBar.setObjectName("toolBar")
         MainWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.toolBar)
-        #Le menu
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setObjectName("menubar")
         self.menuFichier = QtWidgets.QMenu(self.menubar)
@@ -77,20 +77,42 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         screen = QtWidgets.QDesktopWidget()
-        verticalCellNumber=int(2*screen.height()/CELLHEIGHT)
-        horizontalCellNumber=int(2*screen.width()/CELLWIDTH)
-
+        initalRowsNumber=int(2*screen.height()/CELLHEIGHT)
+        initalColunmsNumber=int(2*screen.width()/CELLWIDTH)
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        columnsLabels=columns_labels.generate(horizontalCellNumber)
-
-        for k in range(1,self.tableWidget.rowCount()+1):            #On renomme chaques colonnes
+        columnsLabels=columns_labels.generate(self.tableWidget.columnCount()) #generattion de la liste des labels
+        
+        #On renomme chaques lignes
+        for k in range(1,self.tableWidget.rowCount()+1):
             item=self.tableWidget.verticalHeaderItem(k-1)
             item.setText(_translate("MainWindow",str(k)))
 
-        for k in range(1,self.tableWidget.columnCount()+1):         #On renomme chaques lignes
+        #On renomme chaques colonnes
+        for k in range(1,self.tableWidget.columnCount()+1):
             item = self.tableWidget.horizontalHeaderItem(k-1)
             item.setText(_translate("MainWindow", columnsLabels[k-1]))
+
+        #On ajoute des lignes à la fin si la bar VERTICALE de scrolling est en bas
+        verticalscrollbar=self.tableWidget.verticalScrollBar()
+        def ajoutRows():
+            if verticalscrollbar.value()==verticalscrollbar.maximum():
+                for _ in range(initalRowsNumber//3):
+                    self.tableWidget.insertRow(self.tableWidget.rowCount())
+        verticalscrollbar.valueChanged.connect(ajoutRows)
+
+        #On ajoute des colonnes à la fin si la bar HORIZONTALE de scrolling est en bas (il faut cette fois renommer les colonnes)
+        horizontalscrollbar=self.tableWidget.horizontalScrollBar()
+        def ajoutColumns():
+            if horizontalscrollbar.value()==horizontalscrollbar.maximum():
+                for _ in range(initalColunmsNumber//3):
+                    self.tableWidget.insertColumn(self.tableWidget.columnCount())
+                    item = QtWidgets.QTableWidgetItem()
+                    self.tableWidget.setHorizontalHeaderItem(self.tableWidget.columnCount()-1, item)
+                    item = self.tableWidget.horizontalHeaderItem(self.tableWidget.columnCount()-1)
+                    columns_labels.add(columnsLabels,1)
+                    item.setText(_translate("MainWindow", columnsLabels[self.tableWidget.columnCount()-1]))
+        horizontalscrollbar.valueChanged.connect(ajoutColumns)
 
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
         self.menuFichier.setTitle(_translate("MainWindow", "Menu1"))
@@ -101,7 +123,6 @@ class Ui_MainWindow(object):
         self.actionAction1.setText(_translate("MainWindow", "action1"))
         self.actionAction2.setText(_translate("MainWindow", "action2"))
         self.actionAction2_1.setText(_translate("MainWindow", "action21"))
-
 
 
 if __name__ == "__main__":
