@@ -1,12 +1,19 @@
 # ATTENTION : vu qu'on a modifié ce fichier, mainwindow.ui est devenu obsolète
+
 from PyQt5 import QtCore, QtGui, QtWidgets
-import columns_labels
+from PyQt5.QtCore import pyqtSignal
+import visu.columns_labels as columns_labels
 CELLWIDTH=100
 CELLHEIGHT=30
 
 
 
-class Ui_MainWindow(object):
+class Ui_MainWindow(QtWidgets.QWidget):
+
+    #custom signal
+    ask_coords = pyqtSignal(int,int)
+
+
     def setupUi(self, MainWindow):
         #Initialisation
         MainWindow.setObjectName("MainWindow")
@@ -123,6 +130,15 @@ class Ui_MainWindow(object):
         self.actionAction1.setText(_translate("MainWindow", "action1"))
         self.actionAction2.setText(_translate("MainWindow", "action2"))
         self.actionAction2_1.setText(_translate("MainWindow", "action21"))
+
+
+        #Envoi la coordonnée de la cellule changée
+        def cell_changed():
+            self.ask_coords.emit(self.tableWidget.currentRow(),self.tableWidget.currentColumn())
+        self.tableWidget.cellChanged.connect(cell_changed)
+
+
+
 
 
 if __name__ == "__main__":
