@@ -12,6 +12,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
 
     #custom signal
     ask_coords = pyqtSignal(int,int)
+    ask_value = pyqtSignal(QtWidgets.QTableWidgetItem)
 
 
     def setupUi(self, MainWindow):
@@ -132,10 +133,12 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.actionAction2_1.setText(_translate("MainWindow", "action21"))
 
 
-        #Envoi la coordonnée de la cellule changée
+        #Envoi la coordonnée de la cellule changée et le nouvel item
         def cell_changed():
             self.ask_coords.emit(self.tableWidget.currentRow(),self.tableWidget.currentColumn())
+            self.ask_value.emit(self.tableWidget.currentItem())
         self.tableWidget.cellChanged.connect(cell_changed)
+
 
 
 

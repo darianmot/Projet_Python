@@ -1,4 +1,3 @@
-#Ici, on genère le titre des colonnes à la exce, avec un alphabet quelxonque
 
 import string
 

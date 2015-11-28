@@ -9,6 +9,7 @@ ui = mainwindow.Ui_MainWindow()
 ui.setupUi(MainWindow)
 
 ui.ask_coords.connect(traitement.reconnaisssance)
+ui.ask_value.connect(traitement.value)
 
 MainWindow.showMaximized() #Pour agrandir au max la fenetre
 sys.exit(app.exec_())
