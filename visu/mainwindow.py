@@ -11,9 +11,8 @@ CELLHEIGHT=30
 class Ui_MainWindow(QtWidgets.QWidget):
 
     #custom signal
-    ask_coords = pyqtSignal(int,int)
-    ask_value = pyqtSignal(QtWidgets.QTableWidgetItem)
-
+    ask_coords = pyqtSignal(int,int,str)
+    return_value = pyqtSignal(int,int,str)
 
     def setupUi(self, MainWindow):
         #Initialisation
@@ -135,10 +134,13 @@ class Ui_MainWindow(QtWidgets.QWidget):
 
         #Envoi la coordonnée de la cellule changée et le nouvel item
         def cell_changed():
-            self.ask_coords.emit(self.tableWidget.currentRow(),self.tableWidget.currentColumn())
-            self.ask_value.emit(self.tableWidget.currentItem())
+            self.ask_coords.emit(self.tableWidget.currentRow(),self.tableWidget.currentColumn(),
+                                 self.tableWidget.currentItem().text())
         self.tableWidget.cellChanged.connect(cell_changed)
 
+        def change_cell(x, y, value):
+            self.tableWidget.item(x, y).setText(value)
+        self.return_value.connect(change_cell)
 
 
 
