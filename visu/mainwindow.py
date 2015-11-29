@@ -25,19 +25,19 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.tableWidget.setObjectName("tableWidget")
 
         #On ajuste le nombre de colonnes/lignes en fonction de la taille de l'écran
-        screen = QtWidgets.QDesktopWidget()
-        initalRowsNumber=int(2*screen.height()/CELLHEIGHT)
-        initalColunmsNumber=int(2*screen.width()/CELLWIDTH)
-        self.tableWidget.setColumnCount(initalColunmsNumber)
-        self.tableWidget.setRowCount(initalRowsNumber)
+        self.screen = QtWidgets.QDesktopWidget()
+        self.initialRowsNumber=int(2*self.screen.height()/CELLHEIGHT)
+        self.initialColumnsNumber=int(2*self.screen.width()/CELLWIDTH)
+        self.tableWidget.setColumnCount(self.initialColumnsNumber)
+        self.tableWidget.setRowCount(self.initialRowsNumber)
 
         #On attribue un identifiant à chaques colonnes
-        for k in range(initalRowsNumber):
+        for k in range(self.initialRowsNumber):
             item = QtWidgets.QTableWidgetItem()
             self.tableWidget.setVerticalHeaderItem(k,item)
 
         #On attribue un identifiant à chaques lignes
-        for k in range(initalColunmsNumber):
+        for k in range(self.initialColumnsNumber):
             item = QtWidgets.QTableWidgetItem()
             self.tableWidget.setHorizontalHeaderItem(k, item)
 
@@ -83,9 +83,6 @@ class Ui_MainWindow(QtWidgets.QWidget):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        screen = QtWidgets.QDesktopWidget()
-        initalRowsNumber=int(2*screen.height()/CELLHEIGHT)
-        initalColunmsNumber=int(2*screen.width()/CELLWIDTH)
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         columnsLabels=columns_labels.generate(self.tableWidget.columnCount()) #generattion de la liste des labels
@@ -100,19 +97,19 @@ class Ui_MainWindow(QtWidgets.QWidget):
             item = self.tableWidget.horizontalHeaderItem(k-1)
             item.setText(_translate("MainWindow", columnsLabels[k-1]))
 
-        #On ajoute des lignes à la fin si la bar VERTICALE de scrolling est en bas
+        #On ajoute des lignes à la fin si la barre VERTICALE de scrolling est en bas
         verticalscrollbar=self.tableWidget.verticalScrollBar()
         def ajoutRows():
             if verticalscrollbar.value()==verticalscrollbar.maximum():
-                for _ in range(initalRowsNumber//3):
+                for _ in range(self.initialRowsNumber//3):
                     self.tableWidget.insertRow(self.tableWidget.rowCount())
         verticalscrollbar.valueChanged.connect(ajoutRows)
 
-        #On ajoute des colonnes à la fin si la bar HORIZONTALE de scrolling est en bas (il faut cette fois renommer les colonnes)
+        #On ajoute des colonnes à la fin si la barre HORIZONTALE de scrolling est en bas (il faut cette fois renommer les colonnes)
         horizontalscrollbar=self.tableWidget.horizontalScrollBar()
         def ajoutColumns():
             if horizontalscrollbar.value()==horizontalscrollbar.maximum():
-                for _ in range(initalColunmsNumber//3):
+                for _ in range(self.initialColumnsNumber//3):
                     self.tableWidget.insertColumn(self.tableWidget.columnCount())
                     item = QtWidgets.QTableWidgetItem()
                     self.tableWidget.setHorizontalHeaderItem(self.tableWidget.columnCount()-1, item)
@@ -130,7 +127,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.actionAction1.setText(_translate("MainWindow", "action1"))
         self.actionAction2.setText(_translate("MainWindow", "action2"))
         self.actionAction2_1.setText(_translate("MainWindow", "action21"))
-
+        self.tableWidget.setDragDropMode(self.tableWidget.DragDrop) #Autorise le drag and drop ??
 
         #Envoi la coordonnée de la cellule changée et le nouvel item
         def cell_changed():

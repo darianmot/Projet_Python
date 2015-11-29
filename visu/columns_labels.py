@@ -13,7 +13,7 @@ def add(labels,n): #Ajoute n labels a la liste labels
             label=labels[k//len(ALPHABET)-1]+ALPHABET[k%len(ALPHABET)]
         labels.append(label)
 
-def generate(n): #Henere une liste de  labels
+def generate(n): #Genere une liste de  labels
     l=[]
     add(l,n)
     return l
