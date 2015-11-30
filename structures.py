@@ -10,7 +10,6 @@ class Cell(object): #caractéristiques et organisation d'une cellule
     def __repr__(self):
         return str(self.name)
 
-
 # class reseau(object):  #On classe par name
 #     def __init__(self):
 #         self.labels=columns_labels.generate(1)
@@ -39,38 +38,61 @@ class Cell(object): #caractéristiques et organisation d'une cellule
 #     def addColumns(self,n):
 #         for _ in range(n):
 #             self.addColumn()
-#
-
 
 class network(object): #On classe par coordonnées
     def __init__(self):
         self.labels=columns_labels.generate(1)
         self.matrix=[[Cell(None)]]
+        self.matrix[0][0].name=columns_labels.getLabel(self.labels,0)+str(1)
         self.columnNumber=1
         self.rowNumber=1
 
     def addRow(self):
         l=[]
+        self.rowNumber+=1
         for c in range(self.columnNumber):
             l.append(Cell(None))
-            l[-1].name=self.labels[c]+str(self.rowNumber)
+            l[-1].name=columns_labels.getLabel(self.labels,c+1)+str(self.rowNumber)
         self.matrix.append(l)
-        self.rowNumber+=1
 
     def addRows(self,n):
         for _ in range(n):
             self.addRow()
 
     def addColumn(self):
-        columns_labels.add(self.labels,1)
+        self.columnNumber+=1
         for r in range(self.rowNumber):
             self.matrix[r].append(Cell(None))
-            self.matrix[r][-1].name=self.labels[self.columnNumber]+str(r)
-        self.columnNumber+=1
+            self.matrix[r][-1].name=columns_labels.getLabel(self.labels,self.columnNumber)+str(r+1)
 
     def addColumns(self,n):
         for _ in range(n):
             self.addColumn()
+
+    def getCell(self,x,y): #Renvoi la cellule (x,y) si elle existe, 0 sinon
+        if x<0  or y < 0: return 0
+        try:
+            return self.matrix[y][x]
+        except IndexError:
+            return 0
+
+    def getCellByName(self,name): #Renvoi la celulle nommée si elle existe, 0 sinon
+        letters=""
+        numbers=""
+        k=0
+        while len(numbers)==0:
+            if name[k].isalpha():
+                letters+=name[k]
+            else:
+                numbers+=name[k]
+            k+=1
+        while k<len(name):
+            numbers+=name[k]
+            k+=1
+        try:
+            return self.getCell(columns_labels.getColumn(letters)-1,int(numbers)-1,)
+        except :
+            return 0
 
     def __repr__(self):
         return str(self.matrix)

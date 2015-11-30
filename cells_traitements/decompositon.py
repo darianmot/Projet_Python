@@ -1,4 +1,4 @@
-import visu.columns_labels as columns_labels
+import visu.columns_labels as columns_labels,structures
 
 OPERATEUR_MATH=['+','-','*','/','//','**']
 OPERATEUR_LOG=['<','>','==','<=','>=','!=']
@@ -22,10 +22,8 @@ def isCell(chaine):
 
 #Renvoie True si l'entrée correspond à une fonction (du tableur) [A AJUSTER PLUS TARD]
 def isfunction(chaine):
-    if chaine[-1].isdigit(): #On considère que le nom d'une focntion ne peut terminer par un chiffre
-        return False
     for char in chaine:
-        if not(char.isalpha() or char.isdigit() or char=='_'):
+        if not(char.isalpha() or char=='_'): #On considere que le nom d'une fonction n'est composé que de lettres de underscore
             return False
     return True
 
@@ -71,4 +69,20 @@ def decompo(chaine):
             elementListType.append(type)
     return (elementList,elementListType)
 
+def evaluation(network,chaine):#Renvoie l'évaluation d'une formule, au sein d'un réseau nétwork
+    chaine_elm=decompo(chaine)[0]
+    chaine_type=decompo(chaine)[1]
+    for k in range(len(chaine_elm)):
+        if chaine_type[k]== 'cell':
+            chaine_elm[k]=str(network.getCellByName(chaine_elm[k]).value)
+        if chaine_type[k]=='function':
+            pass                        #A Ajuster
+    return eval(''.join(chaine_elm))
 
+#Exemple
+# grille=structures.network()
+# grille.addColumns(10)
+# grille.addRows(10)
+# grille.getCell(0,0).value=50
+# grille.getCell(0,1).value=2
+# print(evaluation(grille,'(A1+A2)*3'))

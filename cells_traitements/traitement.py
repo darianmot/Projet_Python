@@ -1,9 +1,5 @@
 import structures
 
-
-
-
-
 def reconnaisssance(a,b):
     print(a,b)
 
@@ -26,6 +22,3 @@ def traitement(x, y, string):
         main.ui.return_value.emit(x,y,v)
     else:
         active_cells.append(structures.Cell(x,y,string))
-
-
-
