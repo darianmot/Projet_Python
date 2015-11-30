@@ -71,3 +71,4 @@ def decompo(chaine):
             elementListType.append(type)
     return (elementList,elementListType)
 
+

@@ -14,7 +14,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
     ask_coords = pyqtSignal(int,int,str)
     return_value = pyqtSignal(int,int,str)
 
-    def setupUi(self, MainWindow):
+    def setupUi(self, MainWindow,matrix):
         #Initialisation
         MainWindow.setObjectName("MainWindow")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
