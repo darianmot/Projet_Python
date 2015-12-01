@@ -23,13 +23,14 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.verticalLayout.setObjectName("verticalLayout")
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
         self.tableWidget.setObjectName("tableWidget")
-
         #On ajuste le nombre de colonnes/lignes en fonction de la taille de l'écran
         self.screen = QtWidgets.QDesktopWidget()
         self.initialRowsNumber=int(2*self.screen.height()/CELLHEIGHT)
         self.initialColumnsNumber=int(2*self.screen.width()/CELLWIDTH)
         self.tableWidget.setColumnCount(self.initialColumnsNumber)
         self.tableWidget.setRowCount(self.initialRowsNumber)
+        matrix.addRows(self.initialRowsNumber-1)
+        matrix.addColumns(self.initialColumnsNumber-1)
 
         #On attribue un identifiant à chaques colonnes
         for k in range(self.initialRowsNumber):
@@ -79,10 +80,10 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.menuFichier.addAction(self.menuSsmenu2.menuAction())
         self.menubar.addAction(self.menuFichier.menuAction())
 
-        self.retranslateUi(MainWindow)
+        self.retranslateUi(MainWindow, matrix)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-    def retranslateUi(self, MainWindow):
+    def retranslateUi(self, MainWindow, matrix):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         columnsLabels=columns_labels.generate(self.tableWidget.columnCount()) #generattion de la liste des labels
@@ -103,6 +104,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
             if verticalscrollbar.value()==verticalscrollbar.maximum():
                 for _ in range(self.initialRowsNumber//3):
                     self.tableWidget.insertRow(self.tableWidget.rowCount())
+                    matrix.addRow()
         verticalscrollbar.valueChanged.connect(ajoutRows)
 
         #On ajoute des colonnes à la fin si la barre HORIZONTALE de scrolling est en bas (il faut cette fois renommer les colonnes)
@@ -116,7 +118,9 @@ class Ui_MainWindow(QtWidgets.QWidget):
                     item = self.tableWidget.horizontalHeaderItem(self.tableWidget.columnCount()-1)
                     columns_labels.add(columnsLabels,1)
                     item.setText(_translate("MainWindow", columnsLabels[self.tableWidget.columnCount()-1]))
+                    matrix.addColumn()
         horizontalscrollbar.valueChanged.connect(ajoutColumns)
+
 
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
         self.menuFichier.setTitle(_translate("MainWindow", "Menu1"))
@@ -151,5 +155,6 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.showMaximized() #Pour agrandir au max la fenetre
     sys.exit(app.exec_())
+
 
 
