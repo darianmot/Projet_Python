@@ -23,6 +23,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.verticalLayout.setObjectName("verticalLayout")
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
         self.tableWidget.setObjectName("tableWidget")
+        self.tableWidget.setStyleSheet("item:{border-top-width: 200 px}")
         #On ajuste le nombre de colonnes/lignes en fonction de la taille de l'écran
         self.screen = QtWidgets.QDesktopWidget()
         self.initialRowsNumber=int(2*self.screen.height()/CELLHEIGHT)
