@@ -88,7 +88,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         columnsLabels=columns_labels.generate(self.tableWidget.columnCount()) #generattion de la liste des labels
-        
+
         #On renomme chaques lignes
         for k in range(1,self.tableWidget.rowCount()+1):
             item=self.tableWidget.verticalHeaderItem(k-1)

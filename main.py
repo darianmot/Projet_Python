@@ -26,5 +26,3 @@ MainWindow.showMaximized() #Pour agrandir au max la fenetre
 sys.exit(app.exec_())
 
 
-
-
