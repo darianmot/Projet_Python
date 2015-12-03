@@ -1,4 +1,4 @@
-import visu.columns_labels as columns_labels,structures,cells_traitements.functions as functions,math
+import visu.columns_labels as columns_labels,structures,cells_traitements.functions as functions
 
 
 OPERATEUR_MATH=['+','-','*','/','//','**']
@@ -29,10 +29,22 @@ def isfunction(chaine):
             return False
     return True
 
+def isNumber(chaine):
+    dotNumber=0
+    for char in chaine:
+        if char == '.':
+            dotNumber+=1
+        if dotNumber>1 or not(char.isdigit() or char=='.'):
+            return False
+    return True
+
+def isError(chaine):
+    return True if chaine[0]=='#' else False
+
 #Renvoie le type, s'il est connu, d'une chaine de caractère
 def what_type(chaine):
-    if chaine.isdigit():
-        return 'entier'
+    if isNumber(chaine):
+        return 'nombre'
     elif chaine in OPERATEUR_MATH:
         return 'op_math'
     elif chaine in OPERATEUR_LOG:
@@ -67,37 +79,49 @@ def decompo(chaine):
                 elementListType.append(oldResult[1])
                 currentChain=chaine[k]
                 type=what_type(currentChain)
-            else:
-                print('Chaine non reconnue:'+str(currentChain)+str(k))
-
         if (type!=None and k+1==len(chaine)):
             elementList.append(currentChain)
             elementListType.append(type)
     return (elementList,elementListType)
-#
-# knownFunctions=functions.Knownfunctions()
-# knownFunctions.add(functions.Function('f','2*args[0]+args[1]',0))
-# knownFunctions.add(functions.Function('cos','math.cos(args[0])',0))
+
+knownFunctions=functions.Knownfunctions()
+knownFunctions.add(functions.Function('sum','sum(args)'))
+knownFunctions.add(functions.Function('cos','math.cos(args[0])'))
+
+#Renvoie la position de la parenthese fermant une fonction de position de k dans une liste d'élement
+def endOfFunction(elementList,k):
+    p_count=1
+    for i in range(k,len(elementList)):
+        if i in FERMANTES:
+            p_count-=1
+        elif i in OUVRANTES:
+            p_count+=1
+        if p_count==0:
+            return i
+    return i
 
 #Renvoie l'évaluation d'une fonction en position k dans une liste d'element
-def eval_function(network,elementList,elementType,k):
+def eval_function(network,elementList,elementType,k,knownfunctions):
     element=elementList[k]
-    if element not in knownFunctions.dict:  #Si la fonction n'est pas connue, on renvoie une erreur
-        return 'Erreur : {} n\'est pas connue'.format(elementList[k])
+    if element not in knownfunctions.dict:  #Si la fonction n'est pas connue, on renvoie une erreur
+        return '#Erreur : {} n\'est pas connue'.format(elementList[k])
     if elementType[k+1]!='p_ouvrante':
-        return 'Erreur de syntaxe : parenthese'
+        return '#Erreur de syntaxe : parenthese'
     p_count=1    #Pour verifier le parenthesage
     args=[]
     currentArg=""
     k+=2
     while p_count>0 and k<len(elementList):
         if elementType[k]=='function':  #Si c'est une fonction, on l'évalue recursivement
-            (value,k)=eval_function(network,elementList,elementType,k)
+            value=eval_function(network,elementList,elementType,k,knownFunctions)
+            if isError(str(value)):
+                return value
+            k=endOfFunction(elementList,k)
             args.append(value)
             currentArg=""
         elif elementType[k]=='sep':
             if currentArg=="":  #S'il n'y a rien avant un separateur, la syntaxe n'est pas correcte
-                return 'Erreur de syntaxe : separateur'
+                return '#Erreur de syntaxe : separateur'
             else:
                 args.append(evaluation(network,currentArg))
                 currentArg=""
@@ -111,24 +135,29 @@ def eval_function(network,elementList,elementType,k):
         else:
             currentArg+=elementList[k]
         k+=1
+    if p_count!=0:
+        return "#Error : parenthesage"
     if currentArg!="":
         args.append(evaluation(network,currentArg))
-    return (knownFunctions.dict[str(element)].value(args),k-1)
+    return knownfunctions.dict[str(element)].value(args)
+
 
 #Renvoie l'évaluation d'une formule, au sein d'un réseau nétwork (ou affiche l'erreur le cas écheant)
 def evaluation(network, chaine):
-    chaine_elm=decompo(chaine)[0]
-    chaine_type=decompo(chaine)[1]
+    (elementList,elementType)=decompo(chaine)
     i=0
-    while i<len(chaine_elm):
-        if chaine_type[i]== 'cell':
-            chaine_elm[i]=str(network.getCellByName(chaine_elm[i]).value)
-        elif chaine_type[i]=='function':
-            (value,end)=eval_function(network,chaine_elm,chaine_type,i)
-            chaine_elm[i:end+1]=[str(value)]
+    while i<len(elementList):
+        if elementType[i]== 'cell':
+            elementList[i]=str(network.getCellByName(elementList[i]).value)
+        elif elementType[i]=='function':
+            value=eval_function(network,elementList,elementType,i,knownFunctions)
+            if isError(str(value)):
+                return value
+            end=endOfFunction(elementList,i)
+            elementList[i:end+1]=[str(value)]
             i=end
         i+=1
-    return eval(''.join(chaine_elm))
+    return eval(''.join(elementList))
 
 
 # grille=structures.network()

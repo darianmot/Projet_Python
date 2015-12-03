@@ -12,9 +12,9 @@ class Function():
         try:
             return eval(self.output)
         except IndexError:
-            return 'Index Error'
+            return '#Index Error'
         except:
-            return 'Invalid Syntax'
+            return '#Invalid Syntax'
 
 class Knownfunctions():
     def __init__(self):
