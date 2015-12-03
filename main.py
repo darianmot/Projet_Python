@@ -1,30 +1,26 @@
 __authors__="Darian MOTAMED, Hugo CHOULY, Atime RONDA,Anas DARWICH"
 import sys,visu.mainwindow as mainwindow, structures
+import cells_traitements.decomposition as decomposition
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSignal
 
-
-active_cells=[]   #liste des cellules actives
-
-
-#le traitement appliqué à la chaine de carateres obtenue:
-def traitement(x, y, string):
-    if string[0] == '=':
-        for cell in active_cells:
-            if str(cell.name) in string:
-                string = str(cell.value).join(string.split(cell.name))     #remplace le nom d'une cellule par sa valeur
-        v = str(eval(string[1:]))
-        active_cells.append(structures.Cell(x,y,v))
-        ui.return_value.emit(x,y,v)
-
-
+network = structures.network()
 
 app = mainwindow.QtWidgets.QApplication(sys.argv)
 MainWindow = mainwindow.QtWidgets.QMainWindow()
 ui = mainwindow.Ui_MainWindow()
-ui.setupUi(MainWindow,structures.network())
+ui.setupUi(MainWindow,network)
 
-ui.ask_coords.connect(traitement)
+def traitement(x, y, string):
+    if string[0] == '=':
+        value = decomposition.evaluation(network,string[1:])
+        network.matrix[x][y].value = str(value)
+        network.matrix[x][y].input = string
+        ui.return_value.emit(x ,y, str(value))
+    else:
+        network.matrix[x][y].value = string
+
+ui.read_value.connect(traitement)
 
 MainWindow.showMaximized() #Pour agrandir au max la fenetre
 sys.exit(app.exec_())
