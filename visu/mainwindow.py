@@ -141,7 +141,8 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.tableWidget.cellChanged.connect(cell_changed)
 
         def change_cell(x, y, value):
-            self.tableWidget.item(x, y).setText(value)
+            self.tableWidget.item(x,y).setText(value)
+
         self.return_value.connect(change_cell)
 
 

@@ -1,4 +1,4 @@
-import visu.columns_labels as columns_labels,structures,cells_traitements.functions as functions
+import visu.columns_labels as columns_labels,structures,cells_traitements.functions as functions,math
 
 
 OPERATEUR_MATH=['+','-','*','/','//','**']
@@ -158,6 +158,17 @@ def evaluation(network, chaine):
             i=end
         i+=1
     return eval(''.join(elementList))
+
+
+#Renvoie la liste des celulles apparaissant dans un string
+def parentCells(network,chaine):
+    (elementList,elementType)=decompo(chaine)
+    l=[]
+    for k in range(len(elementList)):
+        if elementType[k]=='cell':
+            l.append(network.getCellByName(elementList[k]))
+    return l
+
 
 
 # grille=structures.network()
