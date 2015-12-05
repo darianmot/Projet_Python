@@ -19,11 +19,25 @@ class Ui_MainWindow(QtWidgets.QWidget):
         MainWindow.setObjectName("MainWindow")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName("verticalLayout")
+        self.editLineLayout = QtWidgets.QHBoxLayout()
+        self.editLineLayout.setObjectName('editLineLayout')
+
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setStyleSheet("item:{border-top-width: 200 px}")
+
+        self.functionButton = QtWidgets.QToolButton(self.centralwidget)
+        self.functionButton.setObjectName("functionButton")
+        self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit.setObjectName("lineEdit")
+        self.editLineLayout.addWidget(self.functionButton)
+        self.editLineLayout.addWidget(self.lineEdit)
+
+        self.verticalLayout.addLayout(self.editLineLayout)
+
         #On ajuste le nombre de colonnes/lignes en fonction de la taille de l'écran
         self.screen = QtWidgets.QDesktopWidget()
         self.initialRowsNumber=int(2*self.screen.height()/CELLHEIGHT)
@@ -81,10 +95,10 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.menuFichier.addAction(self.menuSsmenu2.menuAction())
         self.menubar.addAction(self.menuFichier.menuAction())
 
-        self.retranslateUi(MainWindow, matrix)
+        self.setup(MainWindow, matrix)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-    def retranslateUi(self, MainWindow, matrix):
+    def setup(self, MainWindow, matrix):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         columnsLabels=columns_labels.generate(self.tableWidget.columnCount()) #generattion de la liste des labels
@@ -122,7 +136,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
                     matrix.addColumn()
         horizontalscrollbar.valueChanged.connect(ajoutColumns)
 
-
+        self.functionButton.setText(_translate("MainWindow", "..."))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
         self.menuFichier.setTitle(_translate("MainWindow", "Menu1"))
         self.menuSsmenu1.setTitle(_translate("MainWindow", "ssmenu1"))
