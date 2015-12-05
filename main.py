@@ -1,6 +1,6 @@
 __authors__="Darian MOTAMED, Hugo CHOULY, Atime RONDA,Anas DARWICH"
 import sys,visu.mainwindow as mainwindow, structures
-import cells_traitements.decomposition as decomposition
+import cells_traitements.decomposition as decomposition,recOrd
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSignal
 
@@ -26,7 +26,6 @@ def traitement(x, y, string):
         cell.value = string
         for neighbour in cell.neighbours:
             traitement(neighbour.x,neighbour.y,neighbour.input)
-
 
 ui.read_value.connect(traitement)
 
