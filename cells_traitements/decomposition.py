@@ -1,4 +1,4 @@
-import visu.columns_labels as columns_labels,structures,cells_traitements.functions as functions,math
+import visu.columns_labels as columns_labels,structures,cells_traitements.functions as functions
 
 
 OPERATEUR_MATH=['+','-','*','/','//','**']
@@ -104,9 +104,9 @@ def endOfFunction(elementList,k):
 def eval_function(network,elementList,elementType,k,knownfunctions):
     element=elementList[k]
     if element not in knownfunctions.dict:  #Si la fonction n'est pas connue, on renvoie une erreur
-        return '#Erreur : {} n\'est pas connue'.format(elementList[k])
+        return '#Error : {} n\'est pas connue'.format(elementList[k])
     if elementType[k+1]!='p_ouvrante':
-        return '#Erreur de syntaxe : parenthese'
+        return '#Syntaxe Error : parenthese ouvrante manquante'
     p_count=1    #Pour verifier le parenthesage
     args=[]
     currentArg=""
@@ -121,7 +121,7 @@ def eval_function(network,elementList,elementType,k,knownfunctions):
             currentArg=""
         elif elementType[k]=='sep':
             if currentArg=="":  #S'il n'y a rien avant un separateur, la syntaxe n'est pas correcte
-                return '#Erreur de syntaxe : separateur'
+                return '#Syntax Error : separateur'
             else:
                 args.append(evaluation(network,currentArg))
                 currentArg=""
@@ -136,7 +136,7 @@ def eval_function(network,elementList,elementType,k,knownfunctions):
             currentArg+=elementList[k]
         k+=1
     if p_count!=0:
-        return "#Error : parenthesage"
+        return "#Syntax Error : parenthesage"
     if currentArg!="":
         args.append(evaluation(network,currentArg))
     return knownfunctions.dict[str(element)].value(args)
@@ -160,7 +160,11 @@ def evaluation(network, chaine):
     try:
         return eval(''.join(elementList))
     except SyntaxError as e:
-        return '#Erreur de syntaxe'
+        return '#Syntax Error : {}'.format(e)
+    except ZeroDivisionError:
+        return '#Division by zero'
+    except Exception as e:
+        return '#Error : {}'.format(e)
 
 #Renvoie la liste des celulles apparaissant dans un string
 def parentCells(network,chaine):

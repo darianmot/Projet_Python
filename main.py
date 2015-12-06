@@ -16,7 +16,7 @@ def traitement(x, y, string):
     if len(string)>0:
         if string[0] == '=':
             value = decomposition.evaluation(network,string[1:])
-            for parentCell in decomposition.parentCells(network,string[1:]): #On ajoute cell comme neighbour
+            for parentCell in decomposition.parentCells(network,string[1:]): #On ajoute cell comme neighbour eventuel
                 parentCell.addNeighbour(cell)
             cell.value = str(value)
             cell.input = string
@@ -25,6 +25,13 @@ def traitement(x, y, string):
                 traitement(neighbour.x,neighbour.y,neighbour.input)
         else:
             cell.value = string
+            if cell.input=="":                                                 #Si le input n'était pas définie, on le fait
+                cell.input=string
+            elif cell.input[0]=='=':                                           #Si le input commençait par '=', on ne le change que son evaluation est different de ce que affiche la celulle
+                if str(decomposition.evaluation(network,cell.input[1:]))!=cell.value:
+                    cell.input=cell.value
+            else:                                                              #Dans les autres cas, on change le input
+                cell.input=string
             for neighbour in cell.neighbours:
                 traitement(neighbour.x,neighbour.y,neighbour.input)
 

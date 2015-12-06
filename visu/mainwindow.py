@@ -166,13 +166,8 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.tableWidget.cellChanged.connect(cell_clicked)
 
         def changeLineEdit(x,y):
-            input= matrix.getCell(x,y).input if len(matrix.getCell(x,y).input)>0 else matrix.getCell(x,y).value
-            self.lineEdit.setText(input)
+            self.lineEdit.setText(matrix.getCell(x,y).input)
         self.print_input.connect(changeLineEdit)
-
-
-
-
 
 
 if __name__ == "__main__":
