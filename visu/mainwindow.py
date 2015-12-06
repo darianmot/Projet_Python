@@ -13,6 +13,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
     #custom signal
     read_value = pyqtSignal(int,int,str)
     return_value = pyqtSignal(int,int,str)
+    print_input = pyqtSignal(int,int)
 
     def setupUi(self, MainWindow,matrix):
         #Initialisation
@@ -157,6 +158,17 @@ class Ui_MainWindow(QtWidgets.QWidget):
         def change_cell(x, y, value):
             self.tableWidget.item(x,y).setText(value)
         self.return_value.connect(change_cell)
+
+        # Affiche le input dans la ligne d'edition
+        def cell_clicked():
+            self.print_input.emit(self.tableWidget.currentRow(),self.tableWidget.currentColumn())
+        self.tableWidget.cellClicked.connect(cell_clicked)
+        self.tableWidget.cellChanged.connect(cell_clicked)
+
+        def changeLineEdit(x,y):
+            input= matrix.getCell(x,y).input if len(matrix.getCell(x,y).input)>0 else matrix.getCell(x,y).value
+            self.lineEdit.setText(input)
+        self.print_input.connect(changeLineEdit)
 
 
 

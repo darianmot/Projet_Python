@@ -157,8 +157,10 @@ def evaluation(network, chaine):
             elementList[i:end+1]=[str(value)]
             i=end
         i+=1
-    return eval(''.join(elementList))
-
+    try:
+        return eval(''.join(elementList))
+    except SyntaxError as e:
+        return '#Erreur de syntaxe'
 
 #Renvoie la liste des celulles apparaissant dans un string
 def parentCells(network,chaine):
