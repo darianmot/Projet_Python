@@ -169,6 +169,10 @@ class Ui_MainWindow(QtWidgets.QWidget):
             self.lineEdit.setText(matrix.getCell(x,y).input)
         self.print_input.connect(changeLineEdit)
 
+        def line_changed():
+            self.read_value.emit(self.tableWidget.currentRow(),self.tableWidget.currentColumn(),
+                                 self.lineEdit.text())
+        self.lineEdit.editingFinished.connect(line_changed)
 
 if __name__ == "__main__":
     import sys
