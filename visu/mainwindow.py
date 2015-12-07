@@ -174,6 +174,10 @@ class Ui_MainWindow(QtWidgets.QWidget):
                                  self.lineEdit.text())
         self.lineEdit.editingFinished.connect(line_changed)
 
+        # def selected_cells():
+        #     print(self.tableWidget.selectedItems())
+        # self.tableWidget.itemSelectionChanged.connect(selected_cells)
+
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)

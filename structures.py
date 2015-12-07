@@ -7,17 +7,24 @@ class Cell(object): #caractéristiques et organisation d'une cellule
         self.input = ""
         self.value = None
         self.name = None     #chaine de caractères
-        self.neighbours = []             #liste des cellules dépendant de celle-ci
+        self.children_cells = [] #liste des cellules dépendant de celle-ci
+        self.parent_cells = []
 
-    def addNeighbour(self,other):
-        if other not in self.neighbours:
-            self.neighbours.append(other)
+    def addChildCell(self,other):
+        if other not in self.children_cells:
+            self.children_cells.append(other)
+
+    def removeChildCell(self, cell):
+        try:
+            self.children_cells.remove(cell)
+        except:
+            pass
 
     def __repr__(self):
-        if self.neighbours==[]:
+        if self.children_cells==[]:
             return '{0}({1},{2})'.format(self.name,self.x,self.y)
         else:
-            return '{0}({1},{2}):{3}'.format(self.name,self.x,self.y,self.neighbours)
+            return '{0}({1},{2}):{3}'.format(self.name,self.x,self.y,self.children_cells)
 
 # class reseau(object):  #On classe par name
 #     def __init__(self):

@@ -14,15 +14,17 @@ ui.setupUi(MainWindow,network)
 def traitement(x, y, string):
     cell=network.getCell(x,y)
     if len(string)>0:
+        if len(cell.parent_cells)>0:
+            for parentCell in cell.parent_cells: #On enleve cell comme neighbour eventuel
+                    parentCell.removeChildCell(cell)
         if string[0] == '=':
             value = decomposition.evaluation(network,string[1:])
-            for parentCell in decomposition.parentCells(network,string[1:]): #On ajoute cell comme neighbour eventuel
-                parentCell.addNeighbour(cell)
+            cell.parent_cells = decomposition.parentCells(network,string[1:])
+            for parentCell in cell.parent_cells: #On ajoute cell comme neighbour eventuel
+                parentCell.addChildCell(cell)
             cell.value = str(value)
             cell.input = string
             ui.return_value.emit(x ,y, str(value))
-            for neighbour in cell.neighbours:                                  #On recalcul tous les neighbours de cell
-                traitement(neighbour.x,neighbour.y,neighbour.input)
         else:
             cell.value = string
             if cell.input=="":                                                 #Si le input n'était pas définie, on le fait
@@ -32,8 +34,8 @@ def traitement(x, y, string):
                     cell.input=cell.value
             else:                                                              #Dans les autres cas, on change le input
                 cell.input=string
-            for neighbour in cell.neighbours:
-                traitement(neighbour.x,neighbour.y,neighbour.input)
+        for ChildCell in cell.children_cells:                                  #On recalcul tous les neighbours de cell
+                    traitement(ChildCell.x,ChildCell.y,ChildCell.input)
 
 ui.read_value.connect(traitement)
 
