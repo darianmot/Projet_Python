@@ -84,9 +84,6 @@ def decompo(chaine):
             elementListType.append(type)
     return (elementList,elementListType)
 
-knownFunctions=functions.Knownfunctions()
-knownFunctions.add(functions.Function('sum','sum(args)'))
-knownFunctions.add(functions.Function('cos','math.cos(args[0])'))
 
 #Renvoie la position de la parenthese fermant une fonction de position de k dans une liste d'élement
 def endOfFunction(elementList,k):
@@ -101,9 +98,9 @@ def endOfFunction(elementList,k):
     return i
 
 #Renvoie l'évaluation d'une fonction en position k dans une liste d'element
-def eval_function(network,elementList,elementType,k,knownfunctions):
+def eval_function(network,elementList,elementType,k,knownFunctions):
     element=elementList[k]
-    if element not in knownfunctions.dict:  #Si la fonction n'est pas connue, on renvoie une erreur
+    if element not in knownFunctions.dict:  #Si la fonction n'est pas connue, on renvoie une erreur
         return '#Error : {} n\'est pas connue'.format(elementList[k])
     if elementType[k+1]!='p_ouvrante':
         return '#Syntaxe Error : parenthese ouvrante manquante'
@@ -138,12 +135,12 @@ def eval_function(network,elementList,elementType,k,knownfunctions):
     if p_count!=0:
         return "#Syntax Error : parenthesage"
     if currentArg!="":
-        args.append(evaluation(network,currentArg))
-    return knownfunctions.dict[str(element)].value(args)
+        args.append(evaluation(network,currentArg,knownFunctions))
+    return knownFunctions.dict[str(element)].value(args)
 
 
 #Renvoie l'évaluation d'une formule, au sein d'un réseau nétwork (ou affiche l'erreur le cas écheant)
-def evaluation(network, chaine):
+def evaluation(network, chaine,knownFunctions):
     (elementList,elementType)=decompo(chaine)
     i=0
     while i<len(elementList):

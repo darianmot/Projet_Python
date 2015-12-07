@@ -19,6 +19,13 @@ class Function():
 class Knownfunctions():
     def __init__(self):
         self.dict={}
+        self.initialize()
 
     def add(self,function):
         self.dict[function.name]=function
+
+    def initialize(self):
+        self.add(Function('average','sum(args)/len(args)'))
+        self.add(Function('sum','sum(args)'))
+        self.add(Function('cos','math.cos(args[0])'))
+
