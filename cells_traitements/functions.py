@@ -4,9 +4,10 @@
 #Elles sont répertoriées dans un objet de type Knownfunctions
 import math
 class Function():
-    def __init__(self,name,output):
+    def __init__(self,name,output, description):
         self.name=name
         self.output=output
+        self.description=description
 
     def value(self,args):
         try:
@@ -15,6 +16,8 @@ class Function():
             return '#Index Error'
         except Exception as e:
             return '#Error : {}'.format(e)
+    def __repr__(self):
+        return self.name+' : '+self.output
 
 class Knownfunctions():
     def __init__(self):
@@ -25,7 +28,21 @@ class Knownfunctions():
         self.dict[function.name]=function
 
     def initialize(self):
-        self.add(Function('average','sum(args)/len(args)'))
-        self.add(Function('sum','sum(args)'))
-        self.add(Function('cos','math.cos(args[0])'))
+        self.add(Function('average','sum(args)/len(args)', 'Retourne la moyenne des cellules selectionnées.'))
+        self.add(Function('sum','sum(args)', 'Retourne la somme des cellules selectionnées.'))
+        self.add(Function('cos','math.cos(args[0])', 'Retourne le cosinus de la celulle selectionnée'))
 
+    def getFunction(self,name):
+        try:
+            return self.dict.get(name)
+        except:
+            return 0
+
+    def getList(self):
+        l=[]
+        for fun in self.dict.values():
+            l.append(fun)
+        return sorted(l,key=lambda x:x.name)
+
+    def __repr__(self):
+        return str(self.dict)

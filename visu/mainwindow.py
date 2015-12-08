@@ -186,6 +186,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
             self.read_value.emit(self.tableWidget.currentRow(),self.tableWidget.currentColumn(),
                                  self.lineEdit.text())
         self.lineEdit.editingFinished.connect(line_changed)
+        self.lineEdit.returnPressed.connect(line_changed)
 
         # def selected_cells():
         #     print(self.tableWidget.selectedItems())

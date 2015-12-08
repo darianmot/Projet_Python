@@ -87,15 +87,15 @@ def decompo(chaine):
 
 #Renvoie la position de la parenthese fermant une fonction de position de k dans une liste d'élement
 def endOfFunction(elementList,k):
-    p_count=1
-    for i in range(k,len(elementList)):
-        if i in FERMANTES:
+    p_count=0
+    for i in range(k+1,len(elementList)):
+        if elementList[i] in FERMANTES:
             p_count-=1
-        elif i in OUVRANTES:
+        elif elementList[i] in OUVRANTES:
             p_count+=1
         if p_count==0:
             return i
-    return i
+    return len(elementList)-1
 
 #Renvoie l'évaluation d'une fonction en position k dans une liste d'element
 def eval_function(network,elementList,elementType,k,knownFunctions):
@@ -120,7 +120,7 @@ def eval_function(network,elementList,elementType,k,knownFunctions):
             if currentArg=="":  #S'il n'y a rien avant un separateur, la syntaxe n'est pas correcte
                 return '#Syntax Error : separateur'
             else:
-                args.append(evaluation(network,currentArg))
+                args.append(evaluation(network,currentArg,knownFunctions))
                 currentArg=""
         elif elementType[k]=='p_fermante':  #On gère le parenthesage
             p_count-=1
@@ -152,7 +152,7 @@ def evaluation(network, chaine,knownFunctions):
                 return value
             end=endOfFunction(elementList,i)
             elementList[i:end+1]=[str(value)]
-            i=end
+            elementType[i:end+1]=['nombre']
         i+=1
     try:
         return eval(''.join(elementList))
