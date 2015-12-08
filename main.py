@@ -46,7 +46,7 @@ def traitement(x, y, string):
             for ChildCell in cell.children_cells:                                  #On recalcul tous les neighbours de cell
                     traitement(ChildCell.x, ChildCell.y, ChildCell.input)
 
-
+    recOrd.binder2(network)
 ui.read_value.connect(traitement)
 
 MainWindow.showMaximized() #Pour agrandir au max la fenetre

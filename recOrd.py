@@ -1,6 +1,6 @@
 import xlrd
 from xlwt import Workbook
-
+import csv as csv
 def binder(network):
     #creation of the binder
     binder=Workbook()
@@ -24,3 +24,17 @@ def read(file,i):
     sheet=binder.sheet_by_name(sheets[i])
     sheet.view()
     #display the sheet but where find it?
+def binder2(network):
+     #file name
+    sheet=csv.writer(open('newfile.csv','w'))
+    #creation of the 'newfile', w as writting
+    for x in range(0,len(network.matrix)):
+        sheet.writerow([network.getCell(x,y).input for y in range(0,len(network.matrix[x]))])
+        #writting of each row in comprehension
+def read2(file):
+    a=input()
+    sheet=csv.reader(open(a))
+    #opening
+    for row in sheet:
+        print(row)
+    #view
