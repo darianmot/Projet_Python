@@ -1,10 +1,21 @@
 # ATTENTION : vu qu'on a modifié ce fichier, mainwindow.ui est devenu obsolète
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets,Qt
 from PyQt5.QtCore import pyqtSignal
-import visu.columns_labels as columns_labels
+import visu.columns_labels as columns_labels,random
 CELLWIDTH=100
 CELLHEIGHT=30
+
+class MyTableWidget(QtWidgets.QTableWidget):
+    pass
+    # def paintEvent(self, event):
+    #     painter=QtGui.QPainter(self.viewport())
+    #     painter.setPen(QtGui.QColor(185,0,185))
+    #     painter.drawRect(0, 0, 20, 20)
+    #     self.setStyleSheet("background-color: white;gridline-color:red")
+    #     event.accept()
+
+
 
 
 
@@ -26,7 +37,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.editLineLayout = QtWidgets.QHBoxLayout()
         self.editLineLayout.setObjectName('editLineLayout')
 
-        self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
+        self.tableWidget = MyTableWidget(self.centralwidget)
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setStyleSheet("item:{border-top-width: 200 px}")
 
@@ -147,7 +158,9 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.actionAction1.setText(_translate("MainWindow", "action1"))
         self.actionAction2.setText(_translate("MainWindow", "action2"))
         self.actionAction2_1.setText(_translate("MainWindow", "action21"))
+
         self.tableWidget.setDragDropMode(self.tableWidget.DragDrop) #Autorise le drag and drop ??
+        self.tableWidget.setMouseTracking(True)
 
         #Envoi la coordonnée de la cellule changée et le nouvel item
         def cell_changed():
@@ -177,6 +190,11 @@ class Ui_MainWindow(QtWidgets.QWidget):
         # def selected_cells():
         #     print(self.tableWidget.selectedItems())
         # self.tableWidget.itemSelectionChanged.connect(selected_cells)
+
+        # def cell_entered():
+        #     print('toto')
+        # self.tableWidget.cellEntered.connect(cell_entered)
+
 
 if __name__ == "__main__":
     import sys
