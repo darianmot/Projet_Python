@@ -11,9 +11,12 @@ class MyTableWidget(QtWidgets.QTableWidget):
     # def paintEvent(self, event):
     #     painter=QtGui.QPainter(self.viewport())
     #     painter.setPen(QtGui.QColor(185,0,185))
-    #     painter.drawRect(0, 0, 20, 20)
+    #     x=self.currentItem.x()
+    #     y=self.currentItem.y()
+    #     painter.drawRect(x, y, 99, 20)
     #     self.setStyleSheet("background-color: white;gridline-color:red")
     #     event.accept()
+
 
 
 

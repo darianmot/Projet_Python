@@ -35,14 +35,15 @@ def traitement(x, y, string):
             cell.value = string
             if cell.input == "":                                                 #Si le input n'était pas définie, on le fait
                 cell.input = string
+                cell.parents_cell=[]
             elif cell.input[0] == '=':                                           #Si le input commençait par '=', on ne le change que son evaluation est different de ce que affiche la celulle
                 if str(decomposition.evaluation(network, cell.input[1:], knownFunctions)) != cell.value:
                     cell.input = cell.value
+                    cell.parents_cells=decomposition.parentCells(network, string[1:])
+
             else:                                                              #Dans les autres cas, on change le input
                 cell.input = string
-            # if len(cell.parent_cells) > 0:
-            #         for parentCell in cell.parent_cells: #On enleve cell comme neighbour eventuel
-            #             parentCell.removeChildCell(cell)
+                cell.parents_cell=[]
             for ChildCell in cell.children_cells:                                  #On recalcul tous les neighbours de cell
                     traitement(ChildCell.x, ChildCell.y, ChildCell.input)
     recOrd.binder2(network)
