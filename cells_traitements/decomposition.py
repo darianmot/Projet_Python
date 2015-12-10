@@ -172,11 +172,10 @@ def parentCells(network,chaine):
             l.append(network.getCellByName(elementList[k]))
     return l
 
-
-
-# grille=structures.network()
-# grille.addColumns(10)
-# grille.addRows(10)
-# grille.getCell(0,0).value=math.pi
-# grille.getCell(0,1).value=2
-# print(evaluation(grille,'(A2)*3+f(A2,3**2/2)'))
+#Renvoie l'ensemble des cellules filles (récursive) d'une cellule
+def childrenCellsRec(cell):
+    l=[]
+    for c in cell.children_cells:
+       l.append(c)
+       l.append(childrenCellsRec(c))
+    return l

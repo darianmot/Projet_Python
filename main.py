@@ -40,7 +40,6 @@ def traitement(x, y, string):
                 if str(decomposition.evaluation(network, cell.input[1:], knownFunctions)) != cell.value:
                     cell.input = cell.value
                     cell.parents_cells=decomposition.parentCells(network, string[1:])
-
             else:                                                              #Dans les autres cas, on change le input
                 cell.input = string
                 cell.parents_cell=[]
