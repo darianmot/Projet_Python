@@ -7,14 +7,12 @@ CELLWIDTH=100
 CELLHEIGHT=30
 
 class MyTableWidget(QtWidgets.QTableWidget):
-    # def paintEvent(self, event):
-    #     painter=QtGui.QPainter(self.viewport())
-    #     painter.setPen(QtGui.QColor(185,0,185))
-    #     x=self.currentItem.x()
-    #     y=self.currentItem.y()
-    #     painter.drawRect(x, y, 99, 20)
-    #     self.setStyleSheet("background-color: white;gridline-color:red")
-    #     event.accept()
+    def paintEvent(self, event):
+        QtWidgets.QTableWidget.paintEvent(self,event)
+        painter=QtGui.QPainter(self.viewport())
+        painter.setPen(QtGui.QColor(185,0,185))
+        painter.drawRect(0, 0, 100, 30)
+        event.accept()
 
     read_value = pyqtSignal(int,int,str)
     return_value = pyqtSignal(int,int,str)
