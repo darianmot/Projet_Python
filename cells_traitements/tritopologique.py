@@ -2,15 +2,16 @@
 
 #Renvoie l'ensemble des cellules filles (récursive) d'une cellule
 def childrenCellsRec(cell):
-    l=[cell]
+    l=[]
     for c in cell.children_cells:
-       l.append(childrenCellsRec(c))
+        l.append(c)
+        l+=childrenCellsRec(c)
     return l
 
 #Renvoie une lise contenant les predecesseurs de chaque celulle d'une liste de celulle donnée
 def predecesorList(cellList):
-    preds=[[] for _ in range(cellList)]
-    for i in range(cellList):
+    preds=[[] for _ in range(len(cellList))]
+    for i in range(len(cellList)):
         for parent in cellList[i].parent_cells:
             if parent in cellList:
                 preds[i].append(parent)
@@ -19,8 +20,8 @@ def predecesorList(cellList):
 #Supprime une celulle d'une liste de predecesseurs
 def removePred(predList,cell):
     for cellList in predList:
-        ocurrence=cellList.count(cell)
-        for _ in range(ocurrence):
+        occurrence=cellList.count(cell)
+        for _ in range(occurrence):
             cellList.remove(cell)
 
 def evalOrder(cell):
@@ -30,12 +31,12 @@ def evalOrder(cell):
     while len(cellList)>0:
         i=0
         hasCycle=True
-        while i<len(cellList)or hasCycle==False:
+        while i<len(pred) and hasCycle==True:
             if len(pred[i])==0:
                 hasCycle=False
                 element=cellList.pop(i)
                 order.append(element)
-                pred.remove(i)
+                pred.pop(i)
                 removePred(pred,element)
             i+=1
         if hasCycle:

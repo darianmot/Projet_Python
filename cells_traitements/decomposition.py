@@ -163,6 +163,17 @@ def evaluation(network, chaine,knownFunctions):
     except Exception as e:
         return '#Error : {}'.format(e)
 
+#Evalue linéairement une liste de cellule
+def evalList(cellList,network,knownFunctions):
+    try:
+        for cell in cellList:
+            network.getCellByName(cell.name).value=evaluation(network,cell.input[1:],knownFunctions)
+    except AttributeError:
+        for cell in cellList:
+            network.getCellByName(cell.name).value='#Error : cycle'
+
+
+
 #Renvoie la liste des celulles apparaissant dans un string
 def parentCells(network,chaine):
     (elementList,elementType)=decompo(chaine)
@@ -179,3 +190,4 @@ def childrenCellsRec(cell):
        l.append(c)
        l.append(childrenCellsRec(c))
     return l
+

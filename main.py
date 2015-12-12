@@ -1,6 +1,6 @@
 __authors__="Darian MOTAMED, Hugo CHOULY, Atime RONDA,Anas DARWICH"
 import sys,visu.mainwindow as mainwindow,visu.funwindow as funWindow, structures,cells_traitements.functions as functions
-import cells_traitements.decomposition as decomposition,recOrd
+import cells_traitements.decomposition as decomposition,recOrd,cells_traitements.tritopologique as tritopologique
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSignal
 
@@ -19,36 +19,27 @@ ui_funWinfow.setupUi(Funwindow,knownFunctions)
 
 def traitement(x, y, string):
     cell = network.getCell(x, y)
+    print('eval de '+str(cell.name))
     if len(string) > 0:
         if string[0] == '=':
-
             value = decomposition.evaluation(network,string[1:], knownFunctions)
             cell.parent_cells = decomposition.parentCells(network, string[1:])
-            for parentCell in cell.parent_cells: #On ajoute cell comme neighbour eventuel
+            for parentCell in cell.parent_cells:
                 parentCell.addChildCell(cell)
             cell.value = str(value)
             cell.input = string
-            ui_mainwindow.return_value.emit(x, y, str(value))
-            for ChildCell in cell.children_cells:                                  #On recalcul tous les neighbours de cell
-                    traitement(ChildCell.x, ChildCell.y, ChildCell.input)
+            ui_mainwindow.tableWidget.return_value.emit(x, y, str(cell.value))
         else:
             cell.value = string
-            if cell.input == "":                                                 #Si le input n'était pas définie, on le fait
-                cell.input = string
-                cell.parents_cell=[]
-            elif cell.input[0] == '=':                                           #Si le input commençait par '=', on ne le change que son evaluation est different de ce que affiche la celulle
-                if str(decomposition.evaluation(network, cell.input[1:], knownFunctions)) != cell.value:
-                    cell.input = cell.value
-                    cell.parents_cells=decomposition.parentCells(network, string[1:])
-            else:                                                              #Dans les autres cas, on change le input
-                cell.input = string
-                cell.parents_cell=[]
-            for ChildCell in cell.children_cells:                                  #On recalcul tous les neighbours de cell
-                    traitement(ChildCell.x, ChildCell.y, ChildCell.input)
+            cell.input = string
+            ui_mainwindow.tableWidget.return_value.emit(x, y, str(cell.value))
+        order=tritopologique.evalOrder(cell)
+        for child in order:
+            child.value=str(decomposition.evaluation(network,child.input[1:],knownFunctions))
+            ui_mainwindow.tableWidget.return_value.emit(child.x,child.y,child.value)
     recOrd.binder2(network)
 
-
-ui_mainwindow.read_value.connect(traitement)
+ui_mainwindow.tableWidget.read_value.connect(traitement)
 ui_mainwindow.functionButton.released.connect(Funwindow.show)
 
 MainWindow.showMaximized() #Pour agrandir au max la fenetre

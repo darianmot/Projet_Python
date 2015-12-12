@@ -1,21 +1,4 @@
-import visu.columns_labels as columns_labels
-
-
-class Graph(object): #Graphe orienté
-    def __init__(self):
-        self.edges={} #Dictionnaire qui associe à chaque cellule la liste de ses celulles filles
-
-    def addEdge(self,parent,child):
-        try:
-            if child not in self.edges[parent.name]:
-                self.edges[parent.name].append(child)
-        except KeyError:
-            self.edges[parent.name]=[child]
-
-    def __repr__(self):
-            return str(self.edges)
-
-
+import visu.columns_labels as columns_labels,cells_traitements.decomposition as decomposition
 
 class Cell(object): #caractéristiques et organisation d'une cellule
     def __init__(self,x,y):
@@ -127,15 +110,13 @@ class network(object): #On classe par coordonnées
         except :
             return 0
 
+    def evalList(self,cellList,knownFunctions):
+        try:
+            for cell in cellList:
+                self.getCellByName(cell.name).value=decomposition.evaluation(self,cell.input[1:],knownFunctions)
+        except AttributeError:
+            for cell in cellList:
+                self.getCellByName(cell.name).value='#Error : cycle'
     def __repr__(self):
         return str(self.matrix)
 
-
-n=network()
-n.addRows(15)
-n.addColumns(15)
-g=Graph()
-g.addEdge(n.getCellByName('A1'),n.getCellByName('A2'))
-g.addEdge(n.getCellByName('A1'),n.getCellByName('A3'))
-g.addEdge(n.getCellByName('A2'),n.getCellByName('A3'))
-print(g)

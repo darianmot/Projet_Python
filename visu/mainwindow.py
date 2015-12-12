@@ -7,7 +7,6 @@ CELLWIDTH=100
 CELLHEIGHT=30
 
 class MyTableWidget(QtWidgets.QTableWidget):
-    pass
     # def paintEvent(self, event):
     #     painter=QtGui.QPainter(self.viewport())
     #     painter.setPen(QtGui.QColor(185,0,185))
@@ -17,17 +16,21 @@ class MyTableWidget(QtWidgets.QTableWidget):
     #     self.setStyleSheet("background-color: white;gridline-color:red")
     #     event.accept()
 
+    read_value = pyqtSignal(int,int,str)
+    return_value = pyqtSignal(int,int,str)
+    print_input= pyqtSignal(int,int)
+
+    def closeEditor(self, editor, hint):
+        print('Editor closed')
+        QtWidgets.QTableWidget.closeEditor(self,editor,hint)
+        self.read_value.emit(self.currentRow(),self.currentColumn(),self.currentItem().text())
+        self.print_input.emit(self.currentRow(),self.currentColumn())
 
 
 
 
 
 class Ui_MainWindow(QtWidgets.QWidget):
-
-    #custom signal
-    read_value = pyqtSignal(int,int,str)
-    return_value = pyqtSignal(int,int,str)
-    print_input = pyqtSignal(int,int)
 
     def setupUi(self, MainWindow,matrix):
         #Initialisation
@@ -166,27 +169,28 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.tableWidget.setMouseTracking(True)
 
         #Envoi la coordonnée de la cellule changée et le nouvel item
-        def cell_changed():
-            self.read_value.emit(self.tableWidget.currentRow(),self.tableWidget.currentColumn(),
-                                 self.tableWidget.currentItem().text())
-        self.tableWidget.cellChanged.connect(cell_changed)
+        # def cell_changed():
+        #     self.tableWidget.read_value.emit(self.tableWidget.currentRow(),self.tableWidget.currentColumn(),
+        #                          self.tableWidget.currentItem().text())
+        # self.tableWidget.cell.connect(cell_changed)
 
         def change_cell(x, y, value):
             self.tableWidget.item(x,y).setText(value)
-        self.return_value.connect(change_cell)
+        self.tableWidget.return_value.connect(change_cell)
 
         # Affiche le input dans la ligne d'edition
         def cell_clicked():
-            self.print_input.emit(self.tableWidget.currentRow(),self.tableWidget.currentColumn())
+            self.tableWidget.print_input.emit(self.tableWidget.currentRow(),self.tableWidget.currentColumn())
         self.tableWidget.cellClicked.connect(cell_clicked)
         self.tableWidget.cellChanged.connect(cell_clicked)
 
+
         def changeLineEdit(x,y):
             self.lineEdit.setText(matrix.getCell(x,y).input)
-        self.print_input.connect(changeLineEdit)
+        self.tableWidget.print_input.connect(changeLineEdit)
 
         def line_changed():
-            self.read_value.emit(self.tableWidget.currentRow(),self.tableWidget.currentColumn(),
+            self.tableWidget.read_value.emit(self.tableWidget.currentRow(),self.tableWidget.currentColumn(),
                                  self.lineEdit.text())
         self.lineEdit.editingFinished.connect(line_changed)
         self.lineEdit.returnPressed.connect(line_changed)
