@@ -9,9 +9,13 @@ CELLHEIGHT=30
 class MyTableWidget(QtWidgets.QTableWidget):
     def paintEvent(self, event):
         QtWidgets.QTableWidget.paintEvent(self,event)
+        y = self.rowViewportPosition(self.currentRow())
+        x=self.columnViewportPosition(self.currentColumn())
+        length = self.columnWidth(self.currentColumn())
+        height = self.rowHeight(self.currentRow())
         painter=QtGui.QPainter(self.viewport())
-        painter.setPen(QtGui.QColor(185,0,185))
-        painter.drawRect(0, 0, 100, 30)
+        painter.setPen(QtGui.QColor(0,0,0))
+        painter.drawRect(x, y, length-1, height-1)
         event.accept()
 
     read_value = pyqtSignal(int,int,str)
@@ -24,7 +28,9 @@ class MyTableWidget(QtWidgets.QTableWidget):
         self.read_value.emit(self.currentRow(),self.currentColumn(),self.currentItem().text())
         self.print_input.emit(self.currentRow(),self.currentColumn())
 
-
+#
+# class Border():
+#     def __init__(self, length, height):
 
 
 
