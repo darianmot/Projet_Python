@@ -19,7 +19,7 @@ ui_funWinfow.setupUi(Funwindow,knownFunctions)
 
 def traitement(x, y, string):
     cell = network.getCell(x, y)
-    print('eval de '+str(cell.name))
+    print('Evaluation de {}...'.format(cell.name),end='')
     if len(string) > 0:
         if string[0] == '=':
             value = decomposition.evaluation(network,string[1:], knownFunctions)
@@ -33,10 +33,14 @@ def traitement(x, y, string):
             cell.value = string
             cell.input = string
             ui_mainwindow.tableWidget.return_value.emit(x, y, str(cell.value))
-        order=tritopologique.evalOrder(cell)
-        for child in order:
-            child.value=str(decomposition.evaluation(network,child.input[1:],knownFunctions))
-            ui_mainwindow.tableWidget.return_value.emit(child.x,child.y,child.value)
+        print(' Done')
+        try:
+            order=tritopologique.evalOrder(cell)
+            for child in order:
+                child.value=str(decomposition.evaluation(network,child.input[1:],knownFunctions))
+                ui_mainwindow.tableWidget.return_value.emit(child.x,child.y,child.value)
+        except Exception:
+            ui_mainwindow.tableWidget.return_value.emit(x, y, '#Error : Circle dependancy')
     recOrd.binder2(network)
 
 ui_mainwindow.tableWidget.read_value.connect(traitement)

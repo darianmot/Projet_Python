@@ -1,6 +1,5 @@
 import visu.columns_labels as columns_labels,structures,cells_traitements.functions as functions
 
-
 OPERATEUR_MATH=['+','-','*','/','//','**']
 OPERATEUR_LOG=['<','>','==','<=','>=','!=']
 OUVRANTES=['(','{']
