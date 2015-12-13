@@ -15,7 +15,10 @@ class MyTableWidget(QtWidgets.QTableWidget):
         height = self.rowHeight(self.currentRow())
         painter=QtGui.QPainter(self.viewport())
         painter.setPen(QtGui.QColor(0,0,0))
+        brush = QtGui.QBrush(QtGui.QColor(255,255,255))
         painter.drawRect(x, y, length-2, height-2)
+        painter.setBrush((QtGui.QColor(0,0,0)))
+        painter.drawRect(x+length-8,y+height-8,6,6)
         event.accept()
 
     read_value = pyqtSignal(int,int,str)
