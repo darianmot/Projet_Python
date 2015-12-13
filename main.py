@@ -19,8 +19,8 @@ ui_funWinfow.setupUi(Funwindow,knownFunctions)
 
 def traitement(x, y, string):
     cell = network.getCell(x, y)
-    print('Evaluation de {}...'.format(cell.name),end='')
     if len(string) > 0:
+        print('Evaluation de {}...'.format(cell.name),end='')
         if string[0] == '=':
             value = decomposition.evaluation(network,string[1:], knownFunctions)
             cell.parent_cells = decomposition.parentCells(network, string[1:])

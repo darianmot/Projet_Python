@@ -27,10 +27,15 @@ class MyTableWidget(QtWidgets.QTableWidget):
     return_value = pyqtSignal(int,int,str)
     print_input= pyqtSignal(int,int)
 
+    #Fonction qui s'active lorque l'utilisateur finit d'editer un item
     def closeEditor(self, editor, hint):
         print('Editor closed')
         QtWidgets.QTableWidget.closeEditor(self,editor,hint)
         self.read_value.emit(self.currentRow(),self.currentColumn(),self.currentItem().text())
+        self.print_input.emit(self.currentRow(),self.currentColumn())
+
+    def keyPressEvent(self, event):
+        QtWidgets.QTableWidget.keyPressEvent(self,event)
         self.print_input.emit(self.currentRow(),self.currentColumn())
 
 #
@@ -174,8 +179,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.actionAction1.setText(_translate("MainWindow", "action1"))
         self.actionAction2.setText(_translate("MainWindow", "action2"))
         self.actionAction2_1.setText(_translate("MainWindow", "action21"))
-
-        self.tableWidget.setDragDropMode(self.tableWidget.DragDrop) #Autorise le drag and drop ??
+        # self.tableWidget.setDragDropMode(self.tableWidget.DragDrop) #Autorise le drag and drop ??
         self.tableWidget.setMouseTracking(True)
 
         #Envoi la coordonnée de la cellule changée et le nouvel item
@@ -193,7 +197,6 @@ class Ui_MainWindow(QtWidgets.QWidget):
             self.tableWidget.print_input.emit(self.tableWidget.currentRow(),self.tableWidget.currentColumn())
         self.tableWidget.cellClicked.connect(cell_clicked)
         self.tableWidget.cellChanged.connect(cell_clicked)
-
 
         def changeLineEdit(x,y):
             self.lineEdit.setText(matrix.getCell(x,y).input)
