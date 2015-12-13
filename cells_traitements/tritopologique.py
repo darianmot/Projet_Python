@@ -1,12 +1,28 @@
 """ Dans ce module, on s'occupe d'ordonner une liste de celulles à évaluer selon le tri topologique """
 
 #Renvoie l'ensemble des cellules filles (récursive) d'une cellule
-def childrenCellsRec(cell):
-    l=[]
-    for c in cell.children_cells:
-        l.append(c)
-        l+=childrenCellsRec(c)
-    return l
+# def childrenCellsRec(cell):
+#     l=[]
+#     for c in cell.children_cells:
+#         print(l)
+#         if (c not in l) and c!=cell:
+#             l.append(c)
+#             l+=childrenCellsRec(c)
+#     return l
+def childrenCellsRec(parent):
+    file=[parent]
+    visited=[parent]
+    while file:
+        currentCell=file.pop(0)
+        for child in currentCell.children_cells:
+            if (child not in visited):
+                visited.append(child)
+                file.append(child)
+    return visited
+
+
+
+
 
 #Renvoie une lise contenant les predecesseurs de chaque celulle d'une liste de celulle donnée
 def predecesorList(cellList):
@@ -24,6 +40,7 @@ def removePred(predList,cell):
         for _ in range(occurrence):
             cellList.remove(cell)
 
+#Renvoie l'odre d'évaluation d'une liste de cellule
 def evalOrder(cell):
     cellList=childrenCellsRec(cell)
     pred=predecesorList(cellList)
@@ -40,8 +57,8 @@ def evalOrder(cell):
                 removePred(pred,element)
             i+=1
         if hasCycle:
-            return '#Error : circle cell depency'
-    return order
+            raise Exception
+    return order[1:]
 
 
 
