@@ -14,11 +14,13 @@ class MyTableWidget(QtWidgets.QTableWidget):
         length = self.columnWidth(self.currentColumn())
         height = self.rowHeight(self.currentRow())
         painter=QtGui.QPainter(self.viewport())
-        painter.setPen(QtGui.QColor(0,0,0))
-        brush = QtGui.QBrush(QtGui.QColor(255,255,255))
-        painter.drawRect(x, y, length-2, height-2)
+        pen = QtGui.QPen(QtGui.QColor(0,0,0))
+        pen.setWidth(2)
+        painter.setPen(pen)
+
+        painter.drawRect(x+1, y+1, length-3, height-3)
         painter.setBrush((QtGui.QColor(0,0,0)))
-        painter.drawRect(x+length-8,y+height-8,6,6)
+        painter.drawRect(x+length-8,y+height-8,5,5)
         event.accept()
 
     read_value = pyqtSignal(int,int,str)
@@ -62,6 +64,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.editLineLayout.addWidget(self.lineEdit)
 
         self.verticalLayout.addLayout(self.editLineLayout)
+
 
         #On ajuste le nombre de colonnes/lignes en fonction de la taille de l'écran
         self.screen = QtWidgets.QDesktopWidget()
