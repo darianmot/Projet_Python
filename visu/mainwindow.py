@@ -15,7 +15,7 @@ class MyTableWidget(QtWidgets.QTableWidget):
         height = self.rowHeight(self.currentRow())
         painter=QtGui.QPainter(self.viewport())
         painter.setPen(QtGui.QColor(0,0,0))
-        painter.drawRect(x, y, length-1, height-1)
+        painter.drawRect(x, y, length-2, height-2)
         event.accept()
 
     read_value = pyqtSignal(int,int,str)
@@ -122,7 +122,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
 
     def setup(self, MainWindow, matrix):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "EnaCell"))
         columnsLabels=columns_labels.generate(self.tableWidget.columnCount()) #generattion de la liste des labels
 
         #On renomme chaques lignes
