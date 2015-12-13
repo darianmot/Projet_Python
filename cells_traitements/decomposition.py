@@ -6,6 +6,12 @@ OUVRANTES=['(','{']
 FERMANTES=[')','}']
 SEPARATEURS=[',',';']
 
+class Error(Exception):
+    def __init__(self,reason):
+        self.reason=reason
+        self.disp='#Error : {}'.format(self.reason)
+
+
 #Renvoie True si l'entrée correspond à une celulle
 def isCell(chaine):
     if (chaine[0] not in columns_labels.ALPHABET) or not(chaine[-1].isdigit()): #Le code d'une cellule commence par une lettre et finie par un chiffre
@@ -100,9 +106,12 @@ def endOfFunction(elementList,k):
 def eval_function(network,elementList,elementType,k,knownFunctions):
     element=elementList[k]
     if element not in knownFunctions.dict:  #Si la fonction n'est pas connue, on renvoie une erreur
-        return '#Error : {} n\'est pas connue'.format(elementList[k])
-    if elementType[k+1]!='p_ouvrante':
-        return '#Syntaxe Error : parenthese ouvrante manquante'
+        raise Error('{} n\'est pas connue'.format(elementList[k]))
+    try:
+        if elementType[k+1]!='p_ouvrante':
+            raise Error('\'(\' attendue après {}'.format(elementList[k]))
+    except IndexError:
+        raise Error('\'()\' attendue après {}'.format(elementList[k]))
     p_count=1    #Pour verifier le parenthesage
     args=[]
     currentArg=""
@@ -117,7 +126,7 @@ def eval_function(network,elementList,elementType,k,knownFunctions):
             currentArg=""
         elif elementType[k]=='sep':
             if currentArg=="":  #S'il n'y a rien avant un separateur, la syntaxe n'est pas correcte
-                return '#Syntax Error : separateur'
+                raise Error('\'{}\' innatendue'.format(elementList[k]))
             else:
                 args.append(evaluation(network,currentArg,knownFunctions))
                 currentArg=""
@@ -132,7 +141,7 @@ def eval_function(network,elementList,elementType,k,knownFunctions):
             currentArg+=elementList[k]
         k+=1
     if p_count!=0:
-        return "#Syntax Error : parenthesage"
+        raise Error('parenthesage incorrect')
     if currentArg!="":
         args.append(evaluation(network,currentArg,knownFunctions))
     return knownFunctions.dict[str(element)].value(args)
@@ -146,7 +155,10 @@ def evaluation(network, chaine,knownFunctions):
         if elementType[i]== 'cell':
             elementList[i]=str(network.getCellByName(elementList[i]).value)
         elif elementType[i]=='function':
-            value=eval_function(network,elementList,elementType,i,knownFunctions)
+            try:
+                value=eval_function(network,elementList,elementType,i,knownFunctions)
+            except Error as e:
+                raise Error(e.reason)
             if isError(str(value)):
                 return value
             end=endOfFunction(elementList,i)
@@ -156,21 +168,11 @@ def evaluation(network, chaine,knownFunctions):
     try:
         return eval(''.join(elementList))
     except SyntaxError as e:
-        return '#Syntax Error : {}'.format(e)
+        raise Error('Syntaxe')
     except ZeroDivisionError:
-        return '#Division by zero'
+        raise Error('Division par 0')
     except Exception as e:
-        return '#Error : {}'.format(e)
-
-#Evalue linéairement une liste de cellule
-def evalList(cellList,network,knownFunctions):
-    try:
-        for cell in cellList:
-            network.getCellByName(cell.name).value=evaluation(network,cell.input[1:],knownFunctions)
-    except AttributeError:
-        for cell in cellList:
-            network.getCellByName(cell.name).value='#Error : cycle'
-
+        raise Error(str(e))
 
 
 #Renvoie la liste des celulles apparaissant dans un string

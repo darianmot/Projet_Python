@@ -1,14 +1,7 @@
 """ Dans ce module, on s'occupe d'ordonner une liste de celulles à évaluer selon le tri topologique """
 
-#Renvoie l'ensemble des cellules filles (récursive) d'une cellule
-# def childrenCellsRec(cell):
-#     l=[]
-#     for c in cell.children_cells:
-#         print(l)
-#         if (c not in l) and c!=cell:
-#             l.append(c)
-#             l+=childrenCellsRec(c)
-#     return l
+import cells_traitements.decomposition as decomposition
+
 def childrenCellsRec(parent):
     file=[parent]
     visited=[parent]
@@ -57,7 +50,7 @@ def evalOrder(cell):
                 removePred(pred,element)
             i+=1
         if hasCycle:
-            raise Exception
+            raise decomposition.Error('Dépendance cyclique')
     return order[1:]
 
 
