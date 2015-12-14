@@ -12,12 +12,18 @@ MainWindow = mainwindow.QtWidgets.QMainWindow()
 ui_mainwindow = mainwindow.Ui_MainWindow()
 ui_mainwindow.setupUi(MainWindow,network)
 
+
+
 Funwindow = QtWidgets.QDialog()
 Registerwindow = QtWidgets.QDialog()
 ui_funWinfow = funWindow.Ui_funwindow()
 ui_funWinfow.setupUi(Funwindow,knownFunctions)
 ui_registerwindow = registerwindow.UI_MainWindow()
 ui_registerwindow.setupUi(Registerwindow)
+
+
+
+
 
 
 def traitement(x, y, string):

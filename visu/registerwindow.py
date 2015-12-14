@@ -6,11 +6,10 @@
 #      by: PyQt5 UI code generator 5.2.1
 #
 # WARNING! All changes made in this file will be lost!
-import recOrd
+import recOrd,sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-def Quit():
-    sys.exit(app.exec_())
+
 class UI_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -41,23 +40,12 @@ class UI_MainWindow(object):
         # self.textEdit.setGeometry(QtCore.QRect(10, 200, 401, 51))
         # self.textEdit.setObjectName("textEdit")
         self.retranslateUi(MainWindow)
-        #self.pushButton.pressed.connect(Quit)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
+        self.tree.fileSelected.connect(MainWindow.close)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Open..."))
         #self.pushButton.setText(_translate("MainWindow", "Validate"))
         #self.label.setText(_translate("MainWindow", "Writte down the adress of the file"))
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = UI_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
-
 
