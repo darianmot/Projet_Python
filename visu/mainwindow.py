@@ -7,6 +7,61 @@ CELLWIDTH=100
 CELLHEIGHT=30
 
 class MyTableWidget(QtWidgets.QTableWidget):
+
+    read_value = pyqtSignal(int,int,str)
+    return_value = pyqtSignal(int,int,str)
+    print_input= pyqtSignal(int,int)
+
+    def __init__(self,win,network):
+        super().__init__()
+        _translate = QtCore.QCoreApplication.translate
+        self.setMouseTracking(True)
+        #On ajuste le nombre de colonnes/lignes en fonction de la taille de l'écran
+        self.screen = QtWidgets.QDesktopWidget()
+        self.initialRowsNumber=int(2*self.screen.height()/CELLHEIGHT)
+        self.initialColumnsNumber=int(2*self.screen.width()/CELLWIDTH)
+        self.setColumnCount(self.initialColumnsNumber)
+        self.setRowCount(self.initialRowsNumber)
+        self.columnsLabels=columns_labels.generate(self.columnCount()) #generation de la liste des labels (colonnes)
+        #On attribue un identifiant à chaques colonnes
+        for k in range(self.initialRowsNumber):
+            item = QtWidgets.QTableWidgetItem()
+            self.setVerticalHeaderItem(k,item)
+            item.setText(_translate("MainWindow",str(k+1)))
+
+        #On attribue un identifiant à chaques lignes
+        for k in range(self.initialColumnsNumber):
+            item = QtWidgets.QTableWidgetItem()
+            self.setHorizontalHeaderItem(k, item)
+            item.setText(_translate("MainWindow", self.columnsLabels[k]))
+
+        #On ajoute les celulles crées graphiquement au network
+        network.addRows(self.initialRowsNumber-1)
+        network.addColumns(self.initialColumnsNumber-1)
+
+        #On ajoute des lignes à la fin si la barre VERTICALE de scrolling est en bas
+        verticalscrollbar=self.verticalScrollBar()
+        def ajoutRows():
+            if verticalscrollbar.value()==verticalscrollbar.maximum():
+                for _ in range(self.initialRowsNumber//3):
+                    self.insertRow(self.rowCount())
+                    network.addRow()
+        verticalscrollbar.valueChanged.connect(ajoutRows)
+
+        #On ajoute des colonnes à la fin si la barre HORIZONTALE de scrolling est en bas (il faut cette fois renommer les colonnes)
+        horizontalscrollbar=self.horizontalScrollBar()
+        def ajoutColumns():
+            if horizontalscrollbar.value()==horizontalscrollbar.maximum():
+                for _ in range(self.initialColumnsNumber//3):
+                    self.insertColumn(self.columnCount())
+                    item = QtWidgets.QTableWidgetItem()
+                    self.setHorizontalHeaderItem(self.columnCount()-1, item)
+                    item = self.horizontalHeaderItem(self.columnCount()-1)
+                    columns_labels.add(self.columnsLabels,1)
+                    item.setText(_translate("MainWindow", self.columnsLabels[self.columnCount()-1]))
+                    network.addColumn()
+        horizontalscrollbar.valueChanged.connect(ajoutColumns)
+
     def paintEvent(self, event):
         QtWidgets.QTableWidget.paintEvent(self,event)
         y = self.rowViewportPosition(self.currentRow())
@@ -23,9 +78,6 @@ class MyTableWidget(QtWidgets.QTableWidget):
         painter.drawRect(x+length-8,y+height-8,5,5)
         event.accept()
 
-    read_value = pyqtSignal(int,int,str)
-    return_value = pyqtSignal(int,int,str)
-    print_input= pyqtSignal(int,int)
 
     #Fonction qui s'active lorque l'utilisateur finit d'editer un item
     def closeEditor(self, editor, hint):
@@ -46,52 +98,36 @@ class MyTableWidget(QtWidgets.QTableWidget):
 
 class Ui_MainWindow(QtWidgets.QWidget):
 
-    def setupUi(self, MainWindow,matrix):
-        #Initialisation
+    def setupUi(self, MainWindow,network):
+        #La fenetre
         MainWindow.setObjectName("MainWindow")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
+
+        #La ligne d'édition
+        self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit.setObjectName("lineEdit")
+
+        #Le tableau
+        self.tableWidget = MyTableWidget(self.centralwidget,network)
+        self.tableWidget.setObjectName("tableWidget")
+
+        #Les bouttons
+        self.functionButton = QtWidgets.QToolButton(self.centralwidget)
+        self.functionButton.setObjectName("functionButton")
+
+        #Les layouts
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName("verticalLayout")
         self.editLineLayout = QtWidgets.QHBoxLayout()
         self.editLineLayout.setObjectName('editLineLayout')
-
-        self.tableWidget = MyTableWidget(self.centralwidget)
-        self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setStyleSheet("item:{border-top-width: 200 px}")
-
-        self.functionButton = QtWidgets.QToolButton(self.centralwidget)
-        self.functionButton.setObjectName("functionButton")
-        self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
-        self.lineEdit.setObjectName("lineEdit")
         self.editLineLayout.addWidget(self.functionButton)
         self.editLineLayout.addWidget(self.lineEdit)
-
         self.verticalLayout.addLayout(self.editLineLayout)
-
-
-        #On ajuste le nombre de colonnes/lignes en fonction de la taille de l'écran
-        self.screen = QtWidgets.QDesktopWidget()
-        self.initialRowsNumber=int(2*self.screen.height()/CELLHEIGHT)
-        self.initialColumnsNumber=int(2*self.screen.width()/CELLWIDTH)
-        self.tableWidget.setColumnCount(self.initialColumnsNumber)
-        self.tableWidget.setRowCount(self.initialRowsNumber)
-        matrix.addRows(self.initialRowsNumber-1)
-        matrix.addColumns(self.initialColumnsNumber-1)
-
-        #On attribue un identifiant à chaques colonnes
-        for k in range(self.initialRowsNumber):
-            item = QtWidgets.QTableWidgetItem()
-            self.tableWidget.setVerticalHeaderItem(k,item)
-
-        #On attribue un identifiant à chaques lignes
-        for k in range(self.initialColumnsNumber):
-            item = QtWidgets.QTableWidgetItem()
-            self.tableWidget.setHorizontalHeaderItem(k, item)
+        self.verticalLayout.addWidget(self.tableWidget)
 
         #La toolbox et le menu
-        self.verticalLayout.addWidget(self.tableWidget)
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -128,60 +164,10 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.menuFichier.addAction(self.menuSsmenu2.menuAction())
         self.menubar.addAction(self.menuFichier.menuAction())
 
-        self.setup(MainWindow, matrix)
+        self.setup(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-    def setup(self, MainWindow, matrix):
-        _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "EnaCell"))
-        columnsLabels=columns_labels.generate(self.tableWidget.columnCount()) #generattion de la liste des labels
-
-        #On renomme chaques lignes
-        for k in range(1,self.tableWidget.rowCount()+1):
-            item=self.tableWidget.verticalHeaderItem(k-1)
-            item.setText(_translate("MainWindow",str(k)))
-
-        #On renomme chaques colonnes
-        for k in range(1,self.tableWidget.columnCount()+1):
-            item = self.tableWidget.horizontalHeaderItem(k-1)
-            item.setText(_translate("MainWindow", columnsLabels[k-1]))
-
-        #On ajoute des lignes à la fin si la barre VERTICALE de scrolling est en bas
-        verticalscrollbar=self.tableWidget.verticalScrollBar()
-        def ajoutRows():
-            if verticalscrollbar.value()==verticalscrollbar.maximum():
-                for _ in range(self.initialRowsNumber//3):
-                    self.tableWidget.insertRow(self.tableWidget.rowCount())
-                    matrix.addRow()
-        verticalscrollbar.valueChanged.connect(ajoutRows)
-
-        #On ajoute des colonnes à la fin si la barre HORIZONTALE de scrolling est en bas (il faut cette fois renommer les colonnes)
-        horizontalscrollbar=self.tableWidget.horizontalScrollBar()
-        def ajoutColumns():
-            if horizontalscrollbar.value()==horizontalscrollbar.maximum():
-                for _ in range(self.initialColumnsNumber//3):
-                    self.tableWidget.insertColumn(self.tableWidget.columnCount())
-                    item = QtWidgets.QTableWidgetItem()
-                    self.tableWidget.setHorizontalHeaderItem(self.tableWidget.columnCount()-1, item)
-                    item = self.tableWidget.horizontalHeaderItem(self.tableWidget.columnCount()-1)
-                    columns_labels.add(columnsLabels,1)
-                    item.setText(_translate("MainWindow", columnsLabels[self.tableWidget.columnCount()-1]))
-                    matrix.addColumn()
-        horizontalscrollbar.valueChanged.connect(ajoutColumns)
-
-        self.functionButton.setText(_translate("MainWindow", "..."))
-        self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
-        self.menuFichier.setTitle(_translate("MainWindow", "Menu1"))
-        self.menuSsmenu1.setTitle(_translate("MainWindow", "ssmenu1"))
-        self.menuSsmenu2.setTitle(_translate("MainWindow", "ssmenu2"))
-        self.actionOuvrir.setText(_translate("MainWindow", "Ouvrir"))
-        self.actionOuvrir.setToolTip(_translate("MainWindow", "infobulle"))
-        self.actionAction1.setText(_translate("MainWindow", "action1"))
-        self.actionAction2.setText(_translate("MainWindow", "action2"))
-        self.actionAction2_1.setText(_translate("MainWindow", "action21"))
-        # self.tableWidget.setDragDropMode(self.tableWidget.DragDrop) #Autorise le drag and drop ??
-        self.tableWidget.setMouseTracking(True)
-
+    #Signaux et slots
         #Envoi la coordonnée de la cellule changée et le nouvel item
         # def cell_changed():
         #     self.tableWidget.read_value.emit(self.tableWidget.currentRow(),self.tableWidget.currentColumn(),
@@ -189,7 +175,10 @@ class Ui_MainWindow(QtWidgets.QWidget):
         # self.tableWidget.cell.connect(cell_changed)
 
         def change_cell(x, y, value):
-            self.tableWidget.item(x,y).setText(value)
+            try:
+                self.tableWidget.item(x,y).setText(value)
+            except AttributeError as e:
+                pass
         self.tableWidget.return_value.connect(change_cell)
 
         # Affiche le input dans la ligne d'edition
@@ -199,7 +188,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.tableWidget.cellChanged.connect(cell_clicked)
 
         def changeLineEdit(x,y):
-            self.lineEdit.setText(matrix.getCell(x,y).input)
+            self.lineEdit.setText(network.getCell(x,y).input)
         self.tableWidget.print_input.connect(changeLineEdit)
 
         def line_changed():
@@ -215,6 +204,21 @@ class Ui_MainWindow(QtWidgets.QWidget):
         # def cell_entered():
         #     print('toto')
         # self.tableWidget.cellEntered.connect(cell_entered)
+
+    def setup(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "EnaCell"))
+        self.functionButton.setText(_translate("MainWindow", "..."))
+        self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
+        self.menuFichier.setTitle(_translate("MainWindow", "Menu1"))
+        self.menuSsmenu1.setTitle(_translate("MainWindow", "ssmenu1"))
+        self.menuSsmenu2.setTitle(_translate("MainWindow", "ssmenu2"))
+        self.actionOuvrir.setText(_translate("MainWindow", "Ouvrir"))
+        self.actionOuvrir.setToolTip(_translate("MainWindow", "infobulle"))
+        self.actionAction1.setText(_translate("MainWindow", "action1"))
+        self.actionAction2.setText(_translate("MainWindow", "action2"))
+        self.actionAction2_1.setText(_translate("MainWindow", "action21"))
+
 
 
 if __name__ == "__main__":

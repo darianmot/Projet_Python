@@ -1,6 +1,7 @@
 __authors__="Darian MOTAMED, Hugo CHOULY, Atime RONDA,Anas DARWICH"
 import sys,visu.mainwindow as mainwindow,visu.funwindow as funWindow, visu.registerwindow as registerwindow, structures,cells_traitements.functions as functions
 import cells_traitements.decomposition as decomposition,recOrd,cells_traitements.tritopologique as tritopologique
+import time
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSignal
 
@@ -30,7 +31,8 @@ def traitement(x, y, string):
     cell = network.getCell(x, y)
     if len(string) > 0:
         cell.input = string
-        print('Evaluation de {}...'.format(cell.name),end='')
+        print('Evaluation de {0} et de ses cellules filles ... '.format(cell.name,len(cell.children_cells)),end='')
+        t_init=time.time()
         if string[0] == '=':
             try:
                 value = decomposition.evaluation(network,string[1:], knownFunctions)
@@ -44,7 +46,6 @@ def traitement(x, y, string):
         else:
             cell.value = string
             ui_mainwindow.tableWidget.return_value.emit(x, y, str(cell.value))
-        print(' Done')
         try:
             order=tritopologique.evalOrder(cell)
             for child in order:
@@ -52,6 +53,8 @@ def traitement(x, y, string):
                 ui_mainwindow.tableWidget.return_value.emit(child.x,child.y,child.value)
         except decomposition.Error as e:
             ui_mainwindow.tableWidget.return_value.emit(x, y, e.disp)
+        t_end=time.time()
+        print('Done : {}s'.format(t_end-t_init))
     recOrd.binder2(network)
 
 ui_mainwindow.tableWidget.read_value.connect(traitement)
