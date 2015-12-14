@@ -30,10 +30,6 @@ class UI_MainWindow(object):
         self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
         self.textEdit.setGeometry(QtCore.QRect(10, 200, 401, 51))
         self.textEdit.setObjectName("textEdit")
-        MainWindow.setCentralWidget(self.centralwidget)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
         self.retranslateUi(MainWindow)
         self.pushButton.pressed.connect(Quit)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -41,7 +37,7 @@ class UI_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Open..."))
         self.pushButton.setText(_translate("MainWindow", "Validate"))
         self.label.setText(_translate("MainWindow", "Writte down the adress of the file"))
 

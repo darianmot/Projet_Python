@@ -1,5 +1,5 @@
 __authors__="Darian MOTAMED, Hugo CHOULY, Atime RONDA,Anas DARWICH"
-import sys,visu.mainwindow as mainwindow,visu.funwindow as funWindow, structures,cells_traitements.functions as functions
+import sys,visu.mainwindow as mainwindow,visu.funwindow as funWindow, visu.registerwindow as registerwindow, structures,cells_traitements.functions as functions
 import cells_traitements.decomposition as decomposition,recOrd,cells_traitements.tritopologique as tritopologique
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSignal
@@ -13,8 +13,11 @@ ui_mainwindow = mainwindow.Ui_MainWindow()
 ui_mainwindow.setupUi(MainWindow,network)
 
 Funwindow = QtWidgets.QDialog()
+Registerwindow = QtWidgets.QDialog()
 ui_funWinfow = funWindow.Ui_funwindow()
 ui_funWinfow.setupUi(Funwindow,knownFunctions)
+ui_registerwindow = registerwindow.UI_MainWindow()
+ui_registerwindow.setupUi(Registerwindow)
 
 
 def traitement(x, y, string):
@@ -47,6 +50,7 @@ def traitement(x, y, string):
 
 ui_mainwindow.tableWidget.read_value.connect(traitement)
 ui_mainwindow.functionButton.released.connect(Funwindow.show)
+ui_mainwindow.actionOuvrir.triggered.connect(Registerwindow.show)
 
 MainWindow.showMaximized() #Pour agrandir au max la fenetre
 sys.exit(app.exec_())
