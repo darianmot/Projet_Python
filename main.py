@@ -1,9 +1,10 @@
 __authors__="Darian MOTAMED, Hugo CHOULY, Atime RONDA,Anas DARWICH"
 import sys,visu.mainwindow as mainwindow,visu.funwindow as funWindow, structures,cells_traitements.functions as functions
 import cells_traitements.decomposition as decomposition,recOrd,cells_traitements.tritopologique as tritopologique
+import visu.untitledGUI as recorder
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSignal
-
+from visu import untitledGUI
 network = structures.network()
 knownFunctions=functions.Knownfunctions()
 app = mainwindow.QtWidgets.QApplication(sys.argv)
@@ -15,7 +16,6 @@ ui_mainwindow.setupUi(MainWindow,network)
 Funwindow = QtWidgets.QDialog()
 ui_funWinfow = funWindow.Ui_funwindow()
 ui_funWinfow.setupUi(Funwindow,knownFunctions)
-
 
 def traitement(x, y, string):
     cell = network.getCell(x, y)
@@ -41,10 +41,13 @@ def traitement(x, y, string):
                 ui_mainwindow.tableWidget.return_value.emit(child.x,child.y,child.value)
         except Exception:
             ui_mainwindow.tableWidget.return_value.emit(x, y, '#Error : Circle dependancy')
-    recOrd.binder2(network)
+    recOrd.binder3(network)
 
 ui_mainwindow.tableWidget.read_value.connect(traitement)
 ui_mainwindow.functionButton.released.connect(Funwindow.show)
+
+
+#ui_mainwindow.recordbutton.released.connect(untitledGUI.ouv)
 
 MainWindow.showMaximized() #Pour agrandir au max la fenetre
 sys.exit(app.exec_())
