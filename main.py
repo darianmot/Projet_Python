@@ -53,7 +53,7 @@ def traitement(x, y, string):
             ui_mainwindow.tableWidget.return_value.emit(x, y, e.disp)
         t_end=time.time()
         print('Done : {}s'.format(t_end-t_init))
-    recOrd.binder2(network)
+    recOrd.writter_marshalling(network)
 
 ui_mainwindow.tableWidget.read_value.connect(traitement)
 ui_mainwindow.functionButton.released.connect(Funwindow.show)
