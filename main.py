@@ -25,8 +25,6 @@ ui_registerwindow.setupUi(Registerwindow)
 
 
 
-
-
 def traitement(x, y, string):
     cell = network.getCell(x, y)
     if len(string) > 0:
