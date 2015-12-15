@@ -26,7 +26,6 @@ class UI_MainWindow(object):
         self.tree = QtWidgets.QFileDialog()
         self.arbo_layout.addWidget(self.tree)
 
-
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         self.tree.fileSelected.connect(Quit)
 

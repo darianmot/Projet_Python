@@ -45,7 +45,7 @@ def reader_csv(file):
 #le marshalling n est pas encore pret...ne le testez pas sinon....
 def writter_marshalling(network):
     marshal.dump([[network.getCell(x,y).input for y in range(0,len(network.matrix[x]))]
-                  for x in range(1,4)],open('marshalling.pyc','wb'))
+                  for x in range(0,len(network.matrix))],open('marshalling.pyc','wb'))
     #witting in coprehension of the file, we have to transform each cell in string
 
 def reader_marshalling():
