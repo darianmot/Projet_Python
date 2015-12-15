@@ -3,8 +3,7 @@ from xlwt import Workbook
 import csv as csv
 import marshal
 
-
-def binder(network):
+def writter_xls(network):
     #creation of the binder
     binder=Workbook()
     #creation of the sheet
@@ -16,10 +15,9 @@ def binder(network):
             print(network.getCell(x,y).value)
     #save file
     binder.save('test.xls')
-
     print('file saved')
 
-def read(file,i):
+def reader_xls(file,i):
     #opening of the file as a binder
     binder=xlrd.open_workbook(file)
     #listing of sheet names
@@ -29,7 +27,7 @@ def read(file,i):
     sheet.view()
     #display the sheet but where find it?
 
-def binder2(network):
+def writter_csv(network):
      #file name
     sheet=csv.writer(open('newfile.csv','w'))
     #creation of the 'newfile', w as writting
@@ -37,7 +35,7 @@ def binder2(network):
         sheet.writerow([network.getCell(x,y).input for y in range(0,len(network.matrix[x]))])
         #writting of each row in comprehension
 
-def read2(file):
+def reader_csv(file):
     a=input()
     sheet=csv.reader(open(a))
     #opening
@@ -45,12 +43,13 @@ def read2(file):
         print(row)
     #view
 #le marshalling n est pas encore pret...ne le testez pas sinon....
-def binder3(network):
+def writter_marshalling(network):
     marshal.dump([[network.getCell(x,y).input for y in range(0,len(network.matrix[x]))]
-                  for x in range(0,len(network.matrix))],open('marshalling.pyc','wb'))
+                  for x in range(1,4)],open('marshalling.pyc','wb'))
     #witting in coprehension of the file, we have to transform each cell in string
 
-def read3():
+def reader_marshalling():
     a=input('entrer un fichier')
-    file=open(a)
+    file=open(a,'r')
     marshal.loads(file)
+#reader_marshalling()
