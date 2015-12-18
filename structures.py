@@ -92,11 +92,11 @@ class network(object): #On classe par coordonnées
             self.addColumn()
 
     def getCell(self,x,y): #Renvoi la cellule (x,y) si elle existe, 0 sinon
-        if x<0  or y < 0: return 0
+        if x<0  or y < 0: return Cell(-1,-1)
         try:
             return self.matrix[x][y]
         except IndexError:
-            return 0
+            return Cell(-1,-1)
 
     def getCellByName(self,name): #Renvoi la celulle nommée si elle existe, 0 sinon
         letters=""
