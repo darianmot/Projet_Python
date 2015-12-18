@@ -153,7 +153,7 @@ def eval_function(network,elementList,elementType,k,knownFunctions):
 def evaluation(network, chaine,knownFunctions):
     (elementList,elementType)=decompo(chaine)
     i=0
-    if ':' in elementList: #On remplace c1:c2 par les celulles comprises dans le rectancle d'extrémité (c1,c2)
+    for j in [i for i in range(len(elementList)) if elementList[i]==':']: #On remplace c1:c2 par les celulles comprises dans le rectancle d'extrémité (c1,c2)
         j=elementList.index(':')
         if j==0: raise Error('Syntaxe (\':\' innatendue 1)')
         if elementType[j-1]!='cell' or elementType[j+1]!='cell':
@@ -223,5 +223,4 @@ def cellsBetween(network,c1,c2):
         for c in range(c_init,c_end+1):
             l.append(network.getCell(r,c))
     return l
-
 
