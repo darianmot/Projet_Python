@@ -18,16 +18,26 @@ class Ui_funwindow(object):
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.listLayout = QtWidgets.QVBoxLayout()
+        self.verticalLayout.setObjectName("listLayout")
 
         #On generere la liste de fonctions
         self.listFun = QtWidgets.QListWidget(funwindow)
         self.listFun.setMaximumSize(QtCore.QSize(231, 500))
         self.listFun.setObjectName("listFun")
-        for k in range(0,len(knownFunctions.getList())):
+        for k in range(len(knownFunctions.getFunList())):
             item = QtWidgets.QListWidgetItem()
             self.listFun.addItem(item)
 
-        self.horizontalLayout_2.addWidget(self.listFun)
+        #Les catégories
+        self.combobox=QtWidgets.QComboBox(funwindow)
+        self.combobox.setObjectName('combobox')
+        for category in knownFunctions.getCategoryList():
+            self.combobox.addItem(category)
+
+        self.listLayout.addWidget(self.combobox)
+        self.listLayout.addWidget(self.listFun)
+        self.horizontalLayout_2.addLayout(self.listLayout)
         self.frame = QtWidgets.QFrame(funwindow)
         self.frame.setMinimumSize(QtCore.QSize(231, 249))
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -37,6 +47,7 @@ class Ui_funwindow(object):
         self.gridLayout.setObjectName("gridLayout")
         self.funName = QtWidgets.QLabel(self.frame)
         self.funName.setObjectName("funName")
+
         self.gridLayout.addWidget(self.funName, 0, 0, 1, 2)
         self.description = QtWidgets.QLabel(self.frame)
         self.description.setObjectName("description")
@@ -80,26 +91,39 @@ class Ui_funwindow(object):
         _translate = QtCore.QCoreApplication.translate
         funwindow.setWindowTitle(_translate("funwindow", "Functions"))
 
-        functions=knownFunctions.getList()
-        for k in range(0,len(functions)):
+        self.functions=knownFunctions.getFunList()
+        for k in range(len(self.functions)):
             item = self.listFun.item(k)
-            item.setText(_translate("funwindow", functions[k].name))
+            item.setText(_translate("funwindow", self.functions[k].name))
+
+        
         self.listFun.setCurrentRow(0)
-        self.funName.setText(_translate("funwindow", "<html><head/><body><p align=\"center\">{}</p></body></html>".format(functions[0].name)))
-        self.description.setText(_translate("funwindow", "Description : {}".format(functions[0].description)))
-        self.f_eval.setText(_translate("funwindow", "{}(args)=".format(functions[0].name)))
-        self.lineEdit.setPlainText(_translate("funwindow", functions[0].output))
+        self.combobox.setCurrentText('All')
         self.toolAdd.setText(_translate("funwindow", "+"))
         self.toolDel.setText(_translate("funwindow", "-"))
         self.pushCancel.setText(_translate("funwindow", "Cancel"))
         self.pushOk.setText(_translate("funwindow", "OK"))
 
         #Affiche les details de la fonction selectionnée
-        def fun_selected():
+        def funSelected():
             k=self.listFun.currentRow()
-            self.funName.setText(_translate("funwindow", "<html><head/><body><p align=\"center\">{}</p></body></html>".format(functions[k].name)))
-            self.description.setText(_translate("funwindow", "Description : {}".format(functions[k].description)))
-            self.f_eval.setText(_translate("funwindow", "{}(args)=".format(functions[k].name)))
-            self.lineEdit.setPlainText(_translate("funwindow", functions[k].output))
-        self.listFun.itemClicked.connect(fun_selected)
+            self.funName.setText(_translate("funwindow", "<html><head/><body><p align=\"center\">{}</p></body></html>".format(self.functions[k].name)))
+            self.description.setText(_translate("funwindow", "Description : {}".format(self.functions[k].description)))
+            self.f_eval.setText(_translate("funwindow", "{}(args)=".format(self.functions[k].name)))
+            self.lineEdit.setPlainText(_translate("funwindow", self.functions[k].output))
+        self.listFun.itemClicked.connect(funSelected)
 
+        def categorySelected():
+            currentCategory=self.combobox.currentText()
+            if currentCategory=='All':
+                self.functions=knownFunctions.getFunList()
+            else:
+                self.functions=knownFunctions.functionOfCategory(currentCategory)
+            funSelected()
+            self.listFun.clear()
+            for k in range(len(self.functions)):
+                item = QtWidgets.QListWidgetItem()
+                self.listFun.addItem(item)
+                item.setText(_translate("funwindow", self.functions[k].name))
+        self.combobox.currentIndexChanged.connect(categorySelected)
+        categorySelected()

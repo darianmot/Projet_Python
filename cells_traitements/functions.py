@@ -4,10 +4,11 @@
 #Elles sont répertoriées dans un objet de type Knownfunctions
 import math
 class Function():
-    def __init__(self,name,output, description):
+    def __init__(self,name,output, description,category):
         self.name=name
         self.output=output
         self.description=description
+        self.category=category
 
     def value(self,args):
         try:
@@ -22,15 +23,12 @@ class Function():
 class Knownfunctions():
     def __init__(self):
         self.dict={}
+        self.category=[]
         self.initialize()
 
-    def add(self,function):
-        self.dict[function.name]=function
 
-    def initialize(self):
-        self.add(Function('average','sum(args)/len(args)', 'Retourne la moyenne des cellules selectionnées.'))
-        self.add(Function('sum','sum(args)', 'Retourne la somme des cellules selectionnées.'))
-        self.add(Function('cos','math.cos(args[0])', 'Retourne le cosinus de la celulle selectionnée'))
+    def addFun(self,function):
+        self.dict[function.name]=function
 
     def getFunction(self,name):
         try:
@@ -38,11 +36,32 @@ class Knownfunctions():
         except:
             return 0
 
-    def getList(self):
+    def getFunList(self):
         l=[]
         for fun in self.dict.values():
             l.append(fun)
         return sorted(l,key=lambda x:x.name)
+
+    def addCategory(self,string):
+        self.category.append(string)
+
+    def getCategoryList(self):
+        return sorted(self.category)
+
+    def functionOfCategory(self,string):
+        l=[]
+        for fun in self.dict.values():
+            if fun.category==string:
+                l.append(fun)
+        return sorted(l,key=lambda x:x.name)
+
+    def initialize(self):
+            self.addCategory('All')
+            self.addCategory('Math')
+            self.addCategory('Stat')
+            self.addFun(Function('average','sum(args)/len(args)', 'Retourne la moyenne des cellules selectionnées.','Stat'))
+            self.addFun(Function('sum','sum(args)', 'Retourne la somme des cellules selectionnées.','Math'))
+            self.addFun(Function('cos','math.cos(args[0])', 'Retourne le cosinus de la celulle selectionnée','Math'))
 
     def __repr__(self):
         return str(self.dict)
