@@ -5,12 +5,25 @@ from PyQt5.QtCore import pyqtSignal
 import visu.columns_labels as columns_labels,random
 CELLWIDTH=100
 CELLHEIGHT=30
-class MyRect(Qt.QRect):
-    def mousePressEvent(self,event):
-        event.accept()
-        print('tot')
+class MyRect(Qt.QGraphicsRectItem):
+    def mousePressEvent(self, QGraphicsSceneMouseEvent):
+        print('toto')
 
 
+class MyDelegate(QtWidgets.QItemDelegate):
+    editorcreated=pyqtSignal()
+    def __init__(self,table):
+        super().__init__()
+        self.table=table
+
+    def createEditor(self, QWidget, QStyleOptionViewItem, QModelIndex):
+        print('Editor created')
+        self.editorcreated.emit()
+        return QtWidgets.QItemDelegate.createEditor(self, QWidget, QStyleOptionViewItem, QModelIndex)
+
+
+class MyItem(QtWidgets.QTableWidgetItem):
+    pass
 
 
 class MyTableWidget(QtWidgets.QTableWidget):
@@ -21,8 +34,14 @@ class MyTableWidget(QtWidgets.QTableWidget):
 
     def __init__(self,win,network):
         super().__init__()
+        self.delegate=MyDelegate(self)
+        self.setItemPrototype(MyItem())
+        self.setItemDelegate(self.delegate)
+        self.editorcount=0 #Permet de savoir si l'editeur de celulles est ouvert
+        self.delegate.editorcreated.connect(self.itemeditoropened)
         _translate = QtCore.QCoreApplication.translate
         self.setMouseTracking(True)
+
         #On ajuste le nombre de colonnes/lignes en fonction de la taille de l'écran
         self.screen = QtWidgets.QDesktopWidget()
         self.initialRowsNumber=int(2*self.screen.height()/CELLHEIGHT)
@@ -30,6 +49,7 @@ class MyTableWidget(QtWidgets.QTableWidget):
         self.setColumnCount(self.initialColumnsNumber)
         self.setRowCount(self.initialRowsNumber)
         self.columnsLabels=columns_labels.generate(self.columnCount()) #generation de la liste des labels (colonnes)
+
         #On attribue un identifiant à chaques colonnes
         for k in range(self.initialRowsNumber):
             item = QtWidgets.QTableWidgetItem()
@@ -79,28 +99,44 @@ class MyTableWidget(QtWidgets.QTableWidget):
         pen = QtGui.QPen(QtGui.QColor(0,0,0))
         pen.setWidth(2)
         painter.setPen(pen)
-        rect=MyRect(x+1, y+1, length-3, height-3)
-        #painter.drawRect(x+1, y+1, length-3, height-3)
-        painter.drawRect(rect)
+        rectitem=MyRect(x+length-8,y+height-8,5,5)
+        painter.drawRect(x+1, y+1, length-3, height-3)
+        # painter.drawRect(rectitem.rect())
         painter.setBrush((QtGui.QColor(0,0,0)))
         painter.drawRect(x+length-8,y+height-8,5,5)
         event.accept()
 
 
-    #Fonction qui s'active lorque l'utilisateur finit d'editer un item
+    #Fonction qui s'active lorque l'utilisateur finit d'editer une cellule
     def closeEditor(self, editor, hint):
         print('Editor closed')
+        self.editorcount-=1
         QtWidgets.QTableWidget.closeEditor(self,editor,hint)
         self.read_value.emit(self.currentRow(),self.currentColumn(),self.currentItem().text())
         self.print_input.emit(self.currentRow(),self.currentColumn())
 
+    #Synchronise le input lorsque l'utilsateur change de cellule avec le clavier
     def keyPressEvent(self, event):
         QtWidgets.QTableWidget.keyPressEvent(self,event)
         self.print_input.emit(self.currentRow(),self.currentColumn())
 
-#
-# class Border():
-#     def __init__(self, length, height):
+    #Ajoute un incrément au compteur d'editeur si un éditeur est ouvert (connecte au signal editocreated du delegate)
+    def itemeditoropened(self):
+        self.editorcount+=1
+
+    def isTapping(self):
+        return self.editorcount!=0
+
+
+    # def eventFilter(self, QObject, QEvent):
+    #     if QEvent.type() in [k for k in range(120)]:
+    #         print(QEvent.type())
+    #         return QtWidgets.QTableWidget.eventFilter(self,QObject,QEvent)
+    #     else:
+    #         return QtWidgets.QTableWidget.eventFilter(self,QObject,QEvent)
+    #
+    
+
 
 
 

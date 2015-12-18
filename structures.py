@@ -1,5 +1,5 @@
 import visu.columns_labels as columns_labels,cells_traitements.decomposition as decomposition
-
+from PyQt5 import QtWidgets
 class Cell(object): #caractéristiques et organisation d'une cellule
     def __init__(self,x,y):
         self.x=x
@@ -9,6 +9,12 @@ class Cell(object): #caractéristiques et organisation d'une cellule
         self.name = None     #chaine de caractères
         self.children_cells = [] #liste des cellules filles
         self.parent_cells = []
+
+    def getRow(self):
+        return self.x
+
+    def getColumn(self):
+        return self.y
 
     def addChildCell(self,other):
         if other not in self.children_cells:
@@ -119,4 +125,3 @@ class network(object): #On classe par coordonnées
                 self.getCellByName(cell.name).value='#Error : cycle'
     def __repr__(self):
         return str(self.matrix)
-

@@ -60,6 +60,8 @@ def what_type(chaine):
         return 'p_fermante'
     elif chaine in SEPARATEURS:
         return 'sep'
+    elif chaine==':':
+        return ':'
     elif isCell(chaine):
         return 'cell'
     elif isfunction(chaine):
@@ -151,6 +153,24 @@ def eval_function(network,elementList,elementType,k,knownFunctions):
 def evaluation(network, chaine,knownFunctions):
     (elementList,elementType)=decompo(chaine)
     i=0
+    if ':' in elementList: #On remplace c1:c2 par les celulles comprises dans le rectancle d'extrémité (c1,c2)
+        j=elementList.index(':')
+        if j==0: raise Error('Syntaxe (\':\' innatendue 1)')
+        if elementType[j-1]!='cell' or elementType[j+1]!='cell':
+            raise Error('Syntaxe (\':\' innatendue 2)')
+        c1=network.getCellByName(elementList[j-1])
+        c2=network.getCellByName(elementList[j+1])
+        cells=cellsBetween(network,c1,c2)
+        l_element=[]
+        l_type=[]
+        for cell in cells:
+            l_element.append(cell.name)
+            l_type.append('cell')
+            if cells.index(cell)<len(cells)-1:
+                l_element.append(',')
+                l_type.append('sep')
+        elementList[j-1:j+2]=l_element
+        elementType[j-1:j+2]=l_type
     while i<len(elementList):
         if elementType[i]== 'cell':
             elementList[i]=str(network.getCellByName(elementList[i]).value)
@@ -191,4 +211,17 @@ def childrenCellsRec(cell):
        l.append(c)
        l.append(childrenCellsRec(c))
     return l
+
+#Retourne la liste de l'ensemble des cellules comprises dans la selection rectangulaire d'extrémité diagonale (c1,c2)
+def cellsBetween(network,c1,c2):
+    r_init=min(c1.getRow(),c2.getRow())
+    c_init=min(c1.getColumn(),c2.getColumn())
+    r_end=max(c1.getRow(),c2.getRow())
+    c_end=max(c1.getColumn(),c2.getColumn())
+    l=[]
+    for r in range(r_init,r_end+1):
+        for c in range(c_init,c_end+1):
+            l.append(network.getCell(r,c))
+    return l
+
 
