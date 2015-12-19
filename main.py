@@ -1,5 +1,6 @@
 __authors__="Darian MOTAMED, Hugo CHOULY, Atime RONDA,Anas DARWICH"
-import sys,visu.mainwindow as mainwindow,visu.funwindow as funWindow, visu.registerwindow as registerwindow, structures,cells_traitements.functions as functions
+import sys,visu.mainwindow as mainwindow,visu.funwindow as funWindow, visu.registerwindow as registerwindow, visu.addfunwindow as addfunwindow
+import structures,cells_traitements.functions as functions
 import cells_traitements.decomposition as decomposition,recOrd,cells_traitements.tritopologique as tritopologique
 import time
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -17,10 +18,14 @@ ui_mainwindow.setupUi(MainWindow,network)
 
 Funwindow = QtWidgets.QDialog()
 Registerwindow = QtWidgets.QDialog()
+AddFunwindow = QtWidgets.QDialog()
 ui_funWinfow = funWindow.Ui_funwindow()
 ui_funWinfow.setupUi(Funwindow,knownFunctions)
 ui_registerwindow = registerwindow.UI_MainWindow()
 ui_registerwindow.setupUi(Registerwindow)
+ui_addfunwindow = addfunwindow.Ui_Dialog()
+ui_addfunwindow.setupUi(AddFunwindow,knownFunctions)
+
 
 
 
@@ -57,9 +62,15 @@ def traitement(x, y, string):
             print('Done : {}s'.format(t_end-t_init))
     recOrd.writter_csv(network)
 
+def functionAdded(name,descrition,evaluation,category):
+    knownFunctions.addFun(functions.Function(name,evaluation,descrition,category))
+    ui_funWinfow.retranslateUi(Funwindow,knownFunctions)
+
 ui_mainwindow.tableWidget.read_value.connect(traitement)
 ui_mainwindow.functionButton.released.connect(Funwindow.show)
 ui_mainwindow.actionOuvrir.triggered.connect(Registerwindow.show)
+ui_funWinfow.toolAdd.released.connect(AddFunwindow.show)
+ui_addfunwindow.sendFunData.connect(functionAdded)
 
 MainWindow.showMaximized() #Pour agrandir au max la fenetre
 sys.exit(app.exec_())
