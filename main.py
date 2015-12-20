@@ -61,29 +61,28 @@ def traitement(x, y, string):
                 ui_mainwindow.tableWidget.return_value.emit(x, y, e.disp)
             t_end=time.time()
             print('Done : {}s'.format(t_end-t_init))
-
-    recOrd.writter_csv(network)
-
+        recOrd.writter_xls(network)
 
 
+def reader_xls(file):
+    import xlrd
+    #opening of the file as a binder
+    binder=xlrd.open_workbook(file)
+    #listing of sheet names
+    sheets=binder.sheet_names()
+    #recovering of the i eme sheet
+    sheet=binder.sheet_by_name(sheets[0])
+    #display the sheet but where find it
 
-def reader_csv(file):
+    for i in range(1,sheet.nrows):
+        for j in range(1,sheet.ncols):
+         content=sheet.cell_value(i,j)
+         item= QtWidgets.QTableWidgetItem()
+         ui_mainwindow.tableWidget.setItem(i,j,item)
+         traitement(i,j,content)
+a=input('xls')
+reader_xls(a)
 
-    sheet=csv.reader(open(file))
-    i=0
-    j=0
-    for row in sheet :
-        i+=1
-        for j  in range(0,len(row)):
-            j+=1
-            item= QtWidgets.QTableWidgetItem()
-            ui_mainwindow.tableWidget.setItem(i,j,item)
-            content=row[j-1]
-            traitement(i,j,content)
-
-
-a=input('écrit newfile.csv')
-reader_csv(a)
 def functionAdded(name,descrition,evaluation,category):
     knownFunctions.addFun(functions.Function(name,evaluation,descrition,category))
     ui_funWinfow.retranslateUi(Funwindow,knownFunctions)
