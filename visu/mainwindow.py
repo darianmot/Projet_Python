@@ -254,6 +254,8 @@ class Ui_MainWindow(QtWidgets.QWidget):
         #
         # view.setScene(self.scene)
     def setup(self, MainWindow):
+        self.tableWidget.setFocus()
+        self.tableWidget.setCurrentCell(0,0)
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "EnaCell"))
         self.functionButton.setText(_translate("MainWindow", "..."))

@@ -40,20 +40,19 @@ def writter_csv(network):
         sheet.writerow([network.getCell(x,y).input for y in range(0,len(network.matrix[x]))])
         #writting of each row in comprehension
 
-# def reader_csv(file):
-#     from main import ui_mainwindow, traitement
-#     sheet=csv.reader(open(file))
-#     i=0
-#     j=0
-#     for row in sheet :
-#         i+=1
-#         for j  in range(0,len(row)):
-#             j+=1
-#             item= QtWidgets.QTableWidgetItem()
-#             ui_mainwindow.tableWidget.setItem(i,j,item)
-#             content=row[j-1]
-#             traitement(i,j,content)
-#             print(i,j)
+def reader_csv(file):
+    from main import ui_mainwindow, traitement
+    sheet=csv.reader(open(file))
+    i=0
+    j=0
+    for row in sheet :
+        i+=1
+        for j  in range(0,len(row)):
+            j+=1
+            item= QtWidgets.QTableWidgetItem()
+            ui_mainwindow.tableWidget.setItem(i,j,item)
+            content=row[j-1]
+            traitement(i,j,content)
 
 #le marshalling n est pas encore pret...ne le testez pas sinon....
 

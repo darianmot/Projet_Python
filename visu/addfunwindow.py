@@ -90,6 +90,7 @@ class Ui_Dialog(QtWidgets.QWidget):
             description=self.descriptionEdit.text()
             evaluation=self.evalEdit.text()
             category=self.combobox.currentText()
+            self.retranslateUi(Dialog)
             if isFunValid(name,description,evaluation):
                 self.sendFunData.emit(name,description,evaluation,category)
                 Dialog.accept()
@@ -101,10 +102,14 @@ class Ui_Dialog(QtWidgets.QWidget):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
+        self.nameEdit.setFocus()
         Dialog.setWindowTitle(_translate("Dialog", "Ajouter une fonction"))
         self.Nom.setText(_translate("Dialog", "Nom : "))
+        self.nameEdit.clear()
         self.Description.setText(_translate("Dialog", "Description : "))
+        self.descriptionEdit.clear()
         self.f_eval.setText(_translate("Dialog", "f(args) =  "))
+        self.evalEdit.clear()
         self.category.setText(_translate("Dialog", "Category : "))
 
 
