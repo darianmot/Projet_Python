@@ -2,7 +2,7 @@ import xlrd
 from xlwt import Workbook
 import csv as csv
 import marshal
-
+from structures import Cell
 def writter_xls(network):
     #creation of the binder
     binder=Workbook()
@@ -18,13 +18,14 @@ def writter_xls(network):
     print('file saved')
 
 def reader_xls(file,i):
+
     #opening of the file as a binder
     binder=xlrd.open_workbook(file)
     #listing of sheet names
     sheets=binder.sheet_names()
     #recovering of the i eme sheet
-    sheet=binder.sheet_by_name(sheets[i])
-    sheet.view()
+    sheet=binder.sheet_by_name(sheets[0])
+
     #display the sheet but where find it?
 
 def writter_csv(network):
@@ -36,12 +37,14 @@ def writter_csv(network):
         #writting of each row in comprehension
 
 def reader_csv(file):
-    a=input()
-    sheet=csv.reader(open(a))
+
+    sheet=csv.reader(open(file))
     #opening
     for row in sheet:
         print(row)
-    #view
+
+
+#view
 #le marshalling n est pas encore pret...ne le testez pas sinon....
 def writter_marshalling(network):
     marshal.dump([[network.getCell(x,y).input for y in range(0,len(network.matrix[x]))]

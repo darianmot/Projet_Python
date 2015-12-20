@@ -17,12 +17,12 @@ ui_mainwindow.setupUi(MainWindow,network)
 
 
 Funwindow = QtWidgets.QDialog()
-Registerwindow = QtWidgets.QDialog()
+#Registerwindow = QtWidgets.QFileDialog.getOpenFileName()
 AddFunwindow = QtWidgets.QDialog()
 ui_funWinfow = funWindow.Ui_funwindow()
 ui_funWinfow.setupUi(Funwindow,knownFunctions)
-ui_registerwindow = registerwindow.UI_MainWindow()
-ui_registerwindow.setupUi(Registerwindow)
+#ui_registerwindow = registerwindow.UI_MainWindow()
+#ui_registerwindow.setupUi(Registerwindow)
 ui_addfunwindow = addfunwindow.Ui_Dialog()
 ui_addfunwindow.setupUi(AddFunwindow,knownFunctions)
 
@@ -61,6 +61,10 @@ def traitement(x, y, string):
             t_end=time.time()
             print('Done : {}s'.format(t_end-t_init))
     recOrd.writter_csv(network)
+# for i in range(1,6):
+#     for j in range(1,6):
+#         traitement(i,j,'aaa')
+#         #QtWidgets.QGraphicsItem.
 
 def functionAdded(name,descrition,evaluation,category):
     knownFunctions.addFun(functions.Function(name,evaluation,descrition,category))
@@ -68,7 +72,7 @@ def functionAdded(name,descrition,evaluation,category):
 
 ui_mainwindow.tableWidget.read_value.connect(traitement)
 ui_mainwindow.functionButton.released.connect(Funwindow.show)
-ui_mainwindow.actionOuvrir.triggered.connect(Registerwindow.show)
+ui_mainwindow.actionOuvrir.triggered.connect(QtWidgets.QFileDialog.getOpenFileName)
 ui_funWinfow.toolAdd.released.connect(AddFunwindow.show)
 ui_addfunwindow.sendFunData.connect(functionAdded)
 
