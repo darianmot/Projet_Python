@@ -62,8 +62,26 @@ def traitement(x, y, string):
             t_end=time.time()
             print('Done : {}s'.format(t_end-t_init))
 
-    recOrd.writter_csv(network)
+    recOrd.writter_xls(network)
 
+def reader_xls(file):
+    import xlrd
+    #opening of the file as a binder
+    binder=xlrd.open_workbook(file)
+    #listing of sheet names
+    sheets=binder.sheet_names()
+    #recovering of the i eme sheet
+    sheet=binder.sheet_by_name(sheets[0])
+    #display the sheet but where find it
+    from main import ui_mainwindow, traitement
+    for i in range(1,sheet.nrows):
+        for j in range(1,sheet.ncols):
+         content=sheet.cell_value(i,j)
+         item= QtWidgets.QTableWidgetItem()
+         ui_mainwindow.tableWidget.setItem(i,j,item)
+         traitement(i,j,content)
+#a=input('ecrire test.xls')
+#recOrd.reader_xls(a)
 def functionAdded(name,descrition,evaluation,category):
     knownFunctions.addFun(functions.Function(name,evaluation,descrition,category))
     ui_funWinfow.retranslateUi(Funwindow,knownFunctions)
