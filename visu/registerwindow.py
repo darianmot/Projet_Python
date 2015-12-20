@@ -1,4 +1,4 @@
-# CODE DEVENU INUTILE MAIS AU CAS OU ON AURAIT BESOIN DE CELUI CI JE NE LE SUPPRIME PAS
+# CODE DEVENU INUTILE MAI
 #
 # # Form implementation generated from reading ui file '/home/insaf/PycharmProjects/Projet_Python1/visu/untitled.ui'
 # #
@@ -30,6 +30,5 @@
 #     def retranslateUi(self, MainWindow):
 #         _translate = QtCore.QCoreApplication.translate
 #         MainWindow.setWindowTitle(_translate("MainWindow", "Open..."))
-#
 #
 #

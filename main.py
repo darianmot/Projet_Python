@@ -3,6 +3,7 @@ import sys,visu.mainwindow as mainwindow,visu.funwindow as funWindow, visu.regis
 import structures,cells_traitements.functions as functions
 import cells_traitements.decomposition as decomposition,recOrd,cells_traitements.tritopologique as tritopologique
 import time
+import csv
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSignal
 
@@ -60,12 +61,29 @@ def traitement(x, y, string):
                 ui_mainwindow.tableWidget.return_value.emit(x, y, e.disp)
             t_end=time.time()
             print('Done : {}s'.format(t_end-t_init))
-    recOrd.writter_csv(network)
-# for i in range(1,6):
-#     for j in range(1,6):
-#         traitement(i,j,'aaa')
-#         #QtWidgets.QGraphicsItem.
 
+    recOrd.writter_csv(network)
+
+
+
+
+def reader_csv(file):
+
+    sheet=csv.reader(open(file))
+    i=0
+    j=0
+    for row in sheet :
+        i+=1
+        for j  in range(0,len(row)):
+            j+=1
+            item= QtWidgets.QTableWidgetItem()
+            ui_mainwindow.tableWidget.setItem(i,j,item)
+            content=row[j-1]
+            traitement(i,j,content)
+
+
+a=input('écrit newfile.csv')
+reader_csv(a)
 def functionAdded(name,descrition,evaluation,category):
     knownFunctions.addFun(functions.Function(name,evaluation,descrition,category))
     ui_funWinfow.retranslateUi(Funwindow,knownFunctions)
