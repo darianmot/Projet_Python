@@ -35,7 +35,7 @@ def writter_xls(network):
 # print ("C1:",xlWb.ActiveSheet.Cells(1,3).Value)
 
 def reader_xls(file):
-
+    from main import ui_mainwindow, traitement
     #opening of the file as a binder
     binder=xlrd.open_workbook(file)
     #listing of sheet names
@@ -43,7 +43,7 @@ def reader_xls(file):
     #recovering of the i eme sheet
     sheet=binder.sheet_by_name(sheets[0])
     #display the sheet but where find it
-    from main import ui_mainwindow, traitement
+
     for i in range(1,sheet.nrows):
         for j in range(1,sheet.ncols):
          content=sheet.cell_value(i,j)
@@ -78,11 +78,22 @@ def reader_csv(file):
 def writter_marshalling(network):
     marshal.dump([[network.getCell(x,y).input for y in range(0,len(network.matrix[x]))]
                   for x in range(0,len(network.matrix))],open('marshalling.pyc','wb'))
-    #witting in coprehension of the file, we have to transform each cell in string
+    print('saved')
 
-def reader_marshalling():
-    a=input('entrer un fichier')
-    file=open(a,'r')
-    marshal.loads(file)
 
-#reader_marshalling()
+def reader_marshalling(file):
+    from main import ui_mainwindow, traitement
+    data=marshal.load(open(file,'rb'))
+    i=0
+    j=0
+    for row in data:
+        i+=1
+        for j  in range(0,len(row)):
+            j+=1
+            item= QtWidgets.QTableWidgetItem()
+            ui_mainwindow.tableWidget.setItem(i,j,item)
+            content=row[j-1]
+            traitement(i,j,content)
+
+
+

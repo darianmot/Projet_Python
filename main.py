@@ -62,33 +62,15 @@ def traitement(x, y, string):
             t_end=time.time()
             print('Done : {}s'.format(t_end-t_init))
 
-    recOrd.writter_xls(network)
+    recOrd.writter_marshalling(network)
 
-def reader_xls(file):
-    import xlrd
-    #opening of the file as a binder
-    binder=xlrd.open_workbook(file)
-    #listing of sheet names
-    sheets=binder.sheet_names()
-    #recovering of the i eme sheet
-    sheet=binder.sheet_by_name(sheets[0])
-    #display the sheet but where find it
-    from main import ui_mainwindow, traitement
-    for i in range(1,sheet.nrows):
-        for j in range(1,sheet.ncols):
-         content=sheet.cell_value(i,j)
-         item= QtWidgets.QTableWidgetItem()
-         ui_mainwindow.tableWidget.setItem(i,j,item)
-         traitement(i,j,content)
-#a=input('ecrire test.xls')
-#recOrd.reader_xls(a)
 def functionAdded(name,descrition,evaluation,category):
     knownFunctions.addFun(functions.Function(name,evaluation,descrition,category))
     ui_funWinfow.retranslateUi(Funwindow,knownFunctions)
 
 ui_mainwindow.tableWidget.read_value.connect(traitement)
 ui_mainwindow.functionButton.released.connect(Funwindow.show)
-# ui_mainwindow.actionOuvrir.triggered.connect(Registerwindow.show)
+ui_mainwindow.actionOuvrir.triggered.connect(QtWidgets.QFileDialog.getOpenFileName)
 ui_funWinfow.toolAdd.released.connect(AddFunwindow.show)
 ui_addfunwindow.sendFunData.connect(functionAdded)
 
