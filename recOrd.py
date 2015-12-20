@@ -34,22 +34,22 @@ def writter_xls(network):
 # #Affichage de la cellule C1 (coordonnées 1,3 ligne colonne)
 # print ("C1:",xlWb.ActiveSheet.Cells(1,3).Value)
 
-# def reader_xls(file):
-#
-#     #opening of the file as a binder
-#     binder=xlrd.open_workbook(file)
-#     #listing of sheet names
-#     sheets=binder.sheet_names()
-#     #recovering of the i eme sheet
-#     sheet=binder.sheet_by_name(sheets[0])
-#     #display the sheet but where find it
-#     from main import ui_mainwindow, traitement
-#     for i in range(1,sheet.nrows):
-#         for j in range(1,sheet.ncols):
-#          content=sheet.cell_value(i,j)
-#          item= QtWidgets.QTableWidgetItem()
-#          ui_mainwindow.tableWidget.setItem(i,j,item)
-#          traitement(i,j,content)
+def reader_xls(file):
+
+    #opening of the file as a binder
+    binder=xlrd.open_workbook(file)
+    #listing of sheet names
+    sheets=binder.sheet_names()
+    #recovering of the i eme sheet
+    sheet=binder.sheet_by_name(sheets[0])
+    #display the sheet but where find it
+    from main import ui_mainwindow, traitement
+    for i in range(1,sheet.nrows):
+        for j in range(1,sheet.ncols):
+         content=sheet.cell_value(i,j)
+         item= QtWidgets.QTableWidgetItem()
+         ui_mainwindow.tableWidget.setItem(i,j,item)
+         traitement(i,j,content)
 
 def writter_csv(network):
      #file name
