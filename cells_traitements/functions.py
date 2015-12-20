@@ -26,7 +26,6 @@ class Knownfunctions():
         self.category=[]
         self.initialize()
 
-
     def addFun(self,function):
         self.dict[function.name]=function
 

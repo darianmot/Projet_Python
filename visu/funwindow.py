@@ -1,12 +1,7 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'funwindow.ui'
-#
-# Created by: PyQt5 UI code generator 5.4.1
-#
-# WARNING! All changes made in this file will be lost!
+"""Fenetre de gestion des fonctions"""
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import copy
 
 class Ui_funwindow(object):
     def setupUi(self, funwindow,knownFunctions):
@@ -96,8 +91,15 @@ class Ui_funwindow(object):
         self.horizontalLayout_3.addWidget(self.pushOk)
         self.verticalLayout.addLayout(self.horizontalLayout_3)
         self.horizontalLayout_4.addLayout(self.verticalLayout)
-        self.pushCancel.released.connect(funwindow.close)
-        self.pushOk.released.connect(funwindow.close)
+
+        def quitOk():
+            funwindow.close()
+
+        def quitCancel():
+            funwindow.close()
+            self.retranslateUi(funwindow,knownFunctions)
+        self.pushCancel.released.connect(quitCancel)
+        self.pushOk.released.connect(quitOk)
 
         self.retranslateUi(funwindow,knownFunctions)
 
@@ -106,6 +108,7 @@ class Ui_funwindow(object):
     def retranslateUi(self, funwindow,knownFunctions):
         _translate = QtCore.QCoreApplication.translate
         funwindow.setWindowTitle(_translate("funwindow", "Functions"))
+        self.listFun.setFocus()
 
         #La liste des fonctions
         self.functions=knownFunctions.getFunList()
@@ -129,11 +132,14 @@ class Ui_funwindow(object):
         #Affiche les details de la fonction selectionnée
         def funSelected():
             k=self.listFun.currentRow()
-            self.funName.setText(_translate("funwindow", "<html><head/><body><p align=\"center\">{}</p></body></html>".format(self.functions[k].name)))
-            self.description.setText(_translate("funwindow", "Description : {}".format(self.functions[k].description)))
-            self.f_eval.setText(_translate("funwindow", "{}(args)=".format(self.functions[k].name)))
-            self.expr.setText(_translate("funwindow", self.functions[k].output))
-        self.listFun.itemClicked.connect(funSelected)
+            try:
+                self.funName.setText(_translate("funwindow", "<html><head/><body><p align=\"center\">{}</p></body></html>".format(self.functions[k].name)))
+                self.description.setText(_translate("funwindow", "Description : {}".format(self.functions[k].description)))
+                self.f_eval.setText(_translate("funwindow", "{}(args)=".format(self.functions[k].name)))
+                self.expr.setText(_translate("funwindow", self.functions[k].output))
+            except IndexError:
+                pass
+        self.listFun.itemSelectionChanged.connect(funSelected)
 
         def categorySelected():
             currentCategory=self.combobox.currentText()
@@ -141,14 +147,12 @@ class Ui_funwindow(object):
                 self.functions=knownFunctions.getFunList()
             else:
                 self.functions=knownFunctions.functionOfCategory(currentCategory)
-            funSelected()
             self.listFun.clear()
             for k in range(len(self.functions)):
                 item = QtWidgets.QListWidgetItem()
                 self.listFun.addItem(item)
                 item.setText(_translate("funwindow", self.functions[k].name))
+            self.listFun.setCurrentRow(0)
+            funSelected()
         self.combobox.currentIndexChanged.connect(categorySelected)
         categorySelected()
-
-    def f(self,x,y,z):
-        print(x,y,z)
