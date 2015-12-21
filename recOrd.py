@@ -14,8 +14,7 @@ def writter_xls(network):
     binder.save('test.xls') #save file
     print('file saved')
 
-def reader_xls(file):
-    from main import ui_mainwindow, traitement
+def reader_xls(file,ui_mainwindow,traitement):
     binder=xlrd.open_workbook(file) #opening of the file as a binder
     sheets=binder.sheet_names() #listing of sheet names
     sheet=binder.sheet_by_name(sheets[0]) #recovering of the i eme sheet
@@ -23,8 +22,8 @@ def reader_xls(file):
         for j in range(1,sheet.ncols):
          content=sheet.cell_value(i,j)
          item= QtWidgets.QTableWidgetItem()
-         ui_mainwindow.tableWidget.setItem(i,j,item)
-         traitement(i,j,content)
+         ui_mainwindow.tableWidget.setItem(i-1,j-1,item)
+         traitement(i-1,j-1,content)
 
 def writter_csv(network):
     sheet=csv.writer(open('newfile.csv','w'))      #file name
@@ -33,10 +32,8 @@ def writter_csv(network):
     print('saved')
 
 def reader_csv(file,ui_mainwindow,traitement):
-
     sheet=csv.reader(open(file)) #opening
     i=0
-    j=0
     for row in sheet :
         i+=1
         for j  in range(0,len(row)):  #for each content or cell, a new QtWidget item is created
@@ -51,12 +48,9 @@ def writter_marshalling(network):
                   for x in range(0,len(network.matrix))],open('marshalling.pyc','wb'))
     print('saved')
 
-def reader_marshalling(file):
-    i=0
-    from main import ui_mainwindow, traitement
+def reader_marshalling(file,ui_mainwindow,traitement):
     data=marshal.load(open(file,'rb')) #opening
     i=0
-    j=0
     for row in data:
         i+=1
         for j  in range(0,len(row)):# as for csv
