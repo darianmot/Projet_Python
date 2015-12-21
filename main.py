@@ -70,7 +70,8 @@ def functionAdded(name,descrition,evaluation,category):
 
 ui_mainwindow.tableWidget.read_value.connect(traitement)
 ui_mainwindow.functionButton.released.connect(Funwindow.show)
-ui_mainwindow.actionOuvrir.triggered.connect(QtWidgets.QFileDialog.getOpenFileName)
+ui_mainwindow.actionOuvrir.triggered.connect(QtWidgets.QFileDialog.getOpenFileName)#fenetre fonctionnelle ne PAS TOUCHER!!!!
+
 ui_funWinfow.toolAdd.released.connect(AddFunwindow.show)
 ui_addfunwindow.sendFunData.connect(functionAdded)
 

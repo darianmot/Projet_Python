@@ -64,19 +64,6 @@ def reader_marshalling(file):
             ui_mainwindow.tableWidget.setItem(i,j,item)
             content=row[j-1]
             traitement(i,j,content)
-#
-# import win32com.client as win32
-# from win32com.client import Dispatch
-#
-# path = os.path.join("C:\\", "Users","*****","Desktop","test.xls")
-# #Lance le processus Excel
-# xlApp = Dispatch("Excel.Application")
-# #Excel une fois lancé s'affiche (à false il s'execute en tache de fond on ne le voit pas)
-# xlApp.Visible=True
-# #Ouverture du fichier
-# xlWb = xlApp.Workbooks.Open(path)
-# #Affichage de la cellule C1 (coordonnées 1,3 ligne colonne)
-# print ("C1:",xlWb.ActiveSheet.Cells(1,3).Value)
 
 
 
