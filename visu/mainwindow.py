@@ -9,7 +9,9 @@ CELLHEIGHT=30
 
 
 class MyRect(Qt.QRect):
-    rectPressed = pyqtSignal()
+    def __init__(self):
+        super().__init__()
+        self.isSelected = False
 
 
 class MyDelegate(QtWidgets.QItemDelegate):
@@ -31,8 +33,13 @@ class EventEater(QtCore.QObject):
 
     def eventFilter(self, object, event):
         if event.type() == 2 and self.target.coin.contains(event.pos().x(),event.pos().y()):
-                print('coin selection detected')
-                return True
+            print('coin selected')
+            self.target.coin.isSelected = True
+            return True
+        if event.type() == 3 and self.target.coin.isSelected == True:
+            print('coin released')
+            self.target.coin.isSelected = False
+            return True
         return False
 
 
@@ -129,7 +136,7 @@ class MyTableWidget(QtWidgets.QTableWidget):
         pen.setWidth(2)
         painter.setPen(pen)
 
-        self.coin=MyRect(x+length-8,y+height-8,5,5)
+        self.coin.setRect(x+length-8,y+height-8,5,5)
 
         painter.drawRect(x+1, y+1, length-3, height-3)
 
