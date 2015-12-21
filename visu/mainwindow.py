@@ -127,19 +127,6 @@ class MyTableWidget(QtWidgets.QTableWidget):
     def isTapping(self):
         return self.editorcount!=0
 
-
-    # def eventFilter(self, QObject, QEvent):
-    #     if QEvent.type() in [k for k in range(120)]:
-    #         print(QEvent.type())
-    #         return QtWidgets.QTableWidget.eventFilter(self,QObject,QEvent)
-    #     else:
-    #         return QtWidgets.QTableWidget.eventFilter(self,QObject,QEvent)
-    #
-    
-
-
-
-
 class Ui_MainWindow(QtWidgets.QWidget):
 
     def setupUi(self, MainWindow,network):

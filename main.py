@@ -56,7 +56,7 @@ def traitement(x, y, string):
                 ui_mainwindow.tableWidget.return_value.emit(x, y, e.disp)
             t_end=time.time()
             print('Done : {}s'.format(t_end-t_init))
-    recOrd.writter_csv(network)
+    # recOrd.writter_csv(network)
 
 
 def functionAdded(name,descrition,evaluation,category):

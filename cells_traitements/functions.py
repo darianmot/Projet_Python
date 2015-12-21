@@ -29,6 +29,9 @@ class Knownfunctions():
     def addFun(self,function):
         self.dict[function.name]=function
 
+    def removeFun(self,function):
+        del self.dict[function.name]
+
     def getFunction(self,name):
         try:
             return self.dict.get(name)
@@ -55,12 +58,13 @@ class Knownfunctions():
         return sorted(l,key=lambda x:x.name)
 
     def initialize(self):
-            self.addCategory('All')
-            self.addCategory('Math')
-            self.addCategory('Stat')
-            self.addFun(Function('average','sum(args)/len(args)', 'Retourne la moyenne des cellules selectionnées.','Stat'))
-            self.addFun(Function('sum','sum(args)', 'Retourne la somme des cellules selectionnées.','Math'))
-            self.addFun(Function('cos','math.cos(args[0])', 'Retourne le cosinus de la celulle selectionnée','Math'))
+        self.addCategory('All')
+        self.addCategory('Math')
+        self.addCategory('Stat')
+        self.addFun(Function('average','sum(args)/len(args)', 'Retourne la moyenne des cellules selectionnées.','Stat'))
+        self.addFun(Function('sum','sum(args)', 'Retourne la somme des cellules selectionnées.','Math'))
+        self.addFun(Function('cos','math.cos(args[0])', 'Retourne le cosinus de la celulle selectionnée','Math'))
+        self.addFun(Function('exp','math.exp(args[0])', 'Retourne le exp', 'Math'))
 
     def __repr__(self):
         return str(self.dict)
