@@ -61,7 +61,6 @@ def reader_marshalling(file,ui_mainwindow,traitement):
             traitement(i-1,j-1,content)
 
 def extension(a,ui_mainwindow,traitement): #permet la lecture
-    print('------------------')
     chaine=a.split(os.extsep)
     key=chaine[1]
     if key=='csv':

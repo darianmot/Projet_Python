@@ -64,11 +64,9 @@ def functionAdded(name,descrition,evaluation,category):
     ui_funWinfow.retranslateUi(Funwindow,knownFunctions)
 
 def windowopen():#quand on met  le signe moins ca bug et louverture est trop lente, il arrete pas de save....
-    print('open a file')
     a=QtWidgets.QFileDialog.getOpenFileName()
     adress=a[0]
     recOrd.extension(adress,ui_mainwindow,traitement)
-    print('file opened')
 
 ui_mainwindow.tableWidget.read_value.connect(traitement)
 ui_mainwindow.functionButton.released.connect(Funwindow.show)
