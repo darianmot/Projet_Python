@@ -1,8 +1,9 @@
-import xlrd
+
 from xlwt import Workbook
 import csv as csv
 import marshal
 from PyQt5 import QtWidgets
+
 
 def writter_xls(network):
     binder=Workbook()   #creation of the binder
@@ -13,18 +14,17 @@ def writter_xls(network):
             print(network.getCell(x,y).value)
     binder.save('test.xls') #save file
     print('file saved')
-
-def reader_xls(file):
-    from main import ui_mainwindow, traitement
-    binder=xlrd.open_workbook(file) #opening of the file as a binder
-    sheets=binder.sheet_names() #listing of sheet names
-    sheet=binder.sheet_by_name(sheets[0]) #recovering of the i eme sheet
-    for i in range(1,sheet.nrows):
-        for j in range(1,sheet.ncols):
-         content=sheet.cell_value(i,j)
-         item= QtWidgets.QTableWidgetItem()
-         ui_mainwindow.tableWidget.setItem(i,j,item)
-         traitement(i,j,content)
+#
+# def reader_xls(file):
+#     binder=xlrd.open_workbook(file) #opening of the file as a binder
+#     sheets=binder.sheet_names() #listing of sheet names
+#     sheet=binder.sheet_by_name(sheets[0]) #recovering of the i eme sheet
+#     for i in range(1,sheet.nrows):
+#         for j in range(1,sheet.ncols):
+#          content=sheet.cell_value(i,j)
+#          item= QtWidgets.QTableWidgetItem()
+#          ui_mainwindow.tableWidget.setItem(i,j,item)
+#          traitements.traitement(i,j,content)
 
 def writter_csv(network):
     sheet=csv.writer(open('newfile.csv','w'))      #file name
@@ -51,19 +51,18 @@ def writter_marshalling(network):
                   for x in range(0,len(network.matrix))],open('marshalling.pyc','wb'))
     print('saved')
 
-def reader_marshalling(file):
-    i=0
-    from main import ui_mainwindow, traitement
-    data=marshal.load(open(file,'rb')) #opening
-    i=0
-    j=0
-    for row in data:
-        i+=1
-        for j  in range(0,len(row)):# as for csv
-            j+=1
-            item= QtWidgets.QTableWidgetItem()
-            ui_mainwindow.tableWidget.setItem(i-1,j-1,item)
-            content=row[j-1]
-            traitement(i-1,j-1,content)
-
+# def reader_marshalling(file):
+#     i=0
+#     data=marshal.load(open(file,'rb')) #opening
+#     i=0
+#     j=0
+#     for row in data:
+#         i+=1
+#         for j  in range(0,len(row)):# as for csv
+#             j+=1
+#             item= QtWidgets.QTableWidgetItem()
+#             ui_mainwindow.tableWidget.setItem(i-1,j-1,item)
+#             content=row[j-1]
+#             traitement(i-1,j-1,content)
+#
 
