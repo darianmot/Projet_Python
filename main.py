@@ -56,22 +56,27 @@ def traitement(x, y, string):
                 ui_mainwindow.tableWidget.return_value.emit(x, y, e.disp)
             t_end=time.time()
             print('Done : {}s'.format(t_end-t_init))
-        recOrd.writter_csv(network)
+
 
 
 def functionAdded(name,descrition,evaluation,category):
     knownFunctions.addFun(functions.Function(name,evaluation,descrition,category))
     ui_funWinfow.retranslateUi(Funwindow,knownFunctions)
 
-def windowopen():#quand on met  le signe moins ca bug et louverture est trop lente, il arrete pas de save....
-    a=QtWidgets.QFileDialog.getOpenFileName()
+def windowopen():                      #to open the window open....
+    a=QtWidgets.QFileDialog.getOpenFileName(MainWindow,'open','',"(*.pyc *xls *csv)")
     adress=a[0]
-    recOrd.extension(adress,ui_mainwindow,traitement)
+    recOrd.extensionreader(adress,ui_mainwindow,traitement)
+def windowsave():                      #to open the window save....
+    a=QtWidgets.QFileDialog.getSaveFileName(MainWindow,'save','',"(*.pyc *.xls *.csv)") #ne marche pas très bien, on a pas le choix du format
+    adress=a[0]
+    recOrd.extensionwritter(adress,network) #faut mettre l'extension du format genre anas.pyc ou anas.xls dans la barre, bug: quand on ouvre à la filée des dossiers ca bug, ya des cases qui napparaisdsent plus
+
 
 ui_mainwindow.tableWidget.read_value.connect(traitement)
 ui_mainwindow.functionButton.released.connect(Funwindow.show)
 ui_mainwindow.actionOuvrir.triggered.connect(windowopen)#fenetre fonctionnelle ne PAS TOUCHER!!!!
-
+ui_mainwindow.actionenregistrer.triggered.connect(windowsave)
 ui_funWinfow.toolAdd.released.connect(AddFunwindow.show)
 ui_addfunwindow.sendFunData.connect(functionAdded)
 

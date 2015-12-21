@@ -4,14 +4,14 @@ import csv as csv
 import marshal
 from PyQt5 import QtWidgets
 import os
-def writter_xls(network):
+def writter_xls(network,name):
     binder=Workbook()   #creation of the binder
     sheet= binder.add_sheet('page') #creation of the sheet
     for x in range(0,len(network.matrix)):             #writting of each cell
         for y in range(0,len(network.matrix[x])):
             sheet.write(y,x,network.getCell(x,y).value)
             print(network.getCell(x,y).value)
-    binder.save('test.xls') #save file
+    binder.save(name+'.xls') #save file
     print('file saved')
 
 def reader_xls(file,ui_mainwindow,traitement):
@@ -25,8 +25,8 @@ def reader_xls(file,ui_mainwindow,traitement):
          ui_mainwindow.tableWidget.setItem(i-1,j-1,item)
          traitement(i-1,j-1,content)
 
-def writter_csv(network):
-    sheet=csv.writer(open('newfile.csv','w'))      #file name
+def writter_csv(network,name):
+    sheet=csv.writer(open(name+'.csv','w'))      #file name
     for x in range(0,len(network.matrix)):        #creation of the 'newfile', w as writting
         sheet.writerow([network.getCell(x,y).input for y in range(0,len(network.matrix[x]))])        #writting of each row in comprehension
     print('saved')
@@ -43,9 +43,9 @@ def reader_csv(file,ui_mainwindow,traitement):
             content=row[j-1]
             traitement(i-1,j-1,content)
 
-def writter_marshalling(network):
+def writter_marshalling(network,name):
     marshal.dump([[network.getCell(x,y).input for y in range(0,len(network.matrix[x]))]
-                  for x in range(0,len(network.matrix))],open('marshalling.pyc','wb'))
+                  for x in range(0,len(network.matrix))],open(name+'.pyc','wb'))
     print('saved')
 
 def reader_marshalling(file,ui_mainwindow,traitement):
@@ -60,7 +60,7 @@ def reader_marshalling(file,ui_mainwindow,traitement):
             content=row[j-1]
             traitement(i-1,j-1,content)
 
-def extension(a,ui_mainwindow,traitement): #permet la lecture
+def extensionreader(a,ui_mainwindow,traitement): #permet la lecture
     chaine=a.split(os.extsep)
     key=chaine[1]
     if key=='csv':
@@ -74,3 +74,18 @@ def extension(a,ui_mainwindow,traitement): #permet la lecture
         print('it is a binary file')
 
 
+def extensionwritter(a,network): #permet la lecture
+    chaine=a.split(os.extsep)
+    print(chaine)
+    name=chaine[0]
+    key=chaine[1]
+    print(key)
+    if key=='csv':
+        writter_csv(network,name)
+        print('it is a csv file')
+    elif key=='xls':
+        writter_xls(network,name)
+        print('it is a xls file')
+    else:
+        writter_marshalling(network,name)
+        print('it is a binary file')
