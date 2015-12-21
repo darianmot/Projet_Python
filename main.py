@@ -61,16 +61,23 @@ def traitement(x, y, string):
                 ui_mainwindow.tableWidget.return_value.emit(x, y, e.disp)
             t_end=time.time()
             print('Done : {}s'.format(t_end-t_init))
-
+    recOrd.writter_csv(network)
 
 
 def functionAdded(name,descrition,evaluation,category):
     knownFunctions.addFun(functions.Function(name,evaluation,descrition,category))
     ui_funWinfow.retranslateUi(Funwindow,knownFunctions)
 
+def windowopen():#quand on met  le signe moins ca bug et louverture est trop lente, il arrete pas de save....
+    print('open a file')
+    a=QtWidgets.QFileDialog.getOpenFileName()
+    print(a[0])
+    recOrd.reader_csv(a[0],ui_mainwindow,traitement)
+    print('file opened')
+
 ui_mainwindow.tableWidget.read_value.connect(traitement)
 ui_mainwindow.functionButton.released.connect(Funwindow.show)
-ui_mainwindow.actionOuvrir.triggered.connect(recOrd.windowopen(ui_mainwindow))#fenetre fonctionnelle ne PAS TOUCHER!!!!
+ui_mainwindow.actionOuvrir.triggered.connect(windowopen)#fenetre fonctionnelle ne PAS TOUCHER!!!!
 
 ui_funWinfow.toolAdd.released.connect(AddFunwindow.show)
 ui_addfunwindow.sendFunData.connect(functionAdded)

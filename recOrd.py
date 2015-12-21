@@ -32,8 +32,8 @@ def writter_csv(network):
         sheet.writerow([network.getCell(x,y).input for y in range(0,len(network.matrix[x]))])        #writting of each row in comprehension
     print('saved')
 
-def reader_csv(file):
-    from main import ui_mainwindow, traitement
+def reader_csv(file,ui_mainwindow,traitement):
+
     sheet=csv.reader(open(file)) #opening
     i=0
     j=0
@@ -42,9 +42,9 @@ def reader_csv(file):
         for j  in range(0,len(row)):  #for each content or cell, a new QtWidget item is created
             j+=1
             item= QtWidgets.QTableWidgetItem()
-            ui_mainwindow.tableWidget.setItem(i,j,item)
+            ui_mainwindow.tableWidget.setItem(i-1,j-1,item)
             content=row[j-1]
-            traitement(i,j,content)
+            traitement(i-1,j-1,content)
 
 def writter_marshalling(network):
     marshal.dump([[network.getCell(x,y).input for y in range(0,len(network.matrix[x]))]
@@ -67,9 +67,3 @@ def reader_marshalling(file):
             traitement(i-1,j-1,content)
 
 
-def windowopen():
-    print('open a file')
-    a=QtWidgets.QFileDialog.getOpenFileName()
-    print(a[0])
-    reader_csv(a[0])
-    print('file opened')
