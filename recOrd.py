@@ -3,7 +3,7 @@ from xlwt import Workbook
 import csv as csv
 import marshal
 from PyQt5 import QtWidgets
-
+import os
 def writter_xls(network):
     binder=Workbook()   #creation of the binder
     sheet= binder.add_sheet('page') #creation of the sheet
@@ -59,5 +59,17 @@ def reader_marshalling(file,ui_mainwindow,traitement):
             ui_mainwindow.tableWidget.setItem(i-1,j-1,item)
             content=row[j-1]
             traitement(i-1,j-1,content)
+
+# def extension(a,ui_mainwindow,traitement):
+#
+#     try:
+#         if str(a[0]).split(os.extsep)==csv:
+#             reader_csv(a,ui_mainwindow,traitement)
+#         elif str(a[0]).split(os.extsep)==xls:
+#             reader_xls(a,ui_mainwindow,traitement)
+#         else:
+#             reader_marshalling(a,ui_mainwindow,traitement)
+#     except:
+#         print('extension error')
 
 

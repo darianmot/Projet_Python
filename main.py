@@ -1,11 +1,10 @@
 __authors__="Darian MOTAMED, Hugo CHOULY, Atime RONDA,Anas DARWICH"
-import sys,visu.mainwindow as mainwindow,visu.funwindow as funWindow, visu.registerwindow as registerwindow, visu.addfunwindow as addfunwindow
+import sys,visu.mainwindow as mainwindow,visu.funwindow as funWindow, visu.addfunwindow as addfunwindow
 import structures,cells_traitements.functions as functions
-import cells_traitements.decomposition as decomposition,recOrd,cells_traitements.tritopologique as tritopologique
+import cells_traitements.decomposition as decomposition,cells_traitements.tritopologique as tritopologique
 import time
-import csv
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import pyqtSignal
+import recOrd
+from PyQt5 import QtWidgets
 
 network = structures.network()
 knownFunctions=functions.Knownfunctions()
@@ -21,10 +20,6 @@ Funwindow = QtWidgets.QDialog()
 ui_funWinfow = funWindow.Ui_funwindow()
 ui_funWinfow.setupUi(Funwindow,knownFunctions)
 
-#Open Window
-# Registerwindow = QtWidgets.QDialog()
-# ui_registerwindow = registerwindow.ui_MainWindow()
-# ui_registerwindow.setupUi(Registerwindow)
 
 #AddFunction Window
 AddFunwindow = QtWidgets.QDialog()
@@ -72,7 +67,7 @@ def windowopen():#quand on met  le signe moins ca bug et louverture est trop len
     print('open a file')
     a=QtWidgets.QFileDialog.getOpenFileName()
     print(a[0])
-    recOrd.reader_csv(a[0],ui_mainwindow,traitement)
+    #recOrd.extension(a[0],ui_mainwindow,traitement) ne pas toucher
     print('file opened')
 
 ui_mainwindow.tableWidget.read_value.connect(traitement)
