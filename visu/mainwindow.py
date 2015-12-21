@@ -5,9 +5,11 @@ from PyQt5.QtCore import pyqtSignal
 import visu.columns_labels as columns_labels,random
 CELLWIDTH=100
 CELLHEIGHT=30
-class MyRect(Qt.QGraphicsRectItem):
-    def mousePressEvent(self, QGraphicsSceneMouseEvent):
-        print('toto')
+
+
+
+class MyRect(Qt.QRect):
+    rectPressed = pyqtSignal()
 
 
 class MyDelegate(QtWidgets.QItemDelegate):
@@ -22,6 +24,20 @@ class MyDelegate(QtWidgets.QItemDelegate):
         return QtWidgets.QItemDelegate.createEditor(self, QWidget, QStyleOptionViewItem, QModelIndex)
 
 
+class EventEater(QtCore.QObject):
+    def __init__(self,target):
+        super().__init__()
+        self.target = target
+
+    def eventFilter(self, object, event):
+        if event.type() == 2 and self.target.coin.contains(event.pos().x(),event.pos().y()):
+                print('coin selection detected')
+                return True
+        return False
+
+
+
+
 class MyItem(QtWidgets.QTableWidgetItem):
     pass
 
@@ -34,13 +50,26 @@ class MyTableWidget(QtWidgets.QTableWidget):
 
     def __init__(self,win,network):
         super().__init__()
+        self.coin = MyRect()
         self.delegate=MyDelegate(self)
         self.setItemPrototype(MyItem())
         self.setItemDelegate(self.delegate)
         self.editorcount=0 #Permet de savoir si l'editeur de celulles est ouvert
         self.delegate.editorcreated.connect(self.itemeditoropened)
         _translate = QtCore.QCoreApplication.translate
+
+
+
+
+
+        # Activation de la détection de la souris et du filtre d'événements pour la table
         self.setMouseTracking(True)
+        self.filter = EventEater(self)
+        self.viewport().installEventFilter(self.filter)
+
+
+
+
 
         #On ajuste le nombre de colonnes/lignes en fonction de la taille de l'écran
         self.screen = QtWidgets.QDesktopWidget()
@@ -99,11 +128,13 @@ class MyTableWidget(QtWidgets.QTableWidget):
         pen = QtGui.QPen(QtGui.QColor(0,0,0))
         pen.setWidth(2)
         painter.setPen(pen)
-        rectitem=MyRect(x+length-8,y+height-8,5,5)
+
+        self.coin=MyRect(x+length-8,y+height-8,5,5)
+
         painter.drawRect(x+1, y+1, length-3, height-3)
-        # painter.drawRect(rectitem.rect())
+
         painter.setBrush((QtGui.QColor(0,0,0)))
-        painter.drawRect(x+length-8,y+height-8,5,5)
+        painter.drawRect(self.coin)
         event.accept()
 
 
