@@ -62,7 +62,7 @@ def traitement(x, y, string):
             t_end=time.time()
             print('Done : {}s'.format(t_end-t_init))
 
-    recOrd.writter_marshalling(network)
+
 
 def functionAdded(name,descrition,evaluation,category):
     knownFunctions.addFun(functions.Function(name,evaluation,descrition,category))
@@ -70,7 +70,7 @@ def functionAdded(name,descrition,evaluation,category):
 
 ui_mainwindow.tableWidget.read_value.connect(traitement)
 ui_mainwindow.functionButton.released.connect(Funwindow.show)
-ui_mainwindow.actionOuvrir.triggered.connect(QtWidgets.QFileDialog.getOpenFileName)#fenetre fonctionnelle ne PAS TOUCHER!!!!
+ui_mainwindow.actionOuvrir.triggered.connect(recOrd.windowopen(ui_mainwindow))#fenetre fonctionnelle ne PAS TOUCHER!!!!
 
 ui_funWinfow.toolAdd.released.connect(AddFunwindow.show)
 ui_addfunwindow.sendFunData.connect(functionAdded)

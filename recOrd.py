@@ -52,6 +52,7 @@ def writter_marshalling(network):
     print('saved')
 
 def reader_marshalling(file):
+    i=0
     from main import ui_mainwindow, traitement
     data=marshal.load(open(file,'rb')) #opening
     i=0
@@ -61,9 +62,14 @@ def reader_marshalling(file):
         for j  in range(0,len(row)):# as for csv
             j+=1
             item= QtWidgets.QTableWidgetItem()
-            ui_mainwindow.tableWidget.setItem(i,j,item)
+            ui_mainwindow.tableWidget.setItem(i-1,j-1,item)
             content=row[j-1]
-            traitement(i,j,content)
+            traitement(i-1,j-1,content)
 
 
-
+def windowopen():
+    print('open a file')
+    a=QtWidgets.QFileDialog.getOpenFileName()
+    print(a[0])
+    reader_csv(a[0])
+    print('file opened')
