@@ -60,16 +60,18 @@ def reader_marshalling(file,ui_mainwindow,traitement):
             content=row[j-1]
             traitement(i-1,j-1,content)
 
-# def extension(a,ui_mainwindow,traitement):
-#
-#     try:
-#         if str(a[0]).split(os.extsep)==csv:
-#             reader_csv(a,ui_mainwindow,traitement)
-#         elif str(a[0]).split(os.extsep)==xls:
-#             reader_xls(a,ui_mainwindow,traitement)
-#         else:
-#             reader_marshalling(a,ui_mainwindow,traitement)
-#     except:
-#         print('extension error')
+def extension(a,ui_mainwindow,traitement): #permet la lecture
+    print('------------------')
+    chaine=a.split(os.extsep)
+    key=chaine[1]
+    if key=='csv':
+        reader_csv(a,ui_mainwindow,traitement)
+        print('it is a csv file')
+    elif key=='xls':
+        reader_xls(a,ui_mainwindow,traitement)
+        print('it is a xls file')
+    else:
+        reader_marshalling(a,ui_mainwindow,traitement)
+        print('it is a binary file')
 
 

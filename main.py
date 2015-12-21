@@ -56,7 +56,7 @@ def traitement(x, y, string):
                 ui_mainwindow.tableWidget.return_value.emit(x, y, e.disp)
             t_end=time.time()
             print('Done : {}s'.format(t_end-t_init))
-    # recOrd.writter_csv(network)
+        recOrd.writter_csv(network)
 
 
 def functionAdded(name,descrition,evaluation,category):
@@ -66,8 +66,8 @@ def functionAdded(name,descrition,evaluation,category):
 def windowopen():#quand on met  le signe moins ca bug et louverture est trop lente, il arrete pas de save....
     print('open a file')
     a=QtWidgets.QFileDialog.getOpenFileName()
-    print(a[0])
-    #recOrd.extension(a[0],ui_mainwindow,traitement) ne pas toucher
+    adress=a[0]
+    recOrd.extension(adress,ui_mainwindow,traitement)
     print('file opened')
 
 ui_mainwindow.tableWidget.read_value.connect(traitement)
