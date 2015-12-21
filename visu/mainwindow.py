@@ -43,8 +43,6 @@ class EventEater(QtCore.QObject):
         return False
 
 
-
-
 class MyItem(QtWidgets.QTableWidgetItem):
     pass
 
@@ -65,18 +63,10 @@ class MyTableWidget(QtWidgets.QTableWidget):
         self.delegate.editorcreated.connect(self.itemeditoropened)
         _translate = QtCore.QCoreApplication.translate
 
-
-
-
-
         # Activation de la détection de la souris et du filtre d'événements pour la table
         self.setMouseTracking(True)
         self.filter = EventEater(self)
         self.viewport().installEventFilter(self.filter)
-
-
-
-
 
         #On ajuste le nombre de colonnes/lignes en fonction de la taille de l'écran
         self.screen = QtWidgets.QDesktopWidget()
@@ -173,7 +163,6 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
-
         #La ligne d'édition
         self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdit.setObjectName("lineEdit")
@@ -241,12 +230,6 @@ class Ui_MainWindow(QtWidgets.QWidget):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     #Signaux et slots
-        #Envoi la coordonnée de la cellule changée et le nouvel item
-        # def cell_changed():
-        #     self.tableWidget.read_value.emit(self.tableWidget.currentRow(),self.tableWidget.currentColumn(),
-        #                          self.tableWidget.currentItem().text())
-        # self.tableWidget.cell.connect(cell_changed)
-
         def change_cell(x, y, value):
             try:
                 self.tableWidget.item(x,y).setText(value)
@@ -270,18 +253,6 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.lineEdit.editingFinished.connect(line_changed)
         self.lineEdit.returnPressed.connect(line_changed)
 
-        # def selected_cells():
-        #     print(self.tableWidget.selectedItems())
-        # self.tableWidget.itemSelectionChanged.connect(selected_cells)
-
-        # def cell_entered():
-        #     print('toto')
-        # self.tableWidget.cellEntered.connect(cell_entered)
-        # view=QtWidgets.QGraphicsView()
-        # scene=QtWidgets.QGraphicsScene()
-        # item=QtWidgets.QGraphicsRectItem()
-        #
-        # view.setScene(self.scene)
     def setup(self, MainWindow):
         self.tableWidget.setFocus()
         self.tableWidget.setCurrentCell(0,0)
@@ -297,17 +268,5 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.actionAction1.setText(_translate("MainWindow", "action1"))
         self.actionAction2.setText(_translate("MainWindow", "action2"))
         self.actionAction2_1.setText(_translate("MainWindow", "action21"))
-
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.showMaximized() #Pour agrandir au max la fenetre
-    sys.exit(app.exec_())
-
 
 

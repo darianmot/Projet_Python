@@ -35,9 +35,9 @@ class Ui_Dialog(QtWidgets.QWidget):
         #Description
         self.decriptionLayout = QtWidgets.QHBoxLayout()
         self.decriptionLayout.setObjectName("decriptionLayout")
-        self.Description = QtWidgets.QLabel(Dialog)
-        self.Description.setObjectName("Description")
-        self.decriptionLayout.addWidget(self.Description)
+        self.description = QtWidgets.QLabel(Dialog)
+        self.description.setObjectName("Description")
+        self.decriptionLayout.addWidget(self.description)
         self.descriptionEdit = QtWidgets.QLineEdit(Dialog)
         self.descriptionEdit.setObjectName("descriptionEdit")
         self.decriptionLayout.addWidget(self.descriptionEdit)
@@ -106,19 +106,11 @@ class Ui_Dialog(QtWidgets.QWidget):
         Dialog.setWindowTitle(_translate("Dialog", "Ajouter une fonction"))
         self.Nom.setText(_translate("Dialog", "Nom : "))
         self.nameEdit.clear()
-        self.Description.setText(_translate("Dialog", "Description : "))
+        self.description.setText(_translate("Dialog", "Description : "))
         self.descriptionEdit.clear()
         self.f_eval.setText(_translate("Dialog", "f(args) =  "))
         self.evalEdit.clear()
         self.category.setText(_translate("Dialog", "Category : "))
 
 
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    Dialog = QtWidgets.QDialog()
-    ui = Ui_Dialog()
-    ui.setupUi(Dialog)
-    Dialog.show()
-    sys.exit(app.exec_())
 

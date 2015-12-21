@@ -61,6 +61,7 @@ def traitement(x, y, string):
 
 def functionAdded(name,descrition,evaluation,category):
     knownFunctions.addFun(functions.Function(name,evaluation,descrition,category))
+    print('Ajout de la fonction {}'.format(name) )
     ui_funWinfow.retranslateUi(Funwindow,knownFunctions)
 
 def windowopen():                      #to open the window open....

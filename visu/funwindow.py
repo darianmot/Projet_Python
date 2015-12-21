@@ -23,7 +23,8 @@ class Ui_funwindow(QtWidgets.QWidget):
 
         #La liste de fonctions
         self.listFun = QtWidgets.QListWidget(funwindow)
-        self.listFun.setMaximumSize(QtCore.QSize(231, 500))
+        self.listFun.setMaximumSize(QtCore.QSize(100, 500))
+        self.listFun.setSizePolicy(QtWidgets.QSizePolicy.Fixed,QtWidgets.QSizePolicy.Fixed)
         self.listFun.setObjectName("listFun")
         self.listLayout.addWidget(self.listFun)
 
@@ -34,42 +35,34 @@ class Ui_funwindow(QtWidgets.QWidget):
         self.horizontalLayout_2.addLayout(self.listLayout)
 
         #Le cadre de droite
-        # self.frame = QtWidgets.QFrame(funwindow)
-        # self.frame.setMinimumSize(QtCore.QSize(231, 249))
-        # self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        # self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        # self.frame.setObjectName("frame")
-        # self.gridLayout = QtWidgets.QGridLayout(self.frame)
-        # self.gridLayout.setObjectName("gridLayout")
         self.frameLayout=QtWidgets.QVBoxLayout()
         self.frameLayout.setObjectName("frameLayout")
 
         #Le nom de la fonction
         self.funName = QtWidgets.QLabel()
         self.funName.setObjectName("funName")
-        # self.gridLayout.addWidget(self.funName, 0, 0, 1, 2)
         self.frameLayout.addWidget(self.funName)
 
         #La description
         self.description = QtWidgets.QLabel()
         self.description.setObjectName("description")
-        # self.gridLayout.addWidget(self.description, 1, 0, 1, 1)
-        self.frameLayout.addWidget(self.description)
+        self.descriptiontext=QtWidgets.QLabel()
+        self.descriptiontext.setWordWrap(True)
+        self.descriptiontext.setSizePolicy(QtWidgets.QSizePolicy.Expanding,QtWidgets.QSizePolicy.Expanding)
+        self.descriptiontext.setObjectName("descriptiontext")
+        self.descriptionLayout=QtWidgets.QHBoxLayout()
+        self.descriptionLayout.addWidget(self.description)
 
-        #Le label f(args)
-        self.f_eval = QtWidgets.QLabel()
-        self.f_eval.setObjectName("f_eval")
-        self.horizontalLayout.addWidget(self.f_eval)
+        self.descriptionLayout.addWidget(self.descriptiontext)
+        self.frameLayout.addLayout(self.descriptionLayout)
 
         #L'exrpression de la fonction
         self.expr = QtWidgets.QLabel()
         self.expr.setObjectName("expr")
-        self.horizontalLayout.addWidget(self.expr)
+        self.expr.setWordWrap(True)
+        self.frameLayout.addWidget(self.expr)
 
         #Organisation des layout dans le cadre droit
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        # self.gridLayout.addLayout(self.horizontalLayout, 2, 0, 1, 2)
-        self.frameLayout.addLayout(self.horizontalLayout)
         self.frameLayout.addStretch()
         self.horizontalLayout_2.addLayout(self.frameLayout)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
@@ -83,10 +76,11 @@ class Ui_funwindow(QtWidgets.QWidget):
         self.toolDel = QtWidgets.QToolButton(funwindow)
         self.toolDel.setObjectName("toolDel")
         self.horizontalLayout_3.addWidget(self.toolDel)
+
         #Supprime la fonction selectionnée
         def funDelete():
-            print('suppression')
             currentCategory=self.combobox.currentIndex()
+            print('Suppression de la fonction {}'.format(self.listFun.currentItem()))
             function=self.functions[self.listFun.currentRow()]
             knownFunctions.removeFun(function)
             self.retranslateUi(funwindow,knownFunctions)
@@ -94,8 +88,8 @@ class Ui_funwindow(QtWidgets.QWidget):
         self.toolDel.clicked.connect(funDelete)
 
         #Un space item pour séparer les boutons du bas
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_3.addItem(spacerItem2)
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_3.addItem(spacerItem)
 
         #Les boutons Cancel/Ok
         self.pushOk = QtWidgets.QPushButton(funwindow)
@@ -139,18 +133,14 @@ class Ui_funwindow(QtWidgets.QWidget):
         def funSelected():
             k=self.listFun.currentRow()
             try:
-                font=QtGui.QFont()
-                font.setBold(True)
-                font.setPointSize(20)
-                self.funName.setFont(font)
-                self.funName.setText(_translate("funwindow", "<html><head/><body><p align=\"center\">{}</p></body></html>".format(self.functions[k].name)))
-                self.description.setText(_translate("funwindow", "Description : {}".format(self.functions[k].description)))
-                self.f_eval.setText(_translate("funwindow", "{}(args)=".format(self.functions[k].name)))
-                self.expr.setText(_translate("funwindow", self.functions[k].output))
+                self.funName.setText(_translate("funwindow", "<html><head/><body><h2><p align=\"center\"><b>{}<b/></h2></p></body></html>".format(self.functions[k].name)))
+                self.description.setText(_translate("funwindow", "<html><head/><body><b>Description :</b></body></html>"))
+                self.descriptiontext.setText((_translate("funwindow","<html><head/><body><p><i>{}</i></p></body></html>".format(self.functions[k].description))))
+                self.expr.setText(_translate("funwindow", '<html><head/><body><b>Renvoie : </b> {1}'.format(self.functions[k].name,self.functions[k].output)))
             except IndexError:
                 self.funName.setText(_translate("funwindow", "Pas de fonction selectionnée"))
                 self.description.clear()
-                self.f_eval.clear()
+                self.descriptiontext.clear()
                 self.expr.clear()
         self.listFun.itemSelectionChanged.connect(funSelected)
 
