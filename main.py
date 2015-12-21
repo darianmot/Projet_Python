@@ -65,17 +65,17 @@ def functionAdded(name,descrition,evaluation,category):
 
 def windowopen():                      #to open the window open....
     a=QtWidgets.QFileDialog.getOpenFileName(MainWindow,'open','',"(*.pyc *xls *csv)")
+                           #bug: quand on ouvre à la filee des dossiers ca bug, ya des cases qui n apparaissent plus et tout
     adress=a[0]
     recOrd.extensionreader(adress,ui_mainwindow,traitement)
 def windowsave():                      #to open the window save....
     a=QtWidgets.QFileDialog.getSaveFileName(MainWindow,'save','',"(*.pyc *.xls *.csv)") #ne marche pas très bien, on a pas le choix du format
-    adress=a[0]
-    recOrd.extensionwritter(adress,network) #faut mettre l'extension du format genre anas.pyc ou anas.xls dans la barre, bug: quand on ouvre à la filée des dossiers ca bug, ya des cases qui napparaisdsent plus
-
+    adress=a[0]                                   #faut mettre l'extension du format genre fichier.pyc ou fichier.xls dans la barre de saisie
+    recOrd.extensionwritter(adress,network)
 
 ui_mainwindow.tableWidget.read_value.connect(traitement)
 ui_mainwindow.functionButton.released.connect(Funwindow.show)
-ui_mainwindow.actionOuvrir.triggered.connect(windowopen)#fenetre fonctionnelle ne PAS TOUCHER!!!!
+ui_mainwindow.actionOuvrir.triggered.connect(windowopen)
 ui_mainwindow.actionenregistrer.triggered.connect(windowsave)
 ui_funWinfow.toolAdd.released.connect(AddFunwindow.show)
 ui_addfunwindow.sendFunData.connect(functionAdded)

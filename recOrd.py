@@ -7,7 +7,7 @@ import os
 def writter_xls(network,name):
     binder=Workbook()   #creation of the binder
     sheet= binder.add_sheet('page') #creation of the sheet
-    for x in range(0,len(network.matrix)):             #writting of each cell
+    for x in range(0,len(network.matrix)): #writting of each cell
         for y in range(0,len(network.matrix[x])):
             sheet.write(y,x,network.getCell(x,y).value)
             print(network.getCell(x,y).value)
@@ -26,9 +26,9 @@ def reader_xls(file,ui_mainwindow,traitement):
          traitement(i-1,j-1,content)
 
 def writter_csv(network,name):
-    sheet=csv.writer(open(name+'.csv','w'))      #file name
-    for x in range(0,len(network.matrix)):        #creation of the 'newfile', w as writting
-        sheet.writerow([network.getCell(x,y).input for y in range(0,len(network.matrix[x]))])        #writting of each row in comprehension
+    sheet=csv.writer(open(name+'.csv','w')) #file name
+    for x in range(0,len(network.matrix)): #creation of the 'newfile', w as writting
+        sheet.writerow([network.getCell(x,y).input for y in range(0,len(network.matrix[x]))]) #writting of each row in comprehension
     print('saved')
 
 def reader_csv(file,ui_mainwindow,traitement):
@@ -36,7 +36,7 @@ def reader_csv(file,ui_mainwindow,traitement):
     i=0
     for row in sheet :
         i+=1
-        for j  in range(0,len(row)):  #for each content or cell, a new QtWidget item is created
+        for j  in range(0,len(row)): #for each content or cell, a new QtWidget item is created
             j+=1
             item= QtWidgets.QTableWidgetItem()
             ui_mainwindow.tableWidget.setItem(i-1,j-1,item)
@@ -53,7 +53,7 @@ def reader_marshalling(file,ui_mainwindow,traitement):
     i=0
     for row in data:
         i+=1
-        for j  in range(0,len(row)):# as for csv
+        for j  in range(0,len(row)): #as for csv
             j+=1
             item= QtWidgets.QTableWidgetItem()
             ui_mainwindow.tableWidget.setItem(i-1,j-1,item)
