@@ -34,17 +34,17 @@ def traitement(x, y, string):
             newValue=str(decomposition.evaluation(network,string[1:], knownFunctions)) if string[0]=='=' else string
         except decomposition.Error as e:
             newValue=e.disp
+        if string[0]=='=':
+            cell.parent_cells = decomposition.parentCells(network, string[1:])
+            for parentCell in cell.parent_cells:
+                parentCell.addChildCell(cell)
         if oldValue!=newValue:
             print('Evaluation de {0} et de ses cellules filles ... '.format(cell.name,len(cell.children_cells)),end='')
             if string[0] == '=':
-                cell.parent_cells = decomposition.parentCells(network, string[1:])
-                for parentCell in cell.parent_cells:
-                    parentCell.addChildCell(cell)
                 cell.value = newValue
-                ui_mainwindow.tableWidget.return_value.emit(x, y, str(cell.value))
             else:
                 cell.value = string
-                ui_mainwindow.tableWidget.return_value.emit(x, y, str(cell.value))
+            ui_mainwindow.tableWidget.return_value.emit(x, y, str(cell.value))
             try:
                 order=tritopologique.evalOrder(cell)
                 for child in order:
