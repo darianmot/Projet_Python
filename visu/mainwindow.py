@@ -174,6 +174,9 @@ class Ui_MainWindow(QtWidgets.QWidget):
         #Les bouttons
         self.functionButton = QtWidgets.QToolButton(self.centralwidget)
         self.functionButton.setObjectName("functionButton")
+        funIcon = QtGui.QIcon()
+        funIcon.addPixmap(QtGui.QPixmap("visu/icons/functions.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.functionButton.setIcon(funIcon)
 
         #Les layouts
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -202,14 +205,22 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.menuSsmenu2 = QtWidgets.QMenu(self.menuFichier)
         self.menuSsmenu2.setObjectName("menuSsmenu2")
         MainWindow.setMenuBar(self.menubar)
+
+        #Open action
         self.actionOuvrir = QtWidgets.QAction(MainWindow)
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("stremio.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionOuvrir.setIcon(icon)
+        openIcon = QtGui.QIcon()
+        openIcon.addPixmap(QtGui.QPixmap("visu/icons/open.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionOuvrir.setIcon(openIcon)
         self.actionOuvrir.setObjectName("actionOuvrir")
+
+        #Save Action
         self.actionenregistrer = QtWidgets.QAction(MainWindow)
         self.actionenregistrer.setObjectName('enregistrer')
         self.actionenregistrer.setText('enregistrer')
+        saveIcon = QtGui.QIcon()
+        saveIcon.addPixmap(QtGui.QPixmap("visu/icons/save.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionenregistrer.setIcon(saveIcon)
+
         self.actionAction1 = QtWidgets.QAction(MainWindow)
         self.actionAction1.setObjectName("actionAction1")
         self.actionAction2 = QtWidgets.QAction(MainWindow)
@@ -264,7 +275,8 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.menuSsmenu1.setTitle(_translate("MainWindow", "ssmenu1"))
         self.menuSsmenu2.setTitle(_translate("MainWindow", "ssmenu2"))
         self.actionOuvrir.setText(_translate("MainWindow", "Ouvrir"))
-        self.actionOuvrir.setToolTip(_translate("MainWindow", "infobulle"))
+        self.actionOuvrir.setToolTip(_translate("MainWindow", "Ouvrir"))
+        self.actionenregistrer.setToolTip(_translate("MainWindow", "Enregistrer"))
         self.actionAction1.setText(_translate("MainWindow", "action1"))
         self.actionAction2.setText(_translate("MainWindow", "action2"))
         self.actionAction2_1.setText(_translate("MainWindow", "action21"))
