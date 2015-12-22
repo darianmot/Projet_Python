@@ -94,7 +94,6 @@ ui_addfunwindow.sendFunData.connect(functionAdded)
 
 MainWindow.showMaximized() #Pour agrandir au max la fenetre
 
-
 ui_mainwindow.menu_quit.triggered.connect(MainWindow.close)
 
 sys.exit(app.exec_())
