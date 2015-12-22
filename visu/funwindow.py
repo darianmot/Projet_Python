@@ -42,17 +42,11 @@ class Ui_funwindow(QtWidgets.QWidget):
         self.frameLayout.addWidget(self.funName)
 
         #La description
-        self.description = QtWidgets.QLabel()
-        self.description.setObjectName("description")
         self.descriptiontext=QtWidgets.QLabel()
         self.descriptiontext.setWordWrap(True)
         self.descriptiontext.setSizePolicy(QtWidgets.QSizePolicy.Expanding,QtWidgets.QSizePolicy.Expanding)
         self.descriptiontext.setObjectName("descriptiontext")
-        self.descriptionLayout=QtWidgets.QHBoxLayout()
-        self.descriptionLayout.addWidget(self.description)
-
-        self.descriptionLayout.addWidget(self.descriptiontext)
-        self.frameLayout.addLayout(self.descriptionLayout)
+        self.frameLayout.addWidget(self.descriptiontext)
 
         #L'exrpression de la fonction
         self.expr = QtWidgets.QLabel()
@@ -71,15 +65,21 @@ class Ui_funwindow(QtWidgets.QWidget):
         self.toolAdd = QtWidgets.QToolButton(funwindow)
         self.toolAdd.setObjectName("toolAdd")
         self.horizontalLayout_3.addWidget(self.toolAdd)
+        addIcon = QtGui.QIcon()
+        addIcon.addPixmap(QtGui.QPixmap("visu/icons/add.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.toolAdd.setIcon(addIcon)
         self.toolDel = QtWidgets.QToolButton(funwindow)
         self.toolDel.setObjectName("toolDel")
         self.horizontalLayout_3.addWidget(self.toolDel)
+        delIcon = QtGui.QIcon()
+        delIcon.addPixmap(QtGui.QPixmap("visu/icons/del.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.toolDel.setIcon(delIcon)
 
         #Supprime la fonction selectionnée
         def funDelete():
             currentCategory=self.combobox.currentIndex()
             function=self.functions[self.listFun.currentRow()]
-            print('Suppression de la fonction {}'.format(self.listFun.currentRow()))
+            print('Suppression de la fonction {}'.format(function.name))
             knownFunctions.removeFun(function)
             self.retranslateUi(funwindow,knownFunctions)
             self.combobox.setCurrentIndex(currentCategory)
@@ -124,23 +124,25 @@ class Ui_funwindow(QtWidgets.QWidget):
         
         self.listFun.setCurrentRow(0)
         self.combobox.setCurrentText('All')
-        self.toolAdd.setText(_translate("funwindow", "+"))
-        self.toolDel.setText(_translate("funwindow", "-"))
+        self.toolAdd.setToolTip(_translate("funwindow", "Ajouter une fonction"))
+        self.toolDel.setToolTip(_translate("funwindow", "Supprimer une fonction"))
         self.pushOk.setText(_translate("funwindow", "OK"))
 
         #Affiche les details de la fonction selectionnée
         def funSelected():
             k=self.listFun.currentRow()
             try:
+
                 self.funName.setText(_translate("funwindow", "<html><head/><body><h2><p align=\"center\"><b>{}<b/></h2></p></body></html>".format(self.functions[k].name)))
-                self.description.setText(_translate("funwindow", "<html><head/><body><b>Description :</b></body></html>"))
-                self.descriptiontext.setText((_translate("funwindow","<html><head/><body><p><i>{}</i></p></body></html>".format(self.functions[k].description))))
-                self.expr.setText(_translate("funwindow", '<html><head/><body><b>Renvoie : </b> {1}'.format(self.functions[k].name,self.functions[k].output)))
+                self.descriptiontext.setText((_translate("funwindow","<html><head/><body><b>Description : </b><i>{}</i></body></html>".format(self.functions[k].description))))
+                self.expr.setText(_translate("funwindow", "<html><head/><body><b>Renvoie : </b> {1}</body></html>".format(self.functions[k].name,self.functions[k].output)))
+                self.funName.show()
+                self.descriptiontext.show()
+                self.expr.show()
             except IndexError:
-                self.funName.setText(_translate("funwindow", "Pas de fonction selectionnée"))
-                self.description.clear()
+                self.funName.setText(_translate("funwindow", "<html><head/><body><h2><p align=\"center\"><b><i>No functions<i/><b/></h2></p></body></html>"))
                 self.descriptiontext.clear()
-                self.expr.clear()
+                self.expr.hide()
         self.listFun.itemSelectionChanged.connect(funSelected)
 
         #Affiche les fonctions de la catégorie selectionnée

@@ -65,6 +65,7 @@ class Knownfunctions():
         if name in self.dict.keys() or name=='args':
             return False
         return True
+
     def initialize(self):
         self.addCategory('All')
         self.addCategory('Math')

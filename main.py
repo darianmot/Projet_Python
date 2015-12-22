@@ -63,7 +63,8 @@ def functionAdded(name,descrition,evaluation,category):
     pickle.dump(knownFunctions,open('knownFunctions.p','wb'))
     ui_funWinfow.retranslateUi(Funwindow,knownFunctions)
 
-def windowopen():                      #to open the window open....
+def windowopen():
+    #to open the window open....
     a=QtWidgets.QFileDialog.getOpenFileName(MainWindow,'open','',"(*.pyc *xls *csv)")
                           #bug: quand on ouvre à la filee des dossiers ca bug, ya des cases qui n apparaissent plus et tout
     adress=a[0]
