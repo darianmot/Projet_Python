@@ -175,6 +175,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
+
         #La ligne d'édition
         self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdit.setObjectName("lineEdit")
@@ -288,6 +289,10 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.tableWidget.setCurrentCell(0,0)
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "EnaCell"))
+        appIcon = QtGui.QIcon()
+        appIcon.addPixmap(QtGui.QPixmap("visu/icons/appIcon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        MainWindow.setWindowIcon(appIcon)
+
         self.functionButton.setText(_translate("MainWindow", "..."))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
         self.menuFichier.setTitle(_translate("MainWindow", "Fichier"))
