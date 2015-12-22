@@ -64,22 +64,25 @@ def reader_marshalling(file,ui_mainwindow,traitement):
             traitement(i-1,j-1,content)
 
 def extensionreader(a,ui_mainwindow,traitement): #permet la lecture
-    chaine=a.split(os.extsep)
-    key=chaine[1]
-    if key=='csv':
-        reader_csv(a,ui_mainwindow,traitement)
-        print('it is a csv file')
-    elif key=='xls':
-        reader_xls(a,ui_mainwindow,traitement)
-        print('it is a xls file')
-    else:
-        reader_marshalling(a,ui_mainwindow,traitement)
-        print('it is a binary file')
-
+    try:
+        chaine=a.split(os.extsep)
+        key=chaine[1]
+        if key=='csv':
+            reader_csv(a,ui_mainwindow,traitement)
+            print('it is a csv file')
+        elif key=='xls':
+            reader_xls(a,ui_mainwindow,traitement)
+            print('it is a xls file')
+        else:
+            reader_marshalling(a,ui_mainwindow,traitement)
+            print('it is a binary file')
+    except IndexError:
+        pass
+    finally:
+        print('open window closed')
 
 def extensionwritter(a,network): #permet la lecture
     chaine=a.split(os.extsep)
-    print(chaine)
     name=chaine[0]
     try:
         key=chaine[1]
@@ -95,5 +98,5 @@ def extensionwritter(a,network): #permet la lecture
             print('it is a binary file')
     except IndexError:
         pass
-    except:
-        print('veuillez rentrer un format compatible')#bizar cette erreur apparait jamais
+    finally:
+        print('save window closed')
