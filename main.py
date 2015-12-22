@@ -1,13 +1,12 @@
 __authors__="Darian MOTAMED, Hugo CHOULY, Atime RONDA,Anas DARWICH"
 import sys,visu.mainwindow as mainwindow,visu.funwindow as funWindow, visu.addfunwindow as addfunwindow
-import structures,cells_traitements.functions as functions
+import structures,cells_traitements.functions as functions,recOrd
 import cells_traitements.decomposition as decomposition,cells_traitements.tritopologique as tritopologique
-import time
-import recOrd
+import time,pickle
 from PyQt5 import QtWidgets
 
 network = structures.network()
-knownFunctions=functions.Knownfunctions()
+knownFunctions=pickle.load(open('knownFunctions.p','rb'))
 app = mainwindow.QtWidgets.QApplication(sys.argv)
 
 #Main Window
@@ -19,7 +18,6 @@ ui_mainwindow.setupUi(MainWindow,network)
 Funwindow = QtWidgets.QDialog()
 ui_funWinfow = funWindow.Ui_funwindow()
 ui_funWinfow.setupUi(Funwindow,knownFunctions)
-
 
 #AddFunction Window
 AddFunwindow = QtWidgets.QDialog()
@@ -62,6 +60,7 @@ def traitement(x, y, string):
 def functionAdded(name,descrition,evaluation,category):
     knownFunctions.addFun(functions.Function(name,evaluation,descrition,category))
     print('Ajout de la fonction {}'.format(name) )
+    pickle.dump(knownFunctions,open('knownFunctions.p','wb'))
     ui_funWinfow.retranslateUi(Funwindow,knownFunctions)
 
 def windowopen():                      #to open the window open....

@@ -7,8 +7,6 @@ class Ui_funwindow(QtWidgets.QWidget):
     def setupUi(self, funwindow,knownFunctions):
         funwindow.setObjectName("funwindow")
         funwindow.resize(546, 343)
-        # a=pickle.dump(knownFunctions,open('save.p','wb'))
-        # print(pickle.load(open('save.p','rb')))
         #Les layouts
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout(funwindow)
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
@@ -80,11 +78,12 @@ class Ui_funwindow(QtWidgets.QWidget):
         #Supprime la fonction selectionnée
         def funDelete():
             currentCategory=self.combobox.currentIndex()
-            print('Suppression de la fonction {}'.format(self.listFun.currentItem()))
             function=self.functions[self.listFun.currentRow()]
+            print('Suppression de la fonction {}'.format(self.listFun.currentRow()))
             knownFunctions.removeFun(function)
             self.retranslateUi(funwindow,knownFunctions)
             self.combobox.setCurrentIndex(currentCategory)
+            pickle.dump(knownFunctions,open('knownFunctions.p','wb'))
         self.toolDel.clicked.connect(funDelete)
 
         #Un space item pour séparer les boutons du bas
