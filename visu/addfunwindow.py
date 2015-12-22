@@ -32,6 +32,13 @@ class Ui_Dialog(QtWidgets.QWidget):
         self.nameLayout.addWidget(self.nameEdit)
         self.verticalLayout.addLayout(self.nameLayout)
 
+        #Label Error
+        self.nameError = QtWidgets.QLabel()
+        self.nameError.setObjectName("nameError")
+        self.verticalLayout.addWidget(self.nameError)
+        self.nameError.setMaximumHeight(40)
+        self.nameError.hide()
+
         #Description
         self.decriptionLayout = QtWidgets.QHBoxLayout()
         self.decriptionLayout.setObjectName("decriptionLayout")
@@ -90,11 +97,16 @@ class Ui_Dialog(QtWidgets.QWidget):
             description=self.descriptionEdit.text()
             evaluation=self.evalEdit.text()
             category=self.combobox.currentText()
-            self.retranslateUi(Dialog)
-            if isFunValid(name,description,evaluation):
+            if knownFunctions.isFunValid(name,evaluation):
+                self.retranslateUi(Dialog)
                 self.sendFunData.emit(name,description,evaluation,category)
                 Dialog.accept()
                 Dialog.close()
+            else:
+                if name=="":
+                    self.nameError.setText("<font color='red'>Le nom ne peut être vide</font>")
+                    self.nameError.show()
+                print('Fonction non valide')
 
         self.buttonBox.accepted.connect(quit)
         self.buttonBox.rejected.connect(Dialog.reject)

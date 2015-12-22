@@ -57,6 +57,14 @@ class Knownfunctions():
                 l.append(fun)
         return sorted(l,key=lambda x:x.name)
 
+    def isFunValid(self,name,evaluation):
+        if len(name)==0 or len(evaluation)==0:
+            return False
+        if not(name.isalpha()):
+            return False
+        if name in self.dict.keys() or name=='args':
+            return False
+        return True
     def initialize(self):
         self.addCategory('All')
         self.addCategory('Math')
