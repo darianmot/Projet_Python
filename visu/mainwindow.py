@@ -12,6 +12,7 @@ class MyRect(Qt.QRect):
     def __init__(self):
         super().__init__()
         self.isSelected = False
+        self.isUnder = False
 
 
 class MyDelegate(QtWidgets.QItemDelegate):
@@ -36,10 +37,15 @@ class EventEater(QtCore.QObject):
             print('coin selected')
             self.target.coin.isSelected = True
             return True
-        if event.type() == 3 and self.target.coin.isSelected == True:
+        elif event.type() == 3 and self.target.coin.isSelected == True:
             print('coin released')
             self.target.coin.isSelected = False
             return True
+        elif event.type() == 5:
+            if self.target.coin.contains(event.pos().x(),event.pos().y()):
+                self.target.coin.isUnder = True
+            else:
+                self.target.coin.isUnder = False
         return False
 
 
@@ -134,6 +140,12 @@ class MyTableWidget(QtWidgets.QTableWidget):
         painter.drawRect(self.coin)
         event.accept()
 
+    def mouseMoveEvent(self, QMouseEvent):
+        QtWidgets.QTableWidget.mouseMoveEvent(self,QMouseEvent)
+        if self.coin.isSelected or self.coin.isUnder:
+            self.setCursor(QtCore.Qt.CrossCursor)
+        else:
+            self.setCursor(QtCore.Qt.ArrowCursor)
 
     #Fonction qui s'active lorque l'utilisateur finit d'editer une cellule
     def closeEditor(self, editor, hint):
