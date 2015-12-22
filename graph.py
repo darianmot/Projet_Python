@@ -7,6 +7,6 @@ def graph(listeValue,ordonnée,abscisse,title,xmin,xmax,ymin,ymax,color):
     plt.title(title)
     plt.axis(xmin,xmax,ymin,ymax)
     plt.show()
-
+#
 
 
