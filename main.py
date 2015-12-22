@@ -87,10 +87,14 @@ ui_mainwindow.menu_ouvrir.triggered.connect(windowopen)
 ui_mainwindow.actionenregistrer.triggered.connect(windowsave)
 ui_mainwindow.menu_enregistrer.triggered.connect(windowsave)
 
+
+
 ui_funWinfow.toolAdd.released.connect(AddFunwindow.show)
 ui_addfunwindow.sendFunData.connect(functionAdded)
 
 MainWindow.showMaximized() #Pour agrandir au max la fenetre
+
+
+ui_mainwindow.menu_quit.triggered.connect(MainWindow.close)
+
 sys.exit(app.exec_())
-
-
