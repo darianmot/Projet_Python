@@ -212,42 +212,43 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.menubar.setObjectName("menubar")
         self.menuFichier = QtWidgets.QMenu(self.menubar)
         self.menuFichier.setObjectName("menuFichier")
-        self.menuSsmenu1 = QtWidgets.QMenu(self.menuFichier)
-        self.menuSsmenu1.setObjectName("menuSsmenu1")
-        self.menuSsmenu2 = QtWidgets.QMenu(self.menuFichier)
-        self.menuSsmenu2.setObjectName("menuSsmenu2")
+
         MainWindow.setMenuBar(self.menubar)
 
         #Open action
         self.actionOuvrir = QtWidgets.QAction(MainWindow)
+        self.actionOuvrir.setText("Ouvrir")
+        self.menu_ouvrir = QtWidgets.QAction(MainWindow)
+        self.menu_ouvrir.setText("Ouvrir")
         openIcon = QtGui.QIcon()
         openIcon.addPixmap(QtGui.QPixmap("visu/icons/open.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionOuvrir.setIcon(openIcon)
         self.actionOuvrir.setObjectName("actionOuvrir")
+        self.menu_ouvrir.setIcon(openIcon)
 
         #Save Action
         self.actionenregistrer = QtWidgets.QAction(MainWindow)
-        self.actionenregistrer.setObjectName('enregistrer')
-        self.actionenregistrer.setText('enregistrer')
+        self.actionenregistrer.setText("Enregistrer")
+        self.menu_enregistrer = QtWidgets.QAction(MainWindow)
+        self.menu_enregistrer.setText("Enregistrer")
         saveIcon = QtGui.QIcon()
         saveIcon.addPixmap(QtGui.QPixmap("visu/icons/save.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionenregistrer.setIcon(saveIcon)
+        self.menu_enregistrer.setIcon(saveIcon)
 
-        self.actionAction1 = QtWidgets.QAction(MainWindow)
-        self.actionAction1.setObjectName("actionAction1")
-        self.actionAction2 = QtWidgets.QAction(MainWindow)
-        self.actionAction2.setObjectName("actionAction2")
-        self.actionAction2_1 = QtWidgets.QAction(MainWindow)
-        self.actionAction2_1.setObjectName("actionAction2_1")
+
+
+
+
         self.toolBar.addAction(self.actionOuvrir)
         self.toolBar.addAction(self.actionenregistrer)
         self.toolBar.addSeparator()
-        self.menuSsmenu1.addAction(self.actionAction1)
-        self.menuSsmenu1.addAction(self.actionAction2)
-        self.menuSsmenu2.addAction(self.actionAction2_1)
-        self.menuFichier.addAction(self.menuSsmenu1.menuAction())
-        self.menuFichier.addAction(self.menuSsmenu2.menuAction())
+
         self.menubar.addAction(self.menuFichier.menuAction())
+        self.menuFichier.addAction(self.menu_ouvrir)
+        self.menuFichier.addAction(self.menu_enregistrer)
+
+
 
         self.setup(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -283,14 +284,8 @@ class Ui_MainWindow(QtWidgets.QWidget):
         MainWindow.setWindowTitle(_translate("MainWindow", "EnaCell"))
         self.functionButton.setText(_translate("MainWindow", "..."))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
-        self.menuFichier.setTitle(_translate("MainWindow", "Menu1"))
-        self.menuSsmenu1.setTitle(_translate("MainWindow", "ssmenu1"))
-        self.menuSsmenu2.setTitle(_translate("MainWindow", "ssmenu2"))
-        self.actionOuvrir.setText(_translate("MainWindow", "Ouvrir"))
-        self.actionOuvrir.setToolTip(_translate("MainWindow", "Ouvrir"))
-        self.actionenregistrer.setToolTip(_translate("MainWindow", "Enregistrer"))
-        self.actionAction1.setText(_translate("MainWindow", "action1"))
-        self.actionAction2.setText(_translate("MainWindow", "action2"))
-        self.actionAction2_1.setText(_translate("MainWindow", "action21"))
+        self.menuFichier.setTitle(_translate("MainWindow", "Fichier"))
+
+
 
 
