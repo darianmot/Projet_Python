@@ -78,14 +78,19 @@ def extensionwritter(a,network): #permet la lecture
     chaine=a.split(os.extsep)
     print(chaine)
     name=chaine[0]
-    key=chaine[1]
-    print(key)
-    if key=='csv':
-        writter_csv(network,name)
-        print('it is a csv file')
-    elif key=='xls':
-        writter_xls(network,name)
-        print('it is a xls file')
-    else:
-        writter_marshalling(network,name)
-        print('it is a binary file')
+    try:
+        key=chaine[1]
+        print(key)
+        if key=='csv':
+            writter_csv(network,name)
+            print('it is a csv file')
+        elif key=='xls':
+            writter_xls(network,name)
+            print('it is a xls file')
+        else:
+            writter_marshalling(network,name)
+            print('it is a binary file')
+    except IndexError:
+        pass
+    except:
+        print('veuillez rentrer un format compatible')#bizar cette erreur apparait jamais
