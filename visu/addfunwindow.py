@@ -37,7 +37,6 @@ class Ui_Dialog(QtWidgets.QWidget):
         self.nameError.setObjectName("nameError")
         self.verticalLayout.addWidget(self.nameError)
         self.nameError.setMaximumHeight(40)
-        self.nameError.hide()
 
         #Description
         self.decriptionLayout = QtWidgets.QHBoxLayout()
@@ -60,6 +59,12 @@ class Ui_Dialog(QtWidgets.QWidget):
         self.evalEdit.setObjectName("evalEdit")
         self.evaluationLayout.addWidget(self.evalEdit)
         self.verticalLayout.addLayout(self.evaluationLayout)
+
+        #Evaluation error
+        self.evalError = QtWidgets.QLabel()
+        self.evalError.setObjectName("evalError")
+        self.verticalLayout.addWidget(self.evalError)
+        self.evalError.setMaximumHeight(40)
 
         #Category
         self.categoryLayout = QtWidgets.QHBoxLayout()
@@ -85,14 +90,8 @@ class Ui_Dialog(QtWidgets.QWidget):
         self.buttonsLayout.addLayout(self.verticalLayout)
 
         self.retranslateUi(Dialog)
-        forbidListName=[]
-        def isFunValid(name,description,evaluation):
-            if not (bool(name) or bool(description) or bool(evaluation)) or name in forbidListName:#Si un des éléments est vide ou le nom n'est pas valide
-                return False
-            else:
-                return True
         
-        def quit():
+        def quitok():
             name=self.nameEdit.text()
             description=self.descriptionEdit.text()
             evaluation=self.evalEdit.text()
@@ -103,13 +102,28 @@ class Ui_Dialog(QtWidgets.QWidget):
                 Dialog.accept()
                 Dialog.close()
             else:
+                if evaluation=="":
+                    self.evalError.setText("<font color='red' size=-1><i>L'expression ne peut être vide<i/></font>")
+                    self.evalError.show()
                 if name=="":
-                    self.nameError.setText("<font color='red'>Le nom ne peut être vide</font>")
+                    self.nameError.setText("<font color='red' size=-1><i>Le nom ne peut être vide<i/></font>")
+                    self.nameError.show()
+                elif not(name.isalpha()):
+                    self.nameError.setText("<font color='red' size=-1><i>Le nom ne peut contenir que des lettres<i/></font>")
+                    self.nameError.show()
+                elif name=="args":
+                    self.nameError.setText("<font color='red' size=-1><i>'args' ne peut definir le nom d'une fonction<i/></font>")
+                    self.nameError.show()
+                else:
+                    self.nameError.setText("<font color='red' size=-1><i>La fonction existe déjà<i/></font>")
                     self.nameError.show()
                 print('Fonction non valide')
 
-        self.buttonBox.accepted.connect(quit)
-        self.buttonBox.rejected.connect(Dialog.reject)
+        def quitCancel():
+            self.retranslateUi(Dialog)
+            Dialog.reject()
+        self.buttonBox.accepted.connect(quitok)
+        self.buttonBox.rejected.connect(quitCancel)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
@@ -118,10 +132,12 @@ class Ui_Dialog(QtWidgets.QWidget):
         Dialog.setWindowTitle(_translate("Dialog", "Ajouter une fonction"))
         self.Nom.setText(_translate("Dialog", "Nom : "))
         self.nameEdit.clear()
+        self.nameError.hide()
         self.description.setText(_translate("Dialog", "Description : "))
         self.descriptionEdit.clear()
         self.f_eval.setText(_translate("Dialog", "f(args) =  "))
         self.evalEdit.clear()
+        self.evalError.hide()
         self.category.setText(_translate("Dialog", "Category : "))
 
 
