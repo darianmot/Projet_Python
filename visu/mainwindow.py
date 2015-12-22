@@ -236,7 +236,12 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.actionenregistrer.setIcon(saveIcon)
         self.menu_enregistrer.setIcon(saveIcon)
 
-
+        #Quit Action
+        self.menu_quit = QtWidgets.QAction(MainWindow)
+        self.menu_quit.setText("Quitter")
+        quitIcon = QtGui.QIcon()
+        quitIcon.addPixmap(QtGui.QPixmap("visu/icons/quit.png"),QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.menu_quit.setIcon(quitIcon)
 
 
 
@@ -247,6 +252,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.menubar.addAction(self.menuFichier.menuAction())
         self.menuFichier.addAction(self.menu_ouvrir)
         self.menuFichier.addAction(self.menu_enregistrer)
+        self.menuFichier.addAction(self.menu_quit)
 
 
 
