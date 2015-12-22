@@ -5,13 +5,14 @@ import marshal
 from PyQt5 import QtWidgets
 import os
 def writter_xls(network,name):
+    content=name+'.xls'
     binder=Workbook()   #creation of the binder
     sheet= binder.add_sheet('page') #creation of the sheet
     for x in range(0,len(network.matrix)): #writting of each cell
         for y in range(0,len(network.matrix[x])):
             sheet.write(y,x,network.getCell(x,y).value)
             print(network.getCell(x,y).value)
-    binder.save(name+'.xls') #save file
+    binder.save(content) #save file
     print('file saved')
 
 def reader_xls(file,ui_mainwindow,traitement):
@@ -26,7 +27,8 @@ def reader_xls(file,ui_mainwindow,traitement):
          traitement(i-1,j-1,content)
 
 def writter_csv(network,name):
-    sheet=csv.writer(open(name+'.csv','w')) #file name
+    content=name+'.csv'
+    sheet=csv.writer(open(content,'w')) #file name
     for x in range(0,len(network.matrix)): #creation of the 'newfile', w as writting
         sheet.writerow([network.getCell(x,y).input for y in range(0,len(network.matrix[x]))]) #writting of each row in comprehension
     print('saved')
@@ -44,8 +46,9 @@ def reader_csv(file,ui_mainwindow,traitement):
             traitement(i-1,j-1,content)
 
 def writter_marshalling(network,name):
+    content=name+'.pyc'
     marshal.dump([[network.getCell(x,y).input for y in range(0,len(network.matrix[x]))]
-                  for x in range(0,len(network.matrix))],open(name+'.pyc','wb'))
+                  for x in range(0,len(network.matrix))],open(content,'wb'))
     print('saved')
 
 def reader_marshalling(file,ui_mainwindow,traitement):
