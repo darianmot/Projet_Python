@@ -9,10 +9,9 @@ CELLHEIGHT=30
 
 
 class MyRect(Qt.QRect):
-    def __init__(self,x,y):
+
+    def __init__(self):
         super().__init__()
-        self.x=x
-        self.y=y
         self.isSelected = False
         self.isUnder = False
 
@@ -30,6 +29,9 @@ class MyDelegate(QtWidgets.QItemDelegate):
 
 
 class EventEater(QtCore.QObject):
+
+    cellExpended = pyqtSignal(list)
+
     def __init__(self,target):
         super().__init__()
         self.target = target
@@ -39,12 +41,12 @@ class EventEater(QtCore.QObject):
             print('coin selected')
             self.target.coin.isSelected = True
             return True
-        if event.type() == 3 and self.target.coin.isSelected == True:
+        elif event.type() == 3 and self.target.coin.isSelected == True:
             print('coin released')
             self.target.coin.isSelected = False
-            self.target.setCursor(QtCore.Qt.ArrowCursor)
+            self.cellExpended.emit(self.target.selectedRanges())
             return True
-        if event.type() == 5:
+        elif event.type() == 5:
             if self.target.coin.contains(event.pos().x(),event.pos().y()):
                 self.target.coin.isUnder = True
             else:
@@ -53,8 +55,8 @@ class EventEater(QtCore.QObject):
 
 
 class MyItem(QtWidgets.QTableWidgetItem):
-    def __init__(self):
-        super().__init__()
+    pass
+
 
 class MyTableWidget(QtWidgets.QTableWidget):
 
@@ -64,7 +66,7 @@ class MyTableWidget(QtWidgets.QTableWidget):
 
     def __init__(self,win,network):
         super().__init__()
-        self.coin = MyRect(0,0)
+        self.coin = MyRect()
         self.delegate=MyDelegate(self)
         self.setItemPrototype(MyItem())
         self.setItemDelegate(self.delegate)
@@ -127,23 +129,19 @@ class MyTableWidget(QtWidgets.QTableWidget):
     def paintEvent(self, event):
         QtWidgets.QTableWidget.paintEvent(self,event)
         y = self.rowViewportPosition(self.currentRow())
-        x = self.columnViewportPosition(self.currentColumn())
+        x=self.columnViewportPosition(self.currentColumn())
         length = self.columnWidth(self.currentColumn())
         height = self.rowHeight(self.currentRow())
         painter=QtGui.QPainter(self.viewport())
         pen = QtGui.QPen(QtGui.QColor(0,0,0))
         pen.setWidth(2)
         painter.setPen(pen)
-        if not self.coin.isSelected:
-            painter.drawRect(x+1, y+1, length-3, height-3)
-            painter.setBrush((QtGui.QColor(0,0,0)))
-            self.coin.x=x
-            self.coin.y=y
-            self.coin.setRect(x+length-8,y+height-8,5,5)
-            painter.drawRect(self.coin)
-        else:
-            pen.setColor(QtGui.QColor(85,85,0))
-            painter.drawRect(self.coin.x+1,self.coin.y+1, length-3,height*(1+abs(y-self.coin.y)-5))
+
+        self.coin.setRect(x+length-8,y+height-8,5,5)
+
+        painter.drawRect(x+1, y+1, length-3, height-3)
+
+        painter.setBrush((QtGui.QColor(0,0,0)))
         painter.drawRect(self.coin)
         event.accept()
 
@@ -153,8 +151,6 @@ class MyTableWidget(QtWidgets.QTableWidget):
             self.setCursor(QtCore.Qt.CrossCursor)
         else:
             self.setCursor(QtCore.Qt.ArrowCursor)
-        if self.coin.isSelected:
-            self.repaint()
 
     #Fonction qui s'active lorque l'utilisateur finit d'editer une cellule
     def closeEditor(self, editor, hint):
