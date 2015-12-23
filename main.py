@@ -56,6 +56,26 @@ def traitement(x, y, string):
             print('Done : {}s'.format(t_end-t_init))
 
 
+def expension_process(cells_selected):
+    cells_selected=cells_selected[0]
+    print("nombre de colonnes:", cells_selected.columnCount())
+    print("nombre de lignes:", cells_selected.rowCount())
+    print("première ligne:", cells_selected.topRow())
+    print("dernière ligne:", cells_selected.bottomRow())
+    print("colonne de gauche:", cells_selected.leftColumn())
+    print("colonne de droite:", cells_selected.rightColumn())
+
+
+
+
+
+
+
+
+
+
+
+
 
 def functionAdded(name,descrition,evaluation,category):
     knownFunctions.addFun(functions.Function(name,evaluation,descrition,category))
@@ -77,6 +97,8 @@ def windowsave():                      #to open the window save....
     recOrd.extensionwritter(adress,network)
 
 ui_mainwindow.tableWidget.read_value.connect(traitement)
+ui_mainwindow.tableWidget.filter.cellExpended.connect(expension_process)
+
 ui_mainwindow.functionButton.released.connect(Funwindow.show)
 
 ui_mainwindow.actionOuvrir.triggered.connect(windowopen)

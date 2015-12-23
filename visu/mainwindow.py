@@ -9,6 +9,7 @@ CELLHEIGHT=30
 
 
 class MyRect(Qt.QRect):
+
     def __init__(self):
         super().__init__()
         self.isSelected = False
@@ -28,6 +29,9 @@ class MyDelegate(QtWidgets.QItemDelegate):
 
 
 class EventEater(QtCore.QObject):
+
+    cellExpended = pyqtSignal(list)
+
     def __init__(self,target):
         super().__init__()
         self.target = target
@@ -40,6 +44,7 @@ class EventEater(QtCore.QObject):
         elif event.type() == 3 and self.target.coin.isSelected == True:
             print('coin released')
             self.target.coin.isSelected = False
+            self.cellExpended.emit(self.target.selectedRanges())
             return True
         elif event.type() == 5:
             if self.target.coin.contains(event.pos().x(),event.pos().y()):
