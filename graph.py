@@ -58,7 +58,7 @@ class Ui_MainWindow(object):
         #images graphique et layout
         self.images = QtWidgets.QLabel(self.centralwidget)
         self.images.setObjectName("graphicsView")
-        b=QtGui.QPixmap('/home/insaf/PycharmProjects/Projet_Python1/visu/icons/courbe.png')
+        b=QtGui.QPixmap('visu/icons/courbe.png')
         self.images.setPixmap(b)
         self.horizontalLayout_5.addWidget(self.images)
         self.gridLayout.addLayout(self.horizontalLayout_5, 0, 0, 1, 2)
@@ -152,9 +152,9 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         #selecteur d'image
         def image():
-            courbe=QtGui.QPixmap('/home/insaf/PycharmProjects/Projet_Python1/visu/icons/courbe.png')
-            histogramme=QtGui.QPixmap('/home/insaf/PycharmProjects/Projet_Python1/visu/icons/histogramme.jpg')
-            camembert=QtGui.QPixmap('/home/insaf/PycharmProjects/Projet_Python1/visu/icons/camembert.jpg')
+            courbe=QtGui.QPixmap('visu/icons/courbe.png')
+            histogramme=QtGui.QPixmap('visu/icons/histogramme.jpg')
+            camembert=QtGui.QPixmap('visu/icons/camembert.jpg')
             A=self.listView.currentRow()
             image=self.images
             if A==0:
