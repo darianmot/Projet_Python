@@ -103,20 +103,23 @@ class Ui_Dialog(QtWidgets.QWidget):
                 Dialog.close()
             else:
                 if evaluation=="":
-                    self.evalError.setText("<font color='red' size=-1><i>L'expression ne peut être vide<i/></font>")
+                    self.evalError.setText("<font color='red' size=-1><i>L'expression de la fonction ne peut être vide<i/></font>")
                     self.evalError.show()
-                if name=="":
-                    self.nameError.setText("<font color='red' size=-1><i>Le nom ne peut être vide<i/></font>")
-                    self.nameError.show()
-                elif not(name.isalpha()):
-                    self.nameError.setText("<font color='red' size=-1><i>Le nom ne peut contenir que des lettres<i/></font>")
-                    self.nameError.show()
-                elif name=="args":
-                    self.nameError.setText("<font color='red' size=-1><i>'args' ne peut definir le nom d'une fonction<i/></font>")
-                    self.nameError.show()
                 else:
-                    self.nameError.setText("<font color='red' size=-1><i>La fonction existe déjà<i/></font>")
+                    self.evalError.hide()
+                if name=="":
+                    reason='Le nom ne peut être vide'
+                elif not(name.isalpha()):
+                    reason='Le nom ne peut contenir que des lettres'
+                elif name=="args":
+                    reason ="'args' ne peut definir le nom d'une fonction"
+                elif name in knownFunctions.dict.keys():
+                    reason ='La fonction existe déjà'
+                try:
+                    self.nameError.setText("<font color='red' size=-1><i>{}<i/></font>".format(reason))
                     self.nameError.show()
+                except UnboundLocalError:
+                    self.nameError.hide()
                 print('Fonction non valide')
 
         def quitCancel():
