@@ -224,12 +224,18 @@ class Ui_MainWindow(QtWidgets.QWidget):
         #Open action
         self.actionOuvrir = QtWidgets.QAction(MainWindow)
         self.actionOuvrir.setText("Ouvrir")
+        self.graph=QtWidgets.QAction(MainWindow)
+        self.graph.setText('graphique')
+        self.graph.setObjectName('graphique')
         self.menu_ouvrir = QtWidgets.QAction(MainWindow)
         self.menu_ouvrir.setText("Ouvrir")
         openIcon = QtGui.QIcon()
         openIcon.addPixmap(QtGui.QPixmap("visu/icons/open.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        graphIcon = QtGui.QIcon()
+        graphIcon.addPixmap(QtGui.QPixmap("visu/icons/circulaire2.gif"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionOuvrir.setIcon(openIcon)
         self.actionOuvrir.setObjectName("actionOuvrir")
+        self.graph.setIcon(graphIcon)
         self.menu_ouvrir.setIcon(openIcon)
 
         #Save Action
@@ -250,9 +256,9 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.menu_quit.setIcon(quitIcon)
 
 
-
         self.toolBar.addAction(self.actionOuvrir)
         self.toolBar.addAction(self.actionenregistrer)
+        self.toolBar.addAction(self.graph)
         self.toolBar.addSeparator()
 
         self.menubar.addAction(self.menuFichier.menuAction())

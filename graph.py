@@ -10,17 +10,21 @@ def graph(listeValue,ordonnée,abscisse,title,xmin,xmax,ymin,ymax,color):
     plt.axis(xmin,xmax,ymin,ymax)
     plt.show()
 
-def quit():
-    sys.exit(app.exec_())
+
+
 def chooseitemplot():
     #A=QtWidgets.QListWidget.selectedItems(a)
     #print(A)
 
     print('it ok')
+
 def imp():
     print('you chose an other type of graphic')
 
-class Ui_MainWindow(object):
+#def quit(graph):
+#    graph.close()
+
+class Ui_MainWindowgraph(object):
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -150,6 +154,7 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
         #selecteur d'image
         def image():
             courbe=QtGui.QPixmap('visu/icons/courbe.png')
@@ -168,6 +173,7 @@ class Ui_MainWindow(object):
                 print('you choose a camembert','image')
             else:
                 print('nothing selected','image')
+
         #selecteur de graphique
         def chosentype():#en construction
             A=self.listView.currentRow()
@@ -191,8 +197,8 @@ class Ui_MainWindow(object):
         #les connexions
         self.listView.itemClicked.connect(image)
         self.buttonBox.accepted.connect(chosentype)
-        self.buttonBox.accepted.connect(quit)
-        self.buttonBox.rejected.connect(quit)
+        #self.buttonBox.accepted.connect(quit)
+        #self.buttonBox.rejected.connect(quit)
 
 
     def retranslateUi(self, MainWindow):
@@ -206,14 +212,6 @@ class Ui_MainWindow(object):
         self.label_7.setText(_translate("MainWindow", "ymin"))
         self.label_8.setText(_translate("MainWindow", "ymax"))
 
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
 
 
 

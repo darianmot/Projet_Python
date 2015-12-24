@@ -1,5 +1,5 @@
 __authors__="Darian MOTAMED, Hugo CHOULY, Atime RONDA,Anas DARWICH"
-import sys,visu.mainwindow as mainwindow,visu.funwindow as funWindow, visu.addfunwindow as addfunwindow
+import sys,visu.mainwindow as mainwindow,visu.funwindow as funWindow, visu.addfunwindow as addfunwindow,graph as graphic
 import structures,cells_traitements.functions as functions,recOrd
 import cells_traitements.decomposition as decomposition,cells_traitements.tritopologique as tritopologique
 import time,pickle
@@ -18,7 +18,10 @@ ui_mainwindow.setupUi(MainWindow,network)
 Funwindow = QtWidgets.QDialog()
 ui_funWinfow = funWindow.Ui_funwindow()
 ui_funWinfow.setupUi(Funwindow,knownFunctions)
-
+#graphwindow
+graphwindow=QtWidgets.QMainWindow()
+ui_graphwindow = graphic.Ui_MainWindowgraph()
+ui_graphwindow.setupUi((graphwindow))
 #AddFunction Window
 AddFunwindow = QtWidgets.QDialog()
 ui_addfunwindow = addfunwindow.Ui_Dialog()
@@ -71,12 +74,6 @@ def expension_process(cells_selected):
 
 
 
-
-
-
-
-
-
 def functionAdded(name,descrition,evaluation,category):
     knownFunctions.addFun(functions.Function(name,evaluation,descrition,category))
     print('Ajout de la fonction {}'.format(name) )
@@ -92,7 +89,7 @@ def windowopen():#to open the window open....
         print("No file selected")
 
 def windowsave():                      #to open the window save....
-    a=QtWidgets.QFileDialog.getSaveFileName(MainWindow,'Enregistrer','',"(*.pyc *.xls *.csv)") #ne marche pas très bien, on a pas le choix du format
+    a=QtWidgets.QFileDialog.getSaveFileName(MainWindow,'Enregistrer','',"(*.pyc *.xls *.csv)")
     adress=a[0]                                   #faut mettre l'extension du format genre fichier.pyc ou fichier.xls dans la barre de saisie
     recOrd.extensionwritter(adress,network)
 
@@ -106,8 +103,7 @@ ui_mainwindow.menu_ouvrir.triggered.connect(windowopen)
 
 ui_mainwindow.actionenregistrer.triggered.connect(windowsave)
 ui_mainwindow.menu_enregistrer.triggered.connect(windowsave)
-
-
+ui_mainwindow.graph.triggered.connect(graphwindow.show)
 
 ui_funWinfow.toolAdd.released.connect(AddFunwindow.show)
 ui_addfunwindow.sendFunData.connect(functionAdded)
