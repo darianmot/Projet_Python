@@ -12,12 +12,11 @@ def graph(listeValue,ordonnée,abscisse,title,xmin,xmax,ymin,ymax,color):
 
 def quit():
     sys.exit(app.exec_())
-# def chooseitemplot(a):
-#
-#     #A=QtWidgets.QListWidget.selectedItems(a)
-#     #print(A)
-#     for x in range(6):
-#         print('5')
+def chooseitemplot():
+    #A=QtWidgets.QListWidget.selectedItems(a)
+    #print(A)
+
+    print('it ok')
 def imp():
     print('you chose an other type of graphic')
 
@@ -39,18 +38,18 @@ class Ui_MainWindow(object):
 
         #liste des types de graphiques
         self.listView = QtWidgets.QListWidget(self.centralwidget)
-        self.taken=self.listView.selectedItems()
         self.listView.setObjectName("listView")
-        courbe=QtWidgets.QListWidgetItem()
-        self.listView.addItem(courbe)
-        courbe.setText('courbe')
+        self.courbe=QtWidgets.QListWidgetItem()
+        self.listView.addItem(self.courbe)
+        self.courbe.setText('courbe')
         self.histogramme=QtWidgets.QListWidgetItem()
         self.listView.addItem(self.histogramme)
         self.histogramme.setText('histogramme')
         self.camembert=QtWidgets.QListWidgetItem()
         self.listView.addItem(self.camembert)
         self.camembert.setText('camembert')
-        #print(self.camembert.text())
+
+
         #autre layout
         self.horizontalLayout_5.addWidget(self.listView)
 
@@ -75,15 +74,10 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.addWidget(self.lineEdit_3)
         self.gridLayout.addLayout(self.horizontalLayout_4, 1, 0, 1, 1)
 
-        #le scrolling pour la couleur
-        self.scrollArea = QtWidgets.QScrollArea(self.centralwidget)
-        self.scrollArea.setWidgetResizable(True)
-        self.scrollArea.setObjectName("scrollArea")
-        self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 379, 76))
-        self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
-        self.gridLayout.addWidget(self.scrollArea, 1, 1, 2, 1)
+        #la combobox  pour la couleur
+        self.combobox=QtWidgets.QComboBox(self.centralwidget)
+        self.combobox.addItems(['rouge','bleu','jaune','orange','violet','noir','gris','vert'])
+        self.gridLayout.addWidget(self.combobox, 1, 1, 2, 1)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
 
@@ -129,7 +123,7 @@ class Ui_MainWindow(object):
         self.label_7.setObjectName("label_7")
         self.horizontalLayout_6.addWidget(self.label_7)
 
-        #valeur des ordonnées et layout associée
+        #valeur des ordonnées ymin ymax et layout associée
         self.doubleSpinBox_3 = QtWidgets.QDoubleSpinBox(self.centralwidget)
         self.doubleSpinBox_3.setObjectName("doubleSpinBox_3")
         self.horizontalLayout_6.addWidget(self.doubleSpinBox_3)
@@ -143,6 +137,8 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
+
+        #bouton ok et cancel
         self.buttonBox = QtWidgets.QDialogButtonBox(self.centralwidget)
         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName("buttonBox")
@@ -150,8 +146,26 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-        self.listView.itemSelectionChanged.connect(imp)
-        #self.buttonBox.accepted.connect(chooseitemplot(self.taken))
+
+        def chosentype():#en construction
+            A=self.listView.currentRow()
+            ymin=self.doubleSpinBox_3.value()
+            ymax=self.doubleSpinBox_4.value()
+            xmax=self.doubleSpinBox_2.value()
+            xmin=self.doubleSpinBox.value()
+            xtitle=self.lineEdit_2.text()
+            ytitle=self.lineEdit_3.text()
+            titleplot=self.lineEdit.text()
+            color='blue'
+            if A==0:
+                #a titre d'exemple, evidemment je nai pas de liste de cellule la tout de suite bande de zdenzdkz
+                graph('listeValue',ytitle,xtitle,titleplot,xmin,xmax,ymin,ymax,color)
+                print('you choosed courbe')
+            elif A==1:
+                print('you choose histogramme')
+            else:
+                print('you choose a camembert')
+        self.buttonBox.accepted.connect(chosentype)
         self.buttonBox.accepted.connect(quit)
         self.buttonBox.rejected.connect(quit)
 
@@ -165,7 +179,6 @@ class Ui_MainWindow(object):
         self.label.setText(_translate("MainWindow", "    Y axis title"))
         self.label_7.setText(_translate("MainWindow", "ymin"))
         self.label_8.setText(_translate("MainWindow", "ymax"))
-
 
 if __name__ == "__main__":
     import sys
