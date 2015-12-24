@@ -53,10 +53,14 @@ class Ui_MainWindow(object):
         #autre layout
         self.horizontalLayout_5.addWidget(self.listView)
 
+
+
         #images graphique et layout
-        self.graphicsView = QtWidgets.QGraphicsView(self.centralwidget)
-        self.graphicsView.setObjectName("graphicsView")
-        self.horizontalLayout_5.addWidget(self.graphicsView)
+        self.images = QtWidgets.QLabel(self.centralwidget)
+        self.images.setObjectName("graphicsView")
+        b=QtGui.QPixmap('/home/insaf/PycharmProjects/Projet_Python1/visu/icons/courbe.png')
+        self.images.setPixmap(b)
+        self.horizontalLayout_5.addWidget(self.images)
         self.gridLayout.addLayout(self.horizontalLayout_5, 0, 0, 1, 2)
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
@@ -146,7 +150,25 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
+        #selecteur d'image
+        def image():
+            courbe=QtGui.QPixmap('/home/insaf/PycharmProjects/Projet_Python1/visu/icons/courbe.png')
+            histogramme=QtGui.QPixmap('/home/insaf/PycharmProjects/Projet_Python1/visu/icons/histogramme.jpg')
+            camembert=QtGui.QPixmap('/home/insaf/PycharmProjects/Projet_Python1/visu/icons/camembert.jpg')
+            A=self.listView.currentRow()
+            image=self.images
+            if A==0:
+                print('you choosed courbe','image')
+                image.setPixmap(courbe)
+            elif A==1:
+                print('you choose histogramme','image')
+                image.setPixmap(histogramme)
+            elif A==2:
+                image.setPixmap(camembert)
+                print('you choose a camembert','image')
+            else:
+                print('nothing selected','image')
+        #selecteur de graphique
         def chosentype():#en construction
             A=self.listView.currentRow()
             ymin=self.doubleSpinBox_3.value()
@@ -160,14 +182,18 @@ class Ui_MainWindow(object):
             if A==0:
                 #a titre d'exemple, evidemment je nai pas de liste de cellule la tout de suite bande de zdenzdkz
                 graph('listeValue',ytitle,xtitle,titleplot,xmin,xmax,ymin,ymax,color)
-                print('you choosed courbe')
+                print('you choosed courbe','chosen type')
             elif A==1:
-                print('you choose histogramme')
+                print('you choose histogramme','chosen type')
             else:
-                print('you choose a camembert')
+                print('you choose a camembert','chosen type')
+
+        #les connexions
+        self.listView.itemClicked.connect(image)
         self.buttonBox.accepted.connect(chosentype)
         self.buttonBox.accepted.connect(quit)
         self.buttonBox.rejected.connect(quit)
+
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
