@@ -10,8 +10,19 @@ def graph(listeValue,ordonnée,abscisse,title,xmin,xmax,ymin,ymax,color):
     plt.axis(xmin,xmax,ymin,ymax)
     plt.show()
 
+def quit():
+    sys.exit(app.exec_())
+# def chooseitemplot(a):
+#
+#     #A=QtWidgets.QListWidget.selectedItems(a)
+#     #print(A)
+#     for x in range(6):
+#         print('5')
+def imp():
+    print('you chose an other type of graphic')
 
 class Ui_MainWindow(object):
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(787, 671)
@@ -28,6 +39,7 @@ class Ui_MainWindow(object):
 
         #liste des types de graphiques
         self.listView = QtWidgets.QListWidget(self.centralwidget)
+        self.taken=self.listView.selectedItems()
         self.listView.setObjectName("listView")
         courbe=QtWidgets.QListWidgetItem()
         self.listView.addItem(courbe)
@@ -138,6 +150,10 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.listView.itemSelectionChanged.connect(imp)
+        #self.buttonBox.accepted.connect(chooseitemplot(self.taken))
+        self.buttonBox.accepted.connect(quit)
+        self.buttonBox.rejected.connect(quit)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -149,7 +165,6 @@ class Ui_MainWindow(object):
         self.label.setText(_translate("MainWindow", "    Y axis title"))
         self.label_7.setText(_translate("MainWindow", "ymin"))
         self.label_8.setText(_translate("MainWindow", "ymax"))
-
 
 
 if __name__ == "__main__":
