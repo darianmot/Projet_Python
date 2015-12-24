@@ -6,6 +6,7 @@ OUVRANTES=['(','{']
 FERMANTES=[')','}']
 SEPARATEURS=[',',';']
 
+#Erreur levée lorsqu'on trouve une erreur lors de l'evaluation d'une cellule, que l'on affichera alors dans celle ci
 class Error(Exception):
     def __init__(self,reason):
         self.reason=reason
@@ -18,7 +19,7 @@ def isCell(chaine):
         return False
     in_letters=True    #Si in_letters est vérifiée, on est dans la partie des lettres.
     for char in chaine[1:]:
-        if (in_letters==False) and (char in columns_labels.ALPHABET): #S'il existe un chiffre placé avant une lettre, ce n'est pas une celulle
+        if (in_letters==False) and (char in columns_labels.ALPHABET): #S'il existe un chiffre placé avant une lettre
             return False
         elif char in columns_labels.ALPHABET: pass
         elif char.isdigit():
@@ -153,7 +154,7 @@ def eval_function(network,elementList,elementType,k,knownFunctions):
 def evaluation(network, chaine,knownFunctions):
     (elementList,elementType)=decompo(chaine)
     i=0
-    for j in [i for i in range(len(elementList)) if elementList[i]==':']: #On remplace c1:c2 par les celulles comprises dans le rectancle d'extrémité (c1,c2)
+    for j in [k for k, l in enumerate(elementList) if k == ':']: #On remplace c1:c2 par les celulles comprises dans le rectancle d'extrémité (c1,c2)
         j=elementList.index(':')
         if j==0: raise Error('Syntaxe (\':\' innatendue 1)')
         if elementType[j-1]!='cell' or elementType[j+1]!='cell':
