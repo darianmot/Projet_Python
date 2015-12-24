@@ -181,7 +181,7 @@ class Ui_MainWindow(object):
             color='blue'
             if A==0:
                 #a titre d'exemple, evidemment je nai pas de liste de cellule la tout de suite bande de zdenzdkz
-                graph('listeValue',ytitle,xtitle,titleplot,xmin,xmax,ymin,ymax,color)
+                #graph('listeValue',ytitle,xtitle,titleplot,xmin,xmax,ymin,ymax,color)
                 print('you choosed courbe','chosen type')
             elif A==1:
                 print('you choose histogramme','chosen type')
