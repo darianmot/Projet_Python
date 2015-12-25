@@ -33,29 +33,30 @@ def traitement(x, y, string):
     oldValue=cell.value
     t_init=time.time()
     if len(string) > 0:
+        print('Evaluation de {0} et de ses cellules filles ... '.format(cell.name,len(cell.children_cells)),end='')
         try:
-            newValue=str(decomposition.evaluation(network,string[1:], knownFunctions)) if string[0]=='=' else string
-        except decomposition.Error as e:
-            newValue=e.disp
-        if oldValue!=newValue or string[0]=='=':
-            print('Evaluation de {0} et de ses cellules filles ... '.format(cell.name,len(cell.children_cells)),end='')
             if string[0] == '=':
-                cell.value = newValue
                 cell.parent_cells = decomposition.parentCells(network, string[1:])
                 for parentCell in cell.parent_cells:
                     parentCell.addChildCell(cell)
-            else:
-                cell.value = string
-            ui_mainwindow.tableWidget.return_value.emit(x, y, str(cell.value))
-            try:
-                order=tritopologique.evalOrder(cell)
-                for child in order:
-                    child.value=str(decomposition.evaluation(network,child.input[1:],knownFunctions))
-                    ui_mainwindow.tableWidget.return_value.emit(child.x,child.y,child.value)
-            except decomposition.Error as e:
-                ui_mainwindow.tableWidget.return_value.emit(x, y, e.disp)
-            t_end=time.time()
-            print('Done : {}s'.format(t_end-t_init))
+            newValue=str(decomposition.evaluation(network,string[1:], knownFunctions)) if string[0]=='=' else string
+            if oldValue!=newValue:
+                if string[0] == '=':
+                    cell.value = newValue
+                else:
+                    cell.value = string
+                ui_mainwindow.tableWidget.return_value.emit(x, y, str(cell.value))
+                try:
+                    order=tritopologique.evalOrder(cell)
+                    for child in order:
+                        child.value=str(decomposition.evaluation(network,child.input[1:],knownFunctions))
+                        ui_mainwindow.tableWidget.return_value.emit(child.x,child.y,child.value)
+                except decomposition.Error as e:
+                    ui_mainwindow.tableWidget.return_value.emit(x, y, e.disp)
+        except decomposition.Error as e:
+            ui_mainwindow.tableWidget.return_value.emit(x, y, e.disp)
+        t_end=time.time()
+        print('Done : {}s'.format(t_end-t_init))
 
 
 def expension_process(cells_selected):

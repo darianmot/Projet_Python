@@ -99,22 +99,29 @@ class network(object): #On classe par coordonnées
             return Cell(-1,-1)
 
     def getCellByName(self,name): #Renvoi la celulle nommée si elle existe, 0 sinon
+        name=''.join([char for char in name if char!='$'])  #On eneleve les $ eventuels
+        print(name)
         letters=""
         numbers=""
         k=0
-        while len(numbers)==0:
-            if name[k].isalpha():
-                letters+=name[k]
-            else:
+        try:
+            while len(numbers)==0:
+                if name[k].isalpha():
+                    letters+=name[k]
+                else:
+                    numbers+=name[k]
+                k+=1
+            while k<len(name):
                 numbers+=name[k]
-            k+=1
-        while k<len(name):
-            numbers+=name[k]
-            k+=1
+                k+=1
+        except Exception as e:
+            raise decomposition.Error('Format de cellule non valide')
+        if len(letters)==0 or len(numbers)==0:
+            raise decomposition.Error('Format de cellule non valide')
         try:
             return self.getCell(int(numbers)-1,columns_labels.getColumn(letters)-1)
-        except :
-            return 0
+        except Exception:
+            raise decomposition.Error('Cellule {} non trouvée'.format(name))
 
     def evalList(self,cellList,knownFunctions):
         try:

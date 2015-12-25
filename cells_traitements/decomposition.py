@@ -15,18 +15,26 @@ class Error(Exception):
 
 #Renvoie True si l'entrée correspond à une celulle
 def isCell(chaine):
-    if (chaine[0] not in columns_labels.ALPHABET) or not(chaine[-1].isdigit()): #Le code d'une cellule commence par une lettre et finie par un chiffre
+    if len(chaine)<2 or (chaine[0] not in columns_labels.ALPHABET and chaine[0]!='$'): #Le code d'une cellule commence par une lettre ou un $
         return False
     in_letters=True    #Si in_letters est vérifiée, on est dans la partie des lettres.
+    dollardCount=1 if chaine[0]=='$' else 0
     for char in chaine[1:]:
+        if dollardCount>2:  #Si on trouve plus de 2 $ dans la chaine
+            return False
         if (in_letters==False) and (char in columns_labels.ALPHABET): #S'il existe un chiffre placé avant une lettre
             return False
         elif char in columns_labels.ALPHABET: pass
+        elif char=='$':      #Si on trouve un dollard, soit on est juste avant les chiffres, soit on est pas une cellule
+            if in_letters:
+                dollardCount+=1
+            else:
+                return False
         elif char.isdigit():
             in_letters=False
-        else:                 #Si ce n'est ni un chiffre ni un lettre
+        else:                 #Si ce n'est ni un chiffre ni un lettre ni un $
             return False
-    return True
+    return  (not in_letters or chaine[-1]=='$') #on vérifie qu'on a bien un chiffre ou un dollard à la fin
 
 #Renvoie True si l'entrée correspond syntaxiquement à une fonction
 def isfunction(chaine):
@@ -154,13 +162,17 @@ def eval_function(network,elementList,elementType,k,knownFunctions):
 def evaluation(network, chaine,knownFunctions):
     (elementList,elementType)=decompo(chaine)
     i=0
-    for j in [k for k, l in enumerate(elementList) if k == ':']: #On remplace c1:c2 par les celulles comprises dans le rectancle d'extrémité (c1,c2)
-        j=elementList.index(':')
+    print(elementList)
+    for j in [k for k, l in enumerate(elementList) if l == ':']: #On remplace c1:c2 par les celulles comprises dans le rectancle d'extrémité (c1,c2)
+        print('on y est')
         if j==0: raise Error('Syntaxe (\':\' innatendue 1)')
         if elementType[j-1]!='cell' or elementType[j+1]!='cell':
             raise Error('Syntaxe (\':\' innatendue 2)')
-        c1=network.getCellByName(elementList[j-1])
-        c2=network.getCellByName(elementList[j+1])
+        try:
+            c1=network.getCellByName(elementList[j-1])
+            c2=network.getCellByName(elementList[j+1])
+        except Error as e:
+            raise Error(e.reason)
         cells=cellsBetween(network,c1,c2)
         l_element=[]
         l_type=[]
@@ -174,7 +186,10 @@ def evaluation(network, chaine,knownFunctions):
         elementType[j-1:j+2]=l_type
     while i<len(elementList):
         if elementType[i]== 'cell':
-            elementList[i]=str(network.getCellByName(elementList[i]).value)
+            try:
+                elementList[i]=str(network.getCellByName(elementList[i]).value)
+            except Error as e:
+                raise Error(e.reason)
         elif elementType[i]=='function':
             try:
                 value=eval_function(network,elementList,elementType,i,knownFunctions)
@@ -186,6 +201,7 @@ def evaluation(network, chaine,knownFunctions):
             elementList[i:end+1]=[str(value)]
             elementType[i:end+1]=['nombre']
         i+=1
+        print(elementList)
     try:
         return eval(''.join(elementList))
     except SyntaxError as e:
@@ -202,7 +218,10 @@ def parentCells(network,chaine):
     l=[]
     for k in range(len(elementList)):
         if elementType[k]=='cell':
-            l.append(network.getCellByName(elementList[k]))
+            try:
+                l.append(network.getCellByName(elementList[k]))
+            except Error:
+                pass
     return l
 
 #Renvoie l'ensemble des cellules filles (récursive) d'une cellule

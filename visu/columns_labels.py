@@ -24,6 +24,8 @@ def getLabel(labels,c): #Renvoie le label de la colonne c à partir de la liste 
         return labels[c-1]
 
 def getColumn(n): #Renvoie le numero de colonne ayant pour label n
+    if len(n)==0:
+        return 0
     if len(n)==1:
         return ALPHABET.index(n)+1
     else:
