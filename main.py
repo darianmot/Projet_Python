@@ -68,7 +68,8 @@ def expension_process(cells_selected):
     print("dernière ligne:", cells_selected.bottomRow())
     print("colonne de gauche:", cells_selected.leftColumn())
     print("colonne de droite:", cells_selected.rightColumn())
-    graphic.cell(cells_selected,network,0)
+    #graphic.cell(cells_selected,network,0)
+
 
 
 

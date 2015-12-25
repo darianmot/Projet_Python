@@ -40,6 +40,7 @@ class EventEater(QtCore.QObject):
         if event.type() == 2 and self.target.coin.contains(event.pos().x(),event.pos().y()):
             print('coin selected')
             self.target.coin.isSelected = True
+            self.cellExpended.emit(self.target.selectedRanges())
             return True
         elif event.type() == 3 and self.target.coin.isSelected == True:
             print('coin released')
@@ -51,6 +52,10 @@ class EventEater(QtCore.QObject):
                 self.target.coin.isUnder = True
             else:
                 self.target.coin.isUnder = False
+
+            if self.target.coin.isSelected:
+                self.cellExpended.emit(self.target.selectedRanges())
+
         return False
 
 
@@ -128,21 +133,29 @@ class MyTableWidget(QtWidgets.QTableWidget):
 
     def paintEvent(self, event):
         QtWidgets.QTableWidget.paintEvent(self,event)
-        y = self.rowViewportPosition(self.currentRow())
-        x=self.columnViewportPosition(self.currentColumn())
-        length = self.columnWidth(self.currentColumn())
-        height = self.rowHeight(self.currentRow())
         painter=QtGui.QPainter(self.viewport())
         pen = QtGui.QPen(QtGui.QColor(0,0,0))
         pen.setWidth(2)
         painter.setPen(pen)
 
-        self.coin.setRect(x+length-8,y+height-8,5,5)
 
-        painter.drawRect(x+1, y+1, length-3, height-3)
 
+
+
+        if self.coin.isSelected and event.type() ==12:
+            print('Entering special <extension> paint cell mode')
+
+
+        x=self.columnViewportPosition(self.currentColumn())
+        y = self.rowViewportPosition(self.currentRow())
+        width = self.columnWidth(self.currentColumn())
+        height = self.rowHeight(self.currentRow())
+
+        painter.drawRect(x+1, y+1, width-3, height-3)
         painter.setBrush((QtGui.QColor(0,0,0)))
+        self.coin.setRect(x+width-8,y+height-8,5,5)
         painter.drawRect(self.coin)
+
         event.accept()
 
     def mouseMoveEvent(self, QMouseEvent):
