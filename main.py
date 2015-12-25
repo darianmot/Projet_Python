@@ -58,17 +58,17 @@ def traitement(x, y, string):
         t_end=time.time()
         print('Done : {}s'.format(t_end-t_init))
 
-
+j=0
 def expension_process(cells_selected):
+
     cells_selected=cells_selected[0]
-    print("nombre de colonnes:", cells_selected.columnCount())
-    print("nombre de lignes:", cells_selected.rowCount())
+    #print("nombre de colonnes:", cells_selected.columnCount())
+    #print("nombre de lignes:", cells_selected.rowCount())
     print("première ligne:", cells_selected.topRow())
     print("dernière ligne:", cells_selected.bottomRow())
     print("colonne de gauche:", cells_selected.leftColumn())
     print("colonne de droite:", cells_selected.rightColumn())
-
-
+    graphic.cell(cells_selected,network,0)
 
 
 

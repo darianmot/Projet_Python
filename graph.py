@@ -1,13 +1,15 @@
 
 import matplotlib.pyplot as plt
 from PyQt5 import QtCore, QtGui, QtWidgets
-def graph(listeValue,ordonnée,abscisse,title,xmin,xmax,ymin,ymax,color):
-    newliste=[x.value for x in listeValue]
-    plt.plot[newliste,color]
-    plt.ylabel(ordonnée)
-    plt.xlabel(abscisse)
-    plt.title(title)
-    plt.axis(xmin,xmax,ymin,ymax)
+def graph(listeabscisse,listeordonnée,ordonnée,abscisse,title,xmin,xmax,ymin,ymax,color):
+    a=[int(x) for x in listeabscisse]
+    b=[int(x) for x in listeordonnée]
+    print(a,b)
+    plt.plot(a, b)
+    # plt.ylabel(ordonnée)
+    # plt.xlabel(abscisse)
+    # plt.title(title)
+    #plt.axis(xmin,xmax,ymin,ymax)
     plt.show()
 
 
@@ -21,9 +23,29 @@ def chooseitemplot():
 def imp():
     print('you chose an other type of graphic')
 
-#def quit(graph):
-#    graph.close()
+list=[]
+list2=[]
+def cell(cells_selected,network):
+    j=0
+    if j==0:
+        j=j+1
 
+        for i in range(cells_selected.topRow(),cells_selected.bottomRow()+1):
+            list.append(network.getCell(i, cells_selected.leftColumn()).value)
+            list2.append(network.getCell(i,cells_selected.rightColumn()).value)
+            print(list,list2)
+            print('done')
+
+    else:
+
+        list.clear()
+        list2.clear()
+        for i in range(cells_selected.topRow(),cells_selected.bottomRow()+1):
+            list.append(network.getCell(i, cells_selected.leftColumn()).value)
+            list2.append(network.getCell(i,cells_selected.rightColumn()).value)
+            print(list,list2)
+            print('done')
+    return(list,list2)
 class Ui_MainWindowgraph(object):
 
     def setupUi(self, MainWindow):
@@ -186,19 +208,20 @@ class Ui_MainWindowgraph(object):
             titleplot=self.lineEdit.text()
             color='blue'
             if A==0:
-                #a titre d'exemple, evidemment je nai pas de liste de cellule la tout de suite bande de zdenzdkz
-                #graph('listeValue',ytitle,xtitle,titleplot,xmin,xmax,ymin,ymax,color)
+                graph(list,list2,ytitle,xtitle,titleplot,xmin,xmax,ymin,ymax,color)
                 print('you choosed courbe','chosen type')
             elif A==1:
                 print('you choose histogramme','chosen type')
             else:
                 print('you choose a camembert','chosen type')
 
+        def quit():
+            MainWindow.close()
         #les connexions
         self.listView.itemClicked.connect(image)
         self.buttonBox.accepted.connect(chosentype)
-        #self.buttonBox.accepted.connect(quit)
-        #self.buttonBox.rejected.connect(quit)
+        self.buttonBox.accepted.connect(quit)
+        self.buttonBox.rejected.connect(quit)
 
 
     def retranslateUi(self, MainWindow):
