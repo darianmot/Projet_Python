@@ -23,8 +23,9 @@ def chooseitemplot():
     print('it ok')
 
 def imp():
-    print('you chose an other type of graphic')
+    print('the connexion works')
 
+donées=pyqtSignal(list,list)
 
 def cell(cells_selected,network):
     list=[]
@@ -33,11 +34,10 @@ def cell(cells_selected,network):
     for i in range(cells_selected.topRow(),cells_selected.bottomRow()+1):
         list.append(network.getCell(i, cells_selected.leftColumn()).value)
         list2.append(network.getCell(i,cells_selected.rightColumn()).value)
-        print(list,list2)
-        print('done')
+        print(list,list2,'abscisse,ordonéée ')
 
+    #donées.emit(list,list2)
     return(list,list2)
-buttongraph=pyqtSignal(QtWidgets.QTableWidgetSelectionRange,structures.network)
 
 class Ui_MainWindowgraph(object):
     def setupUi(self, MainWindow):
@@ -207,7 +207,7 @@ class Ui_MainWindowgraph(object):
         color='blue'
         if A==0:
 
-           graph(list,list2,ytitle,xtitle,titleplot,xmin,xmax,ymin,ymax,color)
+           #graph(list,list2,ytitle,xtitle,titleplot,xmin,xmax,ymin,ymax,color)
            print('you choosed courbe','chosen type')
         elif A==1:
            print('you choose histogramme','chosen type')
@@ -215,6 +215,7 @@ class Ui_MainWindowgraph(object):
            print('you choose a camembert','chosen type')
 
         self.buttonBox.accepted.connect(self.chosentype)
+        #donées.connect(self.chosentype)
         def sig():
             print('signal ok')
         Ui_MainWindowgraph.buttongraph.connect(sig)

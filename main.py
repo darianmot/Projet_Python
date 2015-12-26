@@ -70,11 +70,6 @@ def expension_process(cells_selected):
     print("colonne de droite:", cells_selected.rightColumn())
     graphic.cell(cells_selected,network)
 
-
-
-
-
-
 def functionAdded(name,descrition,evaluation,category):
     knownFunctions.addFun(functions.Function(name,evaluation,descrition,category))
     print('Ajout de la fonction {}'.format(name) )

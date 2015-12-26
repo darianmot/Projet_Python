@@ -1,5 +1,5 @@
 # ATTENTION : vu qu'on a modifié ce fichier, mainwindow.ui est devenu obsolète
-
+import structures
 from PyQt5 import QtCore, QtGui, QtWidgets,Qt
 from PyQt5.QtCore import pyqtSignal
 import visu.columns_labels as columns_labels,random
