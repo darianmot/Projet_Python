@@ -58,7 +58,7 @@ def traitement(x, y, string):
         t_end=time.time()
         print('Done : {}s'.format(t_end-t_init))
 
-j=0
+
 def expension_process(cells_selected):
 
     cells_selected=cells_selected[0]
@@ -68,7 +68,7 @@ def expension_process(cells_selected):
     print("dernière ligne:", cells_selected.bottomRow())
     print("colonne de gauche:", cells_selected.leftColumn())
     print("colonne de droite:", cells_selected.rightColumn())
-    #graphic.cell(cells_selected,network,0)
+    graphic.cell(cells_selected,network)
 
 
 

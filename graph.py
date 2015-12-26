@@ -1,6 +1,8 @@
 
 import matplotlib.pyplot as plt
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import pyqtSignal
+import structures
 def graph(listeabscisse,listeordonnée,ordonnée,abscisse,title,xmin,xmax,ymin,ymax,color):
     a=[int(x) for x in listeabscisse]
     b=[int(x) for x in listeordonnée]
@@ -23,31 +25,21 @@ def chooseitemplot():
 def imp():
     print('you chose an other type of graphic')
 
-list=[]
-list2=[]
+
 def cell(cells_selected,network):
-    j=0
-    if j==0:
-        j=j+1
+    list=[]
+    list2=[]
+    print(type(network))
+    for i in range(cells_selected.topRow(),cells_selected.bottomRow()+1):
+        list.append(network.getCell(i, cells_selected.leftColumn()).value)
+        list2.append(network.getCell(i,cells_selected.rightColumn()).value)
+        print(list,list2)
+        print('done')
 
-        for i in range(cells_selected.topRow(),cells_selected.bottomRow()+1):
-            list.append(network.getCell(i, cells_selected.leftColumn()).value)
-            list2.append(network.getCell(i,cells_selected.rightColumn()).value)
-            print(list,list2)
-            print('done')
-
-    else:
-
-        list.clear()
-        list2.clear()
-        for i in range(cells_selected.topRow(),cells_selected.bottomRow()+1):
-            list.append(network.getCell(i, cells_selected.leftColumn()).value)
-            list2.append(network.getCell(i,cells_selected.rightColumn()).value)
-            print(list,list2)
-            print('done')
     return(list,list2)
-class Ui_MainWindowgraph(object):
+buttongraph=pyqtSignal(QtWidgets.QTableWidgetSelectionRange,structures.network)
 
+class Ui_MainWindowgraph(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(787, 671)
@@ -196,33 +188,36 @@ class Ui_MainWindowgraph(object):
             else:
                 print('nothing selected','image')
 
-        #selecteur de graphique
-        def chosentype():#en construction
-            A=self.listView.currentRow()
-            ymin=self.doubleSpinBox_3.value()
-            ymax=self.doubleSpinBox_4.value()
-            xmax=self.doubleSpinBox_2.value()
-            xmin=self.doubleSpinBox.value()
-            xtitle=self.lineEdit_2.text()
-            ytitle=self.lineEdit_3.text()
-            titleplot=self.lineEdit.text()
-            color='blue'
-            if A==0:
-                graph(list,list2,ytitle,xtitle,titleplot,xmin,xmax,ymin,ymax,color)
-                print('you choosed courbe','chosen type')
-            elif A==1:
-                print('you choose histogramme','chosen type')
-            else:
-                print('you choose a camembert','chosen type')
-
         def quit():
             MainWindow.close()
         #les connexions
         self.listView.itemClicked.connect(image)
-        self.buttonBox.accepted.connect(chosentype)
         self.buttonBox.accepted.connect(quit)
         self.buttonBox.rejected.connect(quit)
+        #selecteur de graphique
+    def chosentype(self,cell_selected,network):#en construction
+        A=self.listView.currentRow()
+        ymin=self.doubleSpinBox_3.value()
+        ymax=self.doubleSpinBox_4.value()
+        xmax=self.doubleSpinBox_2.value()
+        xmin=self.doubleSpinBox.value()
+        xtitle=self.lineEdit_2.text()
+        ytitle=self.lineEdit_3.text()
+        titleplot=self.lineEdit.text()
+        color='blue'
+        if A==0:
 
+           graph(list,list2,ytitle,xtitle,titleplot,xmin,xmax,ymin,ymax,color)
+           print('you choosed courbe','chosen type')
+        elif A==1:
+           print('you choose histogramme','chosen type')
+        else:
+           print('you choose a camembert','chosen type')
+
+        self.buttonBox.accepted.connect(self.chosentype)
+        def sig():
+            print('signal ok')
+        Ui_MainWindowgraph.buttongraph.connect(sig)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
