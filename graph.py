@@ -1,8 +1,8 @@
-import unicodedata
+
 import matplotlib.pyplot as plt
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSignal
-import structures
+
 def graph(listeabscisse,listeordonnée,ordonnée,abscisse,title,xmin,xmax,ymin,ymax,color):
     a=[int(x) for x in listeabscisse]
     b=[int(x) for x in listeordonnée]
@@ -40,7 +40,8 @@ class Ui_MainWindowgraph(object):
             list2.append(network.getCell(i,cells_selected.rightColumn()).value)
             print(list,list2,'abscisse,ordonéée ')
 
-        #self.donées.emit(unicode(list),unicode(list2))
+        self.donées.emit(list,list2)
+
         return(list,list2)
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -218,7 +219,7 @@ class Ui_MainWindowgraph(object):
            print('you choose a camembert','chosen type')
 
         self.buttonBox.accepted.connect(self.chosentype)
-        #self.donées.connect(self.chosentype)
+        self.donées.connect(self.chosentype)
 
         def sig():
             print('signal ok')
