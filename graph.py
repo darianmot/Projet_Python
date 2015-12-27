@@ -1,8 +1,19 @@
-
 import matplotlib.pyplot as plt
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSignal
 
+def circulaire(nom,content,titre,explode):
+    plt.pie(content,explode,nom,autopct='%1.1f%%',startangle=90,shadow=True)
+    plt.title(titre)
+    plt.axis('equal')
+    plt.show
+def histogramme(ordonnées,xmin,xmax,ymin,ymax,color,abscisse,ordonné):
+    plt.hist(ordonnées,10,None,1,None,False,None,'bar','mid','vertical',None,False,color)
+    plt.xlabel(abscisse)
+    plt.ylabel(ordonné)
+    plt.axis([xmin,xmax,ymin,ymax])
+    plt.grid(True)
+    plt.show
 def graph(listeabscisse,listeordonnée,ordonnée,abscisse,title,xmin,xmax,ymin,ymax,color):
     a=[int(x) for x in listeabscisse]
     b=[int(x) for x in listeordonnée]
@@ -215,7 +226,9 @@ class Ui_MainWindowgraph(object):
            print('you choosed courbe','chosen type')
         elif A==1:
            print('you choose histogramme','chosen type')
+           #histogramme(list,xmin,xmax,ymin,ymax,color,xtitle,ytitle)
         else:
+           #circulaire(list,list2,title,explode)
            print('you choose a camembert','chosen type')
 
         self.buttonBox.accepted.connect(self.chosentype)
