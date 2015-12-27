@@ -46,7 +46,6 @@ class EventEater(QtCore.QObject):
         elif event.type() == 3 and self.target.coin.isSelected == True:
             print('coin released')
             self.target.coin.isSelected = False
-            self.cellExpended.emit(self.target.selectedRanges())
             return True
         elif event.type() == 5:
             if self.target.coin.contains(event.pos().x(),event.pos().y()):
@@ -146,7 +145,7 @@ class MyTableWidget(QtWidgets.QTableWidget):
         if self.coin.isSelected:
             print('Entering special <extension> paint cell mode')
             cells_selected = self.selectedRanges()[0]
-            pen.setColor(QtGui.QColor(0,0,255))
+            pen.setColor(QtGui.QColor(0,225,0))
             painter.setPen(pen)
             for lign in range(cells_selected.topRow(),cells_selected.bottomRow()+1):
                 for column in range(cells_selected.leftColumn(),cells_selected.rightColumn()+1):
@@ -154,19 +153,16 @@ class MyTableWidget(QtWidgets.QTableWidget):
                     y = lign * height
                     extendingRect = MyRect()
                     extendingRect.setRect(x+1,y+1,width-3,height-3)
-                    extendingRect.isHighlighting = True
                     painter.drawRect(extendingRect)
-                    print('rect')
 
-        pen.setColor(Qt.QColor(0,0,0))
-        x=self.columnViewportPosition(self.currentColumn())
-        y = self.rowViewportPosition(self.currentRow())
+        else:
 
-
-        painter.drawRect(x+1, y+1, width-3, height-3)
-        painter.setBrush((QtGui.QColor(0,0,0)))
-        self.coin.setRect(x+width-8,y+height-8,5,5)
-        painter.drawRect(self.coin)
+            x=self.columnViewportPosition(self.currentColumn())
+            y = self.rowViewportPosition(self.currentRow())
+            painter.drawRect(x+1, y+1, width-3, height-3)
+            painter.setBrush((QtGui.QColor(0,0,0)))
+            self.coin.setRect(x+width-8,y+height-8,5,5)
+            painter.drawRect(self.coin)
 
         event.accept()
 
