@@ -68,7 +68,7 @@ def expension_process(cells_selected):
     print("dernière ligne:", cells_selected.bottomRow())
     print("colonne de gauche:", cells_selected.leftColumn())
     print("colonne de droite:", cells_selected.rightColumn())
-    graphic.cell(cells_selected,network)
+    #graphic.Ui_MainWindowgraph.cell(MainWindow,cells_selected,network) net pas toucher
 
 def functionAdded(name,descrition,evaluation,category):
     knownFunctions.addFun(functions.Function(name,evaluation,descrition,category))

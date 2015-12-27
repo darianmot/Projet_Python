@@ -1,4 +1,4 @@
-
+import unicodedata
 import matplotlib.pyplot as plt
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSignal
@@ -25,21 +25,23 @@ def chooseitemplot():
 def imp():
     print('the connexion works')
 
-donées=pyqtSignal(list,list)
 
-def cell(cells_selected,network):
-    list=[]
-    list2=[]
-    print(type(network))
-    for i in range(cells_selected.topRow(),cells_selected.bottomRow()+1):
-        list.append(network.getCell(i, cells_selected.leftColumn()).value)
-        list2.append(network.getCell(i,cells_selected.rightColumn()).value)
-        print(list,list2,'abscisse,ordonéée ')
 
-    #donées.emit(list,list2)
-    return(list,list2)
+
 
 class Ui_MainWindowgraph(object):
+    donées=pyqtSignal(list,list)
+    def cell(self,cells_selected,network):
+        list=[]
+        list2=[]
+        print(type(network))
+        for i in range(cells_selected.topRow(),cells_selected.bottomRow()+1):
+            list.append(network.getCell(i, cells_selected.leftColumn()).value)
+            list2.append(network.getCell(i,cells_selected.rightColumn()).value)
+            print(list,list2,'abscisse,ordonéée ')
+
+        #self.donées.emit(unicode(list),unicode(list2))
+        return(list,list2)
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(787, 671)
@@ -194,6 +196,7 @@ class Ui_MainWindowgraph(object):
         self.listView.itemClicked.connect(image)
         self.buttonBox.accepted.connect(quit)
         self.buttonBox.rejected.connect(quit)
+
         #selecteur de graphique
     def chosentype(self,cell_selected,network):#en construction
         A=self.listView.currentRow()
@@ -215,7 +218,8 @@ class Ui_MainWindowgraph(object):
            print('you choose a camembert','chosen type')
 
         self.buttonBox.accepted.connect(self.chosentype)
-        #donées.connect(self.chosentype)
+        #self.donées.connect(self.chosentype)
+
         def sig():
             print('signal ok')
         Ui_MainWindowgraph.buttongraph.connect(sig)
