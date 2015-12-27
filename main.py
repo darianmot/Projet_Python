@@ -68,7 +68,7 @@ def expension_process(cells_selected):
     print("dernière ligne:", cells_selected.bottomRow())
     print("colonne de gauche:", cells_selected.leftColumn())
     print("colonne de droite:", cells_selected.rightColumn())
-    graphic.cell(cells_selected,network)
+    #graphic.cell(cells_selected,network)
 
     # width = ui_mainwindow.tableWidget.columnWidth(ui_mainwindow.tableWidget.currentColumn())
     # height = ui_mainwindow.tableWidget.rowHeight(ui_mainwindow.tableWidget.currentRow())
