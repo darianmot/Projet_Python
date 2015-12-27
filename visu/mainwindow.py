@@ -151,7 +151,7 @@ class MyTableWidget(QtWidgets.QTableWidget):
             for lign in range(cells_selected.topRow(),cells_selected.bottomRow()+1):
                 for column in range(cells_selected.leftColumn(),cells_selected.rightColumn()+1):
                     x = column * width
-                    y = lign * width
+                    y = lign * height
                     extendingRect = MyRect()
                     extendingRect.setRect(x+1,y+1,width-3,height-3)
                     extendingRect.isHighlighting = True
