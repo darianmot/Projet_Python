@@ -3,7 +3,7 @@ import sys,visu.mainwindow as mainwindow,visu.funwindow as funWindow, visu.addfu
 import structures,cells_traitements.functions as functions,recOrd
 import cells_traitements.decomposition as decomposition,cells_traitements.tritopologique as tritopologique
 import time,pickle
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets,Qt, QtGui
 
 network = structures.network()
 knownFunctions=pickle.load(open('knownFunctions.p','rb'))
@@ -62,13 +62,33 @@ def traitement(x, y, string):
 def expension_process(cells_selected):
 
     cells_selected=cells_selected[0]
-    #print("nombre de colonnes:", cells_selected.columnCount())
-    #print("nombre de lignes:", cells_selected.rowCount())
+    print("nombre de colonnes:", cells_selected.columnCount())
+    print("nombre de lignes:", cells_selected.rowCount())
     print("première ligne:", cells_selected.topRow())
     print("dernière ligne:", cells_selected.bottomRow())
     print("colonne de gauche:", cells_selected.leftColumn())
     print("colonne de droite:", cells_selected.rightColumn())
-    #graphic.Ui_MainWindowgraph.cell(MainWindow,cells_selected,network) net pas toucher
+    graphic.cell(cells_selected,network)
+
+    # width = ui_mainwindow.tableWidget.columnWidth(ui_mainwindow.tableWidget.currentColumn())
+    # height = ui_mainwindow.tableWidget.rowHeight(ui_mainwindow.tableWidget.currentRow())
+    # for lign in range(cells_selected.topRow(),cells_selected.bottomRow()+1):
+    #     for column in range(cells_selected.leftColumn(),cells_selected.rightColumn()+1):
+    #         x = column * width
+    #         y = lign * width
+    #         extendingRect = mainwindow.MyRect()
+    #         extendingRect.setRect(x+1,y+1,width-3,height-3)
+    #         extendingRect.isHighlighting = True
+    #         ui_mainwindow.tableWidget.repaint(extendingRect)
+
+
+
+
+
+
+
+
+
 
 def functionAdded(name,descrition,evaluation,category):
     knownFunctions.addFun(functions.Function(name,evaluation,descrition,category))

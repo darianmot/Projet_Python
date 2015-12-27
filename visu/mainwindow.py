@@ -14,6 +14,7 @@ class MyRect(Qt.QRect):
         super().__init__()
         self.isSelected = False
         self.isUnder = False
+        self.isHighlighting = False
 
 
 class MyDelegate(QtWidgets.QItemDelegate):
@@ -138,18 +139,29 @@ class MyTableWidget(QtWidgets.QTableWidget):
         pen.setWidth(2)
         painter.setPen(pen)
 
-
-
-
-
-        if self.coin.isSelected and event.type() ==12:
-            print('Entering special <extension> paint cell mode')
-
-
-        x=self.columnViewportPosition(self.currentColumn())
-        y = self.rowViewportPosition(self.currentRow())
         width = self.columnWidth(self.currentColumn())
         height = self.rowHeight(self.currentRow())
+
+
+        if self.coin.isSelected:
+            print('Entering special <extension> paint cell mode')
+            cells_selected = self.selectedRanges()[0]
+            pen.setColor(QtGui.QColor(0,0,255))
+            painter.setPen(pen)
+            for lign in range(cells_selected.topRow(),cells_selected.bottomRow()+1):
+                for column in range(cells_selected.leftColumn(),cells_selected.rightColumn()+1):
+                    x = column * width
+                    y = lign * width
+                    extendingRect = MyRect()
+                    extendingRect.setRect(x+1,y+1,width-3,height-3)
+                    extendingRect.isHighlighting = True
+                    painter.drawRect(extendingRect)
+                    print('rect')
+
+        pen.setColor(Qt.QColor(0,0,0))
+        x=self.columnViewportPosition(self.currentColumn())
+        y = self.rowViewportPosition(self.currentRow())
+
 
         painter.drawRect(x+1, y+1, width-3, height-3)
         painter.setBrush((QtGui.QColor(0,0,0)))
