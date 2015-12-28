@@ -9,6 +9,10 @@ network = structures.network()
 knownFunctions=pickle.load(open('knownFunctions.p','rb'))
 app = mainwindow.QtWidgets.QApplication(sys.argv)
 
+
+
+
+
 #Main Window
 MainWindow = mainwindow.QtWidgets.QMainWindow()
 ui_mainwindow = mainwindow.Ui_MainWindow()

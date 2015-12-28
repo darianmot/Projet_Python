@@ -46,6 +46,7 @@ class EventEater(QtCore.QObject):
         elif event.type() == 3 and self.target.coin.isSelected == True:
             print('coin released')
             self.target.coin.isSelected = False
+            #mettre quelque chose pour effacer les rectangles de sélection verts
             return True
         elif event.type() == 5:
             if self.target.coin.contains(event.pos().x(),event.pos().y()):

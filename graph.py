@@ -47,8 +47,13 @@ class Ui_MainWindowgraph(object):
         list2=[]
         print(type(network))
         for i in range(cells_selected.topRow(),cells_selected.bottomRow()+1):
-            list.append(network.getCell(i, cells_selected.leftColumn()).value)
-            list2.append(network.getCell(i,cells_selected.rightColumn()).value)
+
+            abs = network.getCell(i, cells_selected.leftColumn()).value
+            ord = network.getCell(i,cells_selected.rightColumn()).value
+            if abs != None and ord != None:
+                list.append(abs)
+                list2.append(ord)
+
             print(list,list2,'abscisse,ordonéée ')
 
         self.donées.emit(list,list2)
