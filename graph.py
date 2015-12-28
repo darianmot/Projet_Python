@@ -18,47 +18,34 @@ def graph(listeabscisse,listeordonnée,ordonnée,abscisse,title,xmin,xmax,ymin,y
     a=[int(x) for x in listeabscisse]
     b=[int(x) for x in listeordonnée]
     print(a,b)
-    plt.plot(a, b)
-    # plt.ylabel(ordonnée)
-    # plt.xlabel(abscisse)
-    # plt.title(title)
+    plt.plot(a, b,color)
+    plt.ylabel(ordonnée)
+    plt.xlabel(abscisse)
+    plt.title(title)
     #plt.axis(xmin,xmax,ymin,ymax)
     plt.show()
 
-
-
-def chooseitemplot():
-    #A=QtWidgets.QListWidget.selectedItems(a)
-    #print(A)
-
-    print('it ok')
-
-def imp():
-    print('the connexion works')
-
-
-
-
-
-class Ui_MainWindowgraph(object):
-    donées=pyqtSignal(list,list)
-    def cell(self,cells_selected,network):
-        list=[]
-        list2=[]
-        print(type(network))
-        for i in range(cells_selected.topRow(),cells_selected.bottomRow()+1):
-
+def cell(cells_selected,network):
+        ligne1=cells_selected.topRow()
+        ligne2=cells_selected.bottomRow()+1
+        Ui_MainWindowgraph.données.abscisses=[0 for i in range(ligne1,ligne2)]
+        Ui_MainWindowgraph.données.ordonnées=[0  for i in range(ligne1,ligne2)]
+        print(Ui_MainWindowgraph.données.abscisses)
+        for i in range(ligne1,ligne2):
             abs = network.getCell(i, cells_selected.leftColumn()).value
             ord = network.getCell(i,cells_selected.rightColumn()).value
-            if abs != None and ord != None:
-                list.append(abs)
-                list2.append(ord)
+            print(ord)
+            Ui_MainWindowgraph.données.abscisses[i-ligne1]=abs
+            Ui_MainWindowgraph.données.ordonnées[i-ligne1]=ord
+            print(Ui_MainWindowgraph.données.abscisses,Ui_MainWindowgraph.données.ordonnées,'abscisse,ordonéée ')
+class  datas(object):
+    def __init__(self):
+        self.ordonnées=[]
+        self.abscisses= []
 
-            print(list,list2,'abscisse,ordonéée ')
+class Ui_MainWindowgraph(object):
+    données=datas()
 
-        self.donées.emit(list,list2)
-
-        return(list,list2)
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(787, 671)
@@ -117,7 +104,7 @@ class Ui_MainWindowgraph(object):
 
         #la combobox  pour la couleur
         self.combobox=QtWidgets.QComboBox(self.centralwidget)
-        self.combobox.addItems(['rouge','bleu','jaune','orange','violet','noir','gris','vert'])
+        self.combobox.addItems(['rouge','bleu','jaune','orange','violet','noir','vert'])
         self.gridLayout.addWidget(self.combobox, 1, 1, 2, 1)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
@@ -196,6 +183,7 @@ class Ui_MainWindowgraph(object):
             A=self.listView.currentRow()
             image=self.images
             if A==0:
+
                 print('you choosed courbe','image')
                 image.setPixmap(courbe)
             elif A==1:
@@ -211,11 +199,12 @@ class Ui_MainWindowgraph(object):
             MainWindow.close()
         #les connexions
         self.listView.itemClicked.connect(image)
-        self.buttonBox.accepted.connect(quit)
         self.buttonBox.rejected.connect(quit)
+        self.buttonBox.accepted.connect(self.chosentype)
+        self.buttonBox.accepted.connect(quit)
 
-        #selecteur de graphique
-    def chosentype(self,cell_selected,network):#en construction
+    #selecteur de graphique
+    def chosentype(self):#en construction
         A=self.listView.currentRow()
         ymin=self.doubleSpinBox_3.value()
         ymax=self.doubleSpinBox_4.value()
@@ -224,24 +213,42 @@ class Ui_MainWindowgraph(object):
         xtitle=self.lineEdit_2.text()
         ytitle=self.lineEdit_3.text()
         titleplot=self.lineEdit.text()
-        color='blue'
+        color=self.combobox.currentText()
+        def colorchooser(color):
+
+            if color=='rouge':
+                 color='r'
+                 return color
+            elif color=='bleu':
+                color='b'
+                return color
+            elif color=='jaune':
+                color='y'
+                return color
+            elif color=='violet':
+                color='p'
+                return color
+            elif color=='orange':
+                color='o'
+                return color
+            elif color=='vert':
+                color='g'
+                return color
+            else:
+                color='b'
+                return color
+
         if A==0:
-
-           #graph(list,list2,ytitle,xtitle,titleplot,xmin,xmax,ymin,ymax,color)
-           print('you choosed courbe','chosen type')
+            print(colorchooser(color))
+            graph(Ui_MainWindowgraph.données.abscisses,Ui_MainWindowgraph.données.ordonnées
+                 ,ytitle,xtitle,titleplot,xmin,xmax,ymin,ymax,colorchooser(color))
+            print('you choosed courbe','chosen type')
         elif A==1:
-           print('you choose histogramme','chosen type')
-           #histogramme(list,xmin,xmax,ymin,ymax,color,xtitle,ytitle)
+            print('you choose histogramme','chosen type')
+            #histogramme(list,xmin,xmax,ymin,ymax,color,xtitle,ytitle)
         else:
-           #circulaire(list,list2,title,explode)
-           print('you choose a camembert','chosen type')
-
-        self.buttonBox.accepted.connect(self.chosentype)
-        self.donées.connect(self.chosentype)
-
-        def sig():
-            print('signal ok')
-        Ui_MainWindowgraph.buttongraph.connect(sig)
+            #circulaire(list,list2,title,explode)
+            print('you choose a camembert','chosen type')
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate

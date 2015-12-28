@@ -44,7 +44,7 @@ def reader_csv(file,ui_mainwindow,traitement):
             ui_mainwindow.tableWidget.setItem(i-1,j-1,item)
             content=row[j-1]
             traitement(i-1,j-1,content)
-
+#probleme a prendre en compte le fait que la matrice d'origine soit plus grande que celle qui sera ecrite par dessus
 def writter_marshalling(network,name):
     content=name+'.pyc'
     marshal.dump([[network.getCell(x,y).input for y in range(0,len(network.matrix[x]))]
