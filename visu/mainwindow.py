@@ -41,11 +41,12 @@ class EventEater(QtCore.QObject):
         if event.type() == 2 and self.target.coin.contains(event.pos().x(),event.pos().y()):
             print('coin selected')
             self.target.coin.isSelected = True
-            self.cellExpended.emit(self.target.selectedRanges())
+            # self.cellExpended.emit(self.target.selectedRanges())
             return True
         elif event.type() == 3 and self.target.coin.isSelected == True:
             print('coin released')
             self.target.coin.isSelected = False
+            self.cellExpended.emit(self.target.selectedRanges())
             #mettre quelque chose pour effacer les rectangles de sélection verts
             return True
         elif event.type() == 5:
@@ -54,8 +55,8 @@ class EventEater(QtCore.QObject):
             else:
                 self.target.coin.isUnder = False
 
-            if self.target.coin.isSelected:
-                self.cellExpended.emit(self.target.selectedRanges())
+            # if self.target.coin.isSelected:
+            #     self.cellExpended.emit(self.target.selectedRanges())
 
         return False
 

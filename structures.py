@@ -100,7 +100,6 @@ class network(object): #On classe par coordonnées
 
     def getCellByName(self,name): #Renvoi la celulle nommée si elle existe, 0 sinon
         name=''.join([char for char in name if char!='$'])  #On eneleve les $ eventuels
-        print(name)
         letters=""
         numbers=""
         k=0

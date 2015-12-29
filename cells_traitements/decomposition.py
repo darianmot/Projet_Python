@@ -1,4 +1,4 @@
-import visu.columns_labels as columns_labels,structures,cells_traitements.functions as functions
+import visu.columns_labels as columns_labels,cells_traitements.functions as functions,copy
 
 OPERATEUR_MATH=['+','-','*','/','//','**']
 OPERATEUR_LOG=['<','>','==','<=','>=','!=']
@@ -71,6 +71,8 @@ def what_type(chaine):
         return 'sep'
     elif chaine==':':
         return ':'
+    elif chaine=='=':
+        return '='
     elif isCell(chaine):
         return 'cell'
     elif isfunction(chaine):
@@ -162,9 +164,7 @@ def eval_function(network,elementList,elementType,k,knownFunctions):
 def evaluation(network, chaine,knownFunctions):
     (elementList,elementType)=decompo(chaine)
     i=0
-    print(elementList)
     for j in [k for k, l in enumerate(elementList) if l == ':']: #On remplace c1:c2 par les celulles comprises dans le rectancle d'extrémité (c1,c2)
-        print('on y est')
         if j==0: raise Error('Syntaxe (\':\' innatendue 1)')
         if elementType[j-1]!='cell' or elementType[j+1]!='cell':
             raise Error('Syntaxe (\':\' innatendue 2)')
@@ -201,7 +201,6 @@ def evaluation(network, chaine,knownFunctions):
             elementList[i:end+1]=[str(value)]
             elementType[i:end+1]=['nombre']
         i+=1
-        print(elementList)
     try:
         return eval(''.join(elementList))
     except SyntaxError as e:
@@ -209,6 +208,7 @@ def evaluation(network, chaine,knownFunctions):
     except ZeroDivisionError:
         raise Error('Division par 0')
     except Exception as e:
+        print(''.join(elementList))
         raise Error(str(e))
 
 
@@ -244,3 +244,13 @@ def cellsBetween(network,c1,c2):
             l.append(network.getCell(r,c))
     return l
 
+#Renvoie le input à traiter dans la celulle situé rows lignes plus bas que la celulle initale dans le cas où l'utilisateur tire verticalement sur le coin
+def verticalPull(inputDecomposed,rows):
+    elementList=copy.copy(inputDecomposed[0]) #Pour ne pas changer sur place la decomposition initiale
+    elementType=inputDecomposed[1]
+    for i in range(len(elementList)):
+        if elementType[i]=='cell':
+            dollardcount=elementList[i].count("$")
+            if not((dollardcount==1 and elementList[i][0]!='$') or dollardcount==2): #Si il n'y a pas de $ devant la partie numerique
+                elementList[i]=elementList[i][:-1]+str(int(elementList[i][-1])+rows)
+    return ''.join(elementList)

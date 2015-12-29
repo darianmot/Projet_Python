@@ -4,13 +4,10 @@ import structures,cells_traitements.functions as functions,recOrd
 import cells_traitements.decomposition as decomposition,cells_traitements.tritopologique as tritopologique
 import time,pickle
 from PyQt5 import QtWidgets,Qt, QtGui
+
 network = structures.network()
 knownFunctions=pickle.load(open('knownFunctions.p','rb'))
 app = mainwindow.QtWidgets.QApplication(sys.argv)
-
-
-
-
 
 #Main Window
 MainWindow = mainwindow.QtWidgets.QMainWindow()
@@ -71,7 +68,21 @@ def expension_process(cells_selected):
     print("dernière ligne:", cells_selected.bottomRow())
     print("colonne de gauche:", cells_selected.leftColumn())
     print("colonne de droite:", cells_selected.rightColumn())
-    graphic.cell(cells_selected,network)
+    # graphic.Ui_MainWindowgraph.cell(MainWindow,cells_selected,network)
+    if cells_selected.leftColumn()==cells_selected.rightColumn():
+        column=cells_selected.rightColumn()
+        r0=cells_selected.topRow()
+        input=network.getCell(r0,column).input
+        decomposition0=decomposition.decompo(input)
+        for i in range(r0+1,cells_selected.bottomRow()+1):
+            rows=abs(r0-i)
+            newinput=decomposition.verticalPull(decomposition0,rows)
+            if ui_mainwindow.tableWidget.item(i,column)==None:
+                ui_mainwindow.tableWidget.setItem(i,column,QtWidgets.QTableWidgetItem())
+            traitement(i,column,newinput)
+
+
+
 
     # width = ui_mainwindow.tableWidget.columnWidth(ui_mainwindow.tableWidget.currentColumn())
     # height = ui_mainwindow.tableWidget.rowHeight(ui_mainwindow.tableWidget.currentRow())

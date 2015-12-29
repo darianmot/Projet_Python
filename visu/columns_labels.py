@@ -31,4 +31,3 @@ def getColumn(n): #Renvoie le numero de colonne ayant pour label n
     else:
         return len(ALPHABET)*getColumn(n[:-1])+ALPHABET.index(n[-1])+1
 
-
