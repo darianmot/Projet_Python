@@ -84,6 +84,8 @@ class MyTableWidget(QtWidgets.QTableWidget):
         self.setMouseTracking(True)
         self.filter = EventEater(self)
         self.viewport().installEventFilter(self.filter)
+        self.setFocus()
+        self.setCurrentCell(0,0)
 
         #On ajuste le nombre de colonnes/lignes en fonction de la taille de l'écran
         self.screen = QtWidgets.QDesktopWidget()
@@ -196,6 +198,12 @@ class MyTableWidget(QtWidgets.QTableWidget):
 
 class Ui_MainWindow(QtWidgets.QWidget):
 
+
+    def setTable(self,network):
+        self.tableWidget = MyTableWidget(self.centralwidget,network)
+        self.tableWidget.setObjectName("tableWidget")
+
+
     def setupUi(self, MainWindow,network):
         #La fenetre
         MainWindow.setObjectName("MainWindow")
@@ -208,8 +216,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.lineEdit.setObjectName("lineEdit")
 
         #Le tableau
-        self.tableWidget = MyTableWidget(self.centralwidget,network)
-        self.tableWidget.setObjectName("tableWidget")
+        self.setTable(network)
 
         #Les bouttons
         self.functionButton = QtWidgets.QToolButton(self.centralwidget)
@@ -278,12 +285,18 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.menu_quit.setIcon(quitIcon)
 
 
+        #New Action
+        self.new_button = QtWidgets.QAction(MainWindow)
+        self.new_button.setText("Nouvelle feuille")
+
+
         self.toolBar.addAction(self.actionOuvrir)
         self.toolBar.addAction(self.actionenregistrer)
         self.toolBar.addAction(self.graph)
         self.toolBar.addSeparator()
 
         self.menubar.addAction(self.menuFichier.menuAction())
+        self.menuFichier.addAction(self.new_button)
         self.menuFichier.addAction(self.menu_ouvrir)
         self.menuFichier.addAction(self.menu_enregistrer)
         self.menuFichier.addAction(self.menu_quit)
@@ -318,8 +331,6 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.lineEdit.returnPressed.connect(line_changed)
 
     def setup(self, MainWindow):
-        self.tableWidget.setFocus()
-        self.tableWidget.setCurrentCell(0,0)
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "EnaCell"))
         appIcon = QtGui.QIcon()

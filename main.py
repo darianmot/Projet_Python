@@ -10,9 +10,18 @@ knownFunctions=pickle.load(open('knownFunctions.p','rb'))
 app = mainwindow.QtWidgets.QApplication(sys.argv)
 
 #Main Window
+
+
+
+def setup():
+    MainWindow.destroy()
+    network= structures.network()
+    ui_mainwindow = mainwindow.Ui_MainWindow()
+    ui_mainwindow.setupUi(MainWindow,network)
 MainWindow = mainwindow.QtWidgets.QMainWindow()
 ui_mainwindow = mainwindow.Ui_MainWindow()
 ui_mainwindow.setupUi(MainWindow,network)
+
 
 #Function Window
 Funwindow = QtWidgets.QDialog()
@@ -135,6 +144,10 @@ def windowsave():                      #to open the window save....
     adress=a[0]                                   #faut mettre l'extension du format genre fichier.pyc ou fichier.xls dans la barre de saisie
     recOrd.extensionwritter(adress,network)
 
+
+
+
+
 ui_mainwindow.tableWidget.read_value.connect(traitement)
 ui_mainwindow.tableWidget.filter.cellExpended.connect(expension_process)
 
@@ -153,5 +166,6 @@ ui_addfunwindow.sendFunData.connect(functionAdded)
 MainWindow.showMaximized() #Pour agrandir au max la fenetre
 
 ui_mainwindow.menu_quit.triggered.connect(MainWindow.close)
+ui_mainwindow.new_button.triggered.connect(setup)
 
 sys.exit(app.exec_())
