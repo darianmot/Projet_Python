@@ -47,7 +47,6 @@ class EventEater(QtCore.QObject):
             print('coin released')
             self.target.coin.isSelected = False
             self.cellExpended.emit(self.target.selectedRanges())
-            #mettre quelque chose pour effacer les rectangles de sélection verts
             return True
         elif event.type() == 5:
             if self.target.coin.contains(event.pos().x(),event.pos().y()):

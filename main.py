@@ -81,6 +81,18 @@ def expension_process(cells_selected):
                 ui_mainwindow.tableWidget.setItem(i,column,QtWidgets.QTableWidgetItem())
             traitement(i,column,newinput)
 
+    width = ui_mainwindow.tableWidget.columnWidth(ui_mainwindow.tableWidget.currentColumn())
+    height = ui_mainwindow.tableWidget.rowHeight(ui_mainwindow.tableWidget.currentRow())
+    x = cells_selected.leftColumn() * width
+    y = cells_selected.topRow() * height
+    range_width = cells_selected.rightColumn() - cells_selected.leftColumn()+1
+    range_height = cells_selected.bottomRow() - cells_selected.topRow()+1
+    reset_rect = Qt.QRect()
+    reset_rect.setRect(x,y,range_width * width,range_height* height)
+    ui_mainwindow.tableWidget.viewport().repaint(reset_rect)
+    print('zone reset')
+
+
 
 
 
