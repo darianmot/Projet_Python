@@ -8,12 +8,12 @@ def circulaire(nom,content,titre,explode):
     plt.axis('equal')
     plt.show
 def histogramme(ordonnées,xmin,xmax,ymin,ymax,color,abscisse,ordonné):
-    plt.hist(ordonnées,10,None,1,None,False,None,'bar','mid','vertical',None,False,color)
+    plt.hist(ordonnées)
     plt.xlabel(abscisse)
     plt.ylabel(ordonné)
     plt.axis([xmin,xmax,ymin,ymax])
     plt.grid(True)
-    plt.show
+    plt.show()
 def graph(listeabscisse,listeordonnée,ordonnée,abscisse,title,xmin,xmax,ymin,ymax,color):
     a=[int(x) for x in listeabscisse]
     b=[int(x) for x in listeordonnée]
@@ -22,7 +22,7 @@ def graph(listeabscisse,listeordonnée,ordonnée,abscisse,title,xmin,xmax,ymin,y
     plt.ylabel(ordonnée)
     plt.xlabel(abscisse)
     plt.title(title)
-    #plt.axis(xmin,xmax,ymin,ymax)
+    plt.axis([xmin,xmax,ymin,ymax])
     plt.show()
 
 def cell(cells_selected,network):
@@ -245,7 +245,8 @@ class Ui_MainWindowgraph(object):
             print('you choosed courbe','chosen type')
         elif A==1:
             print('you choose histogramme','chosen type')
-            #histogramme(list,xmin,xmax,ymin,ymax,color,xtitle,ytitle)
+            listlisible=[float(x) for x in Ui_MainWindowgraph.données.abscisses]
+            histogramme(listlisible,xmin,xmax,ymin,ymax,colorchooser(color),xtitle,ytitle)
         else:
             #circulaire(list,list2,title,explode)
             print('you choose a camembert','chosen type')
