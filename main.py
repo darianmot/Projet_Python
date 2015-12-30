@@ -162,11 +162,15 @@ def reset_table():
     network = structures.network()
     ui_mainwindow.setTable(network)
     ui_mainwindow.verticalLayout.addWidget(ui_mainwindow.tableWidget)
-
+def graphiques(cells_selected):
+    cells_selected=cells_selected[0]
+    graphic.cell(cells_selected,network)
+    print('données envoyées')
 
 # connexion des boutons de l'interface
 ui_mainwindow.tableWidget.read_value.connect(traitement)
 ui_mainwindow.tableWidget.filter.cellExpended.connect(expension_process)
+ui_mainwindow.tableWidget.filter.cellExpended.connect(graphiques)
 
 ui_mainwindow.functionButton.released.connect(Funwindow.show)
 
