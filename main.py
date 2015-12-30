@@ -102,7 +102,9 @@ def expension_process(cells_selected):
         row=cells_selected.bottomRow()
         c0=cells_selected.leftColumn() #Colonne intiale
         input=network.getCell(row,c0).input
-        if input[0]!='=':
+        if len(input)==0:
+            pass
+        elif input[0]!='=':
             for i in range(c0+1,cells_selected.rightColumn()+1):
                 if ui_mainwindow.tableWidget.item(row,i)==None:
                     ui_mainwindow.tableWidget.setItem(row,i,QtWidgets.QTableWidgetItem())
