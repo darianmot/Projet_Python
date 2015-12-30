@@ -169,6 +169,7 @@ class MyTableWidget(QtWidgets.QTableWidget):
 
         event.accept()
 
+    #Change le curseur lorsque celui-ci se trouve au dessus du coin
     def mouseMoveEvent(self, QMouseEvent):
         QtWidgets.QTableWidget.mouseMoveEvent(self,QMouseEvent)
         if self.coin.isSelected or self.coin.isUnder:
@@ -337,7 +338,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         appIcon.addPixmap(QtGui.QPixmap("visu/icons/appIcon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(appIcon)
 
-        self.functionButton.setText(_translate("MainWindow", "..."))
+        self.functionButton.setText(_translate("MainWindow", "F"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
         self.menuFichier.setTitle(_translate("MainWindow", "Fichier"))
 
