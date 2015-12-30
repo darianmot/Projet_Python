@@ -256,18 +256,13 @@ class Ui_MainWindow(QtWidgets.QWidget):
         #Open action
         self.actionOuvrir = QtWidgets.QAction(MainWindow)
         self.actionOuvrir.setText("Ouvrir")
-        self.graph=QtWidgets.QAction(MainWindow)
-        self.graph.setText('graphique')
-        self.graph.setObjectName('graphique')
         self.menu_ouvrir = QtWidgets.QAction(MainWindow)
         self.menu_ouvrir.setText("Ouvrir")
         openIcon = QtGui.QIcon()
         openIcon.addPixmap(QtGui.QPixmap("visu/icons/open.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        graphIcon = QtGui.QIcon()
-        graphIcon.addPixmap(QtGui.QPixmap("visu/icons/circulaire2.gif"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionOuvrir.setIcon(openIcon)
         self.actionOuvrir.setObjectName("actionOuvrir")
-        self.graph.setIcon(graphIcon)
+
         self.menu_ouvrir.setIcon(openIcon)
 
         #Save Action
@@ -291,20 +286,32 @@ class Ui_MainWindow(QtWidgets.QWidget):
         #New Action
         self.new_button = QtWidgets.QAction(MainWindow)
         self.new_button.setText("Nouvelle feuille")
+        newcalcIcon = QtGui.QIcon()
+        newcalcIcon.addPixmap(QtGui.QPixmap("visu/icons/new_calc.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.new_button.setIcon(newcalcIcon)
 
 
-        self.toolBar.addAction(self.actionOuvrir)
-        self.toolBar.addAction(self.actionenregistrer)
-        self.toolBar.addAction(self.graph)
-        self.toolBar.addSeparator()
 
+        #Graph Action
+        self.graph=QtWidgets.QAction(MainWindow)
+        self.graph.setText('graphique')
+        self.graph.setObjectName('graphique')
+        graphIcon = QtGui.QIcon()
+        graphIcon.addPixmap(QtGui.QPixmap("visu/icons/graphIcon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.graph.setIcon(graphIcon)
+
+        #Ajout boutons
+            #Menu
         self.menubar.addAction(self.menuFichier.menuAction())
         self.menuFichier.addAction(self.new_button)
         self.menuFichier.addAction(self.menu_ouvrir)
         self.menuFichier.addAction(self.menu_enregistrer)
         self.menuFichier.addAction(self.menu_quit)
-
-
+            #Toolbar
+        self.toolBar.addAction(self.actionOuvrir)
+        self.toolBar.addAction(self.actionenregistrer)
+        self.toolBar.addAction(self.graph)
+        #self.toolBar.addSeparator()
 
         self.setup(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)

@@ -5,21 +5,15 @@ import cells_traitements.decomposition as decomposition,cells_traitements.tritop
 import time,pickle
 from PyQt5 import QtWidgets,Qt, QtGui
 
-network = structures.network()
+
 knownFunctions=pickle.load(open('knownFunctions.p','rb'))
 app = mainwindow.QtWidgets.QApplication(sys.argv)
 
 #Main Window
-
-def setup(): # destinée à réinitialiser la feuille de calucl (pour nouvelle feuille) en cours de construction
-    MainWindow.destroy()
-    network= structures.network()
-    ui_mainwindow = mainwindow.Ui_MainWindow()
-    ui_mainwindow.setupUi(MainWindow,network)
+network = structures.network()
 MainWindow = mainwindow.QtWidgets.QMainWindow()
 ui_mainwindow = mainwindow.Ui_MainWindow()
 ui_mainwindow.setupUi(MainWindow,network)
-
 
 #Function Window
 Funwindow = QtWidgets.QDialog()
@@ -155,7 +149,15 @@ def windowsave():                      #to open the window save....
     adress=a[0]                                   #faut mettre l'extension du format genre fichier.pyc ou fichier.xls dans la barre de saisie
     recOrd.extensionwritter(adress,network)
 
-
+# destinée à réinitialiser la feuille de calcul (pour nouvelle feuille) en cours de construction
+def reset_table():
+    global  ui_mainwindow
+    global  network
+    global  MainWindow
+    ui_mainwindow.tableWidget.close()
+    network = structures.network()
+    ui_mainwindow.setTable(network)
+    ui_mainwindow.verticalLayout.addWidget(ui_mainwindow.tableWidget)
 
 
 # connexion des boutons de l'interface
@@ -177,6 +179,6 @@ ui_addfunwindow.sendFunData.connect(functionAdded)
 MainWindow.showMaximized() #Pour agrandir au max la fenetre
 
 ui_mainwindow.menu_quit.triggered.connect(MainWindow.close)
-ui_mainwindow.new_button.triggered.connect(setup)
+ui_mainwindow.new_button.triggered.connect(reset_table)
 
 sys.exit(app.exec_())

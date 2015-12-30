@@ -253,7 +253,7 @@ class Ui_MainWindowgraph(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Graphiques"))
         self.label_4.setText(_translate("MainWindow", "     Title"))
         self.label_2.setText(_translate("MainWindow", "     X axis title"))
         self.label_5.setText(_translate("MainWindow", "xmin"))
