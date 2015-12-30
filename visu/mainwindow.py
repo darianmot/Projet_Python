@@ -145,18 +145,21 @@ class MyTableWidget(QtWidgets.QTableWidget):
         height = self.rowHeight(self.currentRow())
 
 
-        if self.coin.isSelected:
+        if self.coin.isSelected :
             print('Entering special <extension> paint cell mode')
             cells_selected = self.selectedRanges()[0]
-            pen.setColor(QtGui.QColor(0,225,0))
-            painter.setPen(pen)
-            for lign in range(cells_selected.topRow(),cells_selected.bottomRow()+1):
-                for column in range(cells_selected.leftColumn(),cells_selected.rightColumn()+1):
-                    x = column * width
-                    y = lign * height
-                    extendingRect = MyRect()
-                    extendingRect.setRect(x+1,y+1,width-3,height-3)
-                    painter.drawRect(extendingRect)
+            if cells_selected.columnCount() == 1 or cells_selected.rowCount() ==1:
+                pen.setColor(QtGui.QColor(0,225,0))
+                painter.setPen(pen)
+                for lign in range(cells_selected.topRow(),cells_selected.bottomRow()+1):
+                    for column in range(cells_selected.leftColumn(),cells_selected.rightColumn()+1):
+                        x = column * width
+                        y = lign * height
+                        extendingRect = MyRect()
+                        extendingRect.setRect(x+1,y+1,width-3,height-3)
+                        painter.drawRect(extendingRect)
+            else:
+                pass
 
         else:
 
