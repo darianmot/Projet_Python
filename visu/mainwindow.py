@@ -144,9 +144,8 @@ class MyTableWidget(QtWidgets.QTableWidget):
         width = self.columnWidth(self.currentColumn())
         height = self.rowHeight(self.currentRow())
 
-
+        #dessine les rectangles verts de la tirette
         if self.coin.isSelected :
-            print('Entering special <extension> paint cell mode')
             cells_selected = self.selectedRanges()[0]
             if cells_selected.columnCount() == 1 or cells_selected.rowCount() ==1:
                 pen.setColor(QtGui.QColor(0,225,0))
@@ -162,7 +161,7 @@ class MyTableWidget(QtWidgets.QTableWidget):
                 pass
 
         else:
-
+            #dessine le rectangle noir de sélection et son coin (tirette)
             x=self.columnViewportPosition(self.currentColumn())
             y = self.rowViewportPosition(self.currentRow())
             painter.drawRect(x+1, y+1, width-3, height-3)

@@ -11,9 +11,7 @@ app = mainwindow.QtWidgets.QApplication(sys.argv)
 
 #Main Window
 
-
-
-def setup():
+def setup(): # destinée à réinitialiser la feuille de calucl (pour nouvelle feuille) en cours de construction
     MainWindow.destroy()
     network= structures.network()
     ui_mainwindow = mainwindow.Ui_MainWindow()
@@ -35,6 +33,10 @@ ui_graphwindow.setupUi((graphwindow))
 AddFunwindow = QtWidgets.QDialog()
 ui_addfunwindow = addfunwindow.Ui_Dialog()
 ui_addfunwindow.setupUi(AddFunwindow,knownFunctions)
+
+
+
+# Traitement des cellules (peut être faudrait il trouver moyen de bouger ça dans un module)
 
 def traitement(x, y, string):
     cell = network.getCell(x, y)
@@ -68,6 +70,9 @@ def traitement(x, y, string):
         print('Done : {}s'.format(t_end-t_init))
 
 
+
+#processus de tirette (coin inférieur droit d'une case sélectionnée)
+
 def expension_process(cells_selected):
 
     cells_selected=cells_selected[0]
@@ -77,7 +82,9 @@ def expension_process(cells_selected):
     print("dernière ligne:", cells_selected.bottomRow())
     print("colonne de gauche:", cells_selected.leftColumn())
     print("colonne de droite:", cells_selected.rightColumn())
-    # graphic.Ui_MainWindowgraph.cell(MainWindow,cells_selected,network)
+
+    # application de l'extension de formule (tirette)
+
     if cells_selected.leftColumn()==cells_selected.rightColumn():
         column=cells_selected.rightColumn()
         r0=cells_selected.topRow() #Ligne initiale
@@ -113,6 +120,10 @@ def expension_process(cells_selected):
                     ui_mainwindow.tableWidget.setItem(row,i,QtWidgets.QTableWidgetItem())
                 traitement(row,i,newinput)
 
+
+
+
+    #efface les rectangles verts, fin de l'effet tirette
     width = ui_mainwindow.tableWidget.columnWidth(ui_mainwindow.tableWidget.currentColumn())
     height = ui_mainwindow.tableWidget.rowHeight(ui_mainwindow.tableWidget.currentRow())
     x = cells_selected.leftColumn() * width
@@ -122,29 +133,6 @@ def expension_process(cells_selected):
     reset_rect = Qt.QRect()
     reset_rect.setRect(x,y,range_width * width,range_height* height)
     ui_mainwindow.tableWidget.viewport().repaint(reset_rect)
-    print('zone reset')
-
-
-
-
-
-    # width = ui_mainwindow.tableWidget.columnWidth(ui_mainwindow.tableWidget.currentColumn())
-    # height = ui_mainwindow.tableWidget.rowHeight(ui_mainwindow.tableWidget.currentRow())
-    # for lign in range(cells_selected.topRow(),cells_selected.bottomRow()+1):
-    #     for column in range(cells_selected.leftColumn(),cells_selected.rightColumn()+1):
-    #         x = column * width
-    #         y = lign * width
-    #         extendingRect = mainwindow.MyRect()
-    #         extendingRect.setRect(x+1,y+1,width-3,height-3)
-    #         extendingRect.isHighlighting = True
-    #         ui_mainwindow.tableWidget.repaint(extendingRect)
-
-
-
-
-
-
-
 
 
 
@@ -170,7 +158,7 @@ def windowsave():                      #to open the window save....
 
 
 
-
+# connexion des boutons de l'interface
 ui_mainwindow.tableWidget.read_value.connect(traitement)
 ui_mainwindow.tableWidget.filter.cellExpended.connect(expension_process)
 
