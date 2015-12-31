@@ -65,6 +65,7 @@ def reader_marshalling(file,ui_mainwindow,traitement):
 
 def extensionreader(a,ui_mainwindow,traitement): #permet la lecture
     try:
+        ui_mainwindow.indicator.setText("Ouverture en cours")
         chaine=a.split(os.extsep)
         key=chaine[1]
         if key=='csv':
@@ -76,14 +77,16 @@ def extensionreader(a,ui_mainwindow,traitement): #permet la lecture
         else:
             reader_marshalling(a,ui_mainwindow,traitement)
             print('it is a binary file')
+        ui_mainwindow.indicator.setText("Ouvert")
     except IndexError:
         pass
     finally:
         print('open window closed')
 
-def extensionwritter(a,network): #permet la lecture
+def extensionwritter(a,network,ui_mainwindow): #permet la lecture
     chaine=a.split(os.extsep)
     name=chaine[0]
+    ui_mainwindow.indicator.setText("Sauvegarde en cours")
     try:
         key=chaine[1]
         print(key)
@@ -96,6 +99,7 @@ def extensionwritter(a,network): #permet la lecture
         else:
             writter_marshalling(network,name)
             print('it is a binary file')
+        ui_mainwindow.indicator.setText("Sauvegardé")
     except IndexError:
         pass
     finally:

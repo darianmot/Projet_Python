@@ -11,15 +11,11 @@ app = mainwindow.QtWidgets.QApplication(sys.argv)
 
 pixmap = Qt.QPixmap("visu/icons/Logo_ENAC.png")
 splash = Qt.QSplashScreen(pixmap)
-#splash.showMessage("Chargement...")
 splash.show()
 splash.raise_()
 splash.repaint()
 splash.showMessage("Chargement")
 app.processEvents()
-
-
-
 
 
 # Main Window
@@ -159,9 +155,11 @@ def windowopen():  # to open the window open....
 
 
 def windowsave():  # to open the window save....
+
     a = QtWidgets.QFileDialog.getSaveFileName(MainWindow, 'Enregistrer', '', "(*.pyc *.xls *.csv)")
     adress = a[0]  # faut mettre l'extension du format genre fichier.pyc ou fichier.xls dans la barre de saisie
-    recOrd.extensionwritter(adress, network)
+    recOrd.extensionwritter(adress, network,ui_mainwindow)
+
 
 
 # destinée à réinitialiser la feuille de calcul (pour nouvelle feuille) en cours de construction
@@ -170,9 +168,11 @@ def reset_table():
     global network
     global MainWindow
     ui_mainwindow.tableWidget.close()
+    ui_mainwindow.indicator.destroy()
     network = structures.network()
     ui_mainwindow.setTable(network)
     ui_mainwindow.verticalLayout.addWidget(ui_mainwindow.tableWidget)
+    ui_mainwindow.verticalLayout.addWidget(ui_mainwindow.indicator)
 
 
 def graphiques():

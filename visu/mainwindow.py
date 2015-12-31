@@ -228,6 +228,12 @@ class Ui_MainWindow(QtWidgets.QWidget):
         funIcon.addPixmap(QtGui.QPixmap("visu/icons/functions.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.functionButton.setIcon(funIcon)
 
+        #L'indicateur d'état
+        self.indicator = QtWidgets.QLabel(self.centralwidget)
+        self.indicator.setObjectName("Indicator")
+        self.indicator.setText("Prêt")
+
+
         #Les layouts
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName("verticalLayout")
@@ -237,6 +243,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.editLineLayout.addWidget(self.lineEdit)
         self.verticalLayout.addLayout(self.editLineLayout)
         self.verticalLayout.addWidget(self.tableWidget)
+        self.verticalLayout.addWidget(self.indicator)
 
         #La toolbox et le menu
         MainWindow.setCentralWidget(self.centralwidget)
