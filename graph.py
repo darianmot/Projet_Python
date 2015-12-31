@@ -15,8 +15,8 @@ def histogramme(ordonnées,xmin,xmax,ymin,ymax,color,abscisse,ordonné):
     plt.grid(True)
     plt.show()
 def graph(listeabscisse,listeordonnée,ordonnée,abscisse,title,xmin,xmax,ymin,ymax,color):
-    a=[int(x) for x in listeabscisse]
-    b=[int(x) for x in listeordonnée]
+    a=[float(x) for x in listeabscisse]
+    b=[float(x) for x in listeordonnée]
     print(a,b)
     plt.plot(a, b,color)
     plt.ylabel(ordonnée)
@@ -56,14 +56,17 @@ class Ui_MainWindowgraph(object):
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayout.setObjectName("gridLayout")
 
-        # 1introduction de layout dans la grille
+        # 1introduction de layout dans la grille, celle du diagramme circulaire aussi
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
         self.lastlayout= QtWidgets.QHBoxLayout()
         self.lastlayout.setObjectName("lastlayout")
+
         #liste des types de graphiques
         self.listView = QtWidgets.QListWidget(self.centralwidget)
         self.listView.setObjectName("listView")
+        self.explode=QtWidgets.QLineEdit(self.centralwidget)
+        self.explode.setObjectName('explode')
         self.courbe=QtWidgets.QListWidgetItem()
         self.listView.addItem(self.courbe)
         self.courbe.setText('courbe')
@@ -73,11 +76,14 @@ class Ui_MainWindowgraph(object):
         self.camembert=QtWidgets.QListWidgetItem()
         self.listView.addItem(self.camembert)
         self.camembert.setText('camembert')
+        self.circulaire=QtWidgets.QLabel(self.centralwidget)
+        self.circulaire.setObjectName('label_circulaire')
+        self.circulaire.setText('DIAGRAMME CIRCULAIRE')
 
-
-        #autre layout
+        #ajout de widget aux layouts
         self.horizontalLayout_5.addWidget(self.listView)
-
+        self.lastlayout.addWidget(self.circulaire)
+        self.lastlayout.addWidget(self.explode)
 
 
 
@@ -88,7 +94,7 @@ class Ui_MainWindowgraph(object):
         self.images.setPixmap(b)
         self.horizontalLayout_5.addWidget(self.images)
         self.gridLayout.addLayout(self.horizontalLayout_5, 0, 0, 1, 2)
-        self.gridLayout.addLayout(self.lastlayout,5,2,1,1)
+        self.gridLayout.addLayout(self.lastlayout,5,0,1,3)
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
 
@@ -173,7 +179,7 @@ class Ui_MainWindowgraph(object):
         self.buttonBox = QtWidgets.QDialogButtonBox(self.centralwidget)
         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName("buttonBox")
-        self.gridLayout.addWidget(self.buttonBox, 5, 0, 1, 1)
+        self.gridLayout.addWidget(self.buttonBox, 6, 0, 1, 1)
         MainWindow.setStatusBar(self.statusbar)
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -217,6 +223,7 @@ class Ui_MainWindowgraph(object):
         ytitle=self.lineEdit_3.text()
         titleplot=self.lineEdit.text()
         color=self.combobox.currentText()
+        explode=self.explode.text()
         def colorchooser(color):
 
             if color=='rouge':
@@ -251,22 +258,23 @@ class Ui_MainWindowgraph(object):
             listlisible=[float(x) for x in Ui_MainWindowgraph.données.abscisses]
             histogramme(listlisible,xmin,xmax,ymin,ymax,colorchooser(color),xtitle,ytitle)
         else:
-            a=[0 for x in range(len(Ui_MainWindowgraph.données.abscisses))]
-            a=tuple(a)
-            circulaire(Ui_MainWindowgraph.données.abscisses,Ui_MainWindowgraph.données.ordonnées,xtitle,explode=a)
+            textes=explode.split(',')
+            textes=[float(x) for x in textes]
+            textes=tuple(textes)
+            circulaire(Ui_MainWindowgraph.données.abscisses,Ui_MainWindowgraph.données.ordonnées,xtitle,explode=textes)
             #en cours d amelioration pour ajout de nouvelles fonctionnalites
             print('you choose a camembert  chosen type')
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Graphiques"))
-        self.label_4.setText(_translate("MainWindow", "     Title"))
-        self.label_2.setText(_translate("MainWindow", "     X axis title"))
-        self.label_5.setText(_translate("MainWindow", "xmin"))
-        self.label_6.setText(_translate("MainWindow", "xmax"))
-        self.label.setText(_translate("MainWindow", "    Y axis title"))
-        self.label_7.setText(_translate("MainWindow", "ymin"))
-        self.label_8.setText(_translate("MainWindow", "ymax"))
+        self.label_4.setText(_translate("MainWindow", "     TITLE       "))
+        self.label_2.setText(_translate("MainWindow", "    X AXIS TITLE"))
+        self.label_5.setText(_translate("MainWindow", "Xmin"))
+        self.label_6.setText(_translate("MainWindow", "Xmax"))
+        self.label.setText(_translate("MainWindow", "    Y AXIS TITLE"))
+        self.label_7.setText(_translate("MainWindow", "Ymin"))
+        self.label_8.setText(_translate("MainWindow", "Ymax"))
 
 
 
