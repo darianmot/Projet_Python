@@ -78,45 +78,47 @@ def expension_process(cells_selected):
     print("colonne de droite:", cells_selected.rightColumn())
 
     # application de l'extension de formule (tirette)
+    #Anas: la tirette fonctionnait mal je  l ai donc mise en comment,elle prend le premier terme et le reecopie partout ou on tire sur une colonne
 
-    if cells_selected.leftColumn()==cells_selected.rightColumn():
-        column=cells_selected.rightColumn()
-        r0=cells_selected.topRow() #Ligne initiale
-        input=network.getCell(r0,column).input
-        if len(input)==0:
-            pass
-        elif input[0]!='=':
-            for i in range(r0+1,cells_selected.bottomRow()+1):
-                if ui_mainwindow.tableWidget.item(i,column)==None:
-                    ui_mainwindow.tableWidget.setItem(i,column,QtWidgets.QTableWidgetItem())
-                traitement(i,column,input)
-        else:
-            decomposition0=decomposition.decompo(input)
-            for i in range(r0+1,cells_selected.bottomRow()+1):
-                rows=i-r0
-                newinput=decomposition.verticalPull(decomposition0,rows)
-                if ui_mainwindow.tableWidget.item(i,column)==None:
-                    ui_mainwindow.tableWidget.setItem(i,column,QtWidgets.QTableWidgetItem())
-                traitement(i,column,newinput)
-    elif cells_selected.topRow()==cells_selected.bottomRow():
-        row=cells_selected.bottomRow()
-        c0=cells_selected.leftColumn() #Colonne intiale
-        input=network.getCell(row,c0).input
-        if len(input)==0:
-            pass
-        elif input[0]!='=':
-            for i in range(c0+1,cells_selected.rightColumn()+1):
-                if ui_mainwindow.tableWidget.item(row,i)==None:
-                    ui_mainwindow.tableWidget.setItem(row,i,QtWidgets.QTableWidgetItem())
-                traitement(row,i,input)
-        else:
-            decomposition0=decomposition.decompo(input)
-            for i in range(c0+1,cells_selected.rightColumn()+1):
-                columns=i-c0
-                newinput=decomposition.horizontalPull(decomposition0,columns,ui_mainwindow.tableWidget.columnsLabels)
-                if ui_mainwindow.tableWidget.item(row,i)==None:
-                    ui_mainwindow.tableWidget.setItem(row,i,QtWidgets.QTableWidgetItem())
-                traitement(row,i,newinput)
+
+    # if cells_selected.leftColumn()==cells_selected.rightColumn():
+    #     column=cells_selected.rightColumn()
+    #     r0=cells_selected.topRow() #Ligne initiale
+    #     input=network.getCell(r0,column).input
+    #     if len(input)==0:
+    #         pass
+    #     elif input[0]!='=':
+    #         for i in range(r0+1,cells_selected.bottomRow()+1):
+    #             if ui_mainwindow.tableWidget.item(i,column)==None:
+    #                 ui_mainwindow.tableWidget.setItem(i,column,QtWidgets.QTableWidgetItem())
+    #             traitement(i,column,input)
+    #     else:
+    #         decomposition0=decomposition.decompo(input)
+    #         for i in range(r0+1,cells_selected.bottomRow()+1):
+    #             rows=i-r0
+    #             newinput=decomposition.verticalPull(decomposition0,rows)
+    #             if ui_mainwindow.tableWidget.item(i,column)==None:
+    #                 ui_mainwindow.tableWidget.setItem(i,column,QtWidgets.QTableWidgetItem())
+    #             traitement(i,column,newinput)
+    # elif cells_selected.topRow()==cells_selected.bottomRow():
+    #     row=cells_selected.bottomRow()
+    #     c0=cells_selected.leftColumn() #Colonne intiale
+    #     input=network.getCell(row,c0).input
+    #     if len(input)==0:
+    #         pass
+    #     elif input[0]!='=':
+    #         for i in range(c0+1,cells_selected.rightColumn()+1):
+    #             if ui_mainwindow.tableWidget.item(row,i)==None:
+    #                 ui_mainwindow.tableWidget.setItem(row,i,QtWidgets.QTableWidgetItem())
+    #             traitement(row,i,input)
+    #     else:
+    #         decomposition0=decomposition.decompo(input)
+    #         for i in range(c0+1,cells_selected.rightColumn()+1):
+    #             columns=i-c0
+    #             newinput=decomposition.horizontalPull(decomposition0,columns,ui_mainwindow.tableWidget.columnsLabels)
+    #             if ui_mainwindow.tableWidget.item(row,i)==None:
+    #                 ui_mainwindow.tableWidget.setItem(row,i,QtWidgets.QTableWidgetItem())
+    #             traitement(row,i,newinput)
 
 
 

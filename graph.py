@@ -6,7 +6,7 @@ def circulaire(nom,content,titre,explode):
     plt.pie(content,explode,nom,autopct='%1.1f%%',startangle=90,shadow=True)
     plt.title(titre)
     plt.axis('equal')
-    plt.show
+    plt.show()
 def histogramme(ordonnées,xmin,xmax,ymin,ymax,color,abscisse,ordonné):
     plt.hist(ordonnées)
     plt.xlabel(abscisse)
@@ -59,7 +59,8 @@ class Ui_MainWindowgraph(object):
         # 1introduction de layout dans la grille
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
-
+        self.lastlayout= QtWidgets.QHBoxLayout()
+        self.lastlayout.setObjectName("lastlayout")
         #liste des types de graphiques
         self.listView = QtWidgets.QListWidget(self.centralwidget)
         self.listView.setObjectName("listView")
@@ -79,6 +80,7 @@ class Ui_MainWindowgraph(object):
 
 
 
+
         #images graphique et layout
         self.images = QtWidgets.QLabel(self.centralwidget)
         self.images.setObjectName("graphicsView")
@@ -86,6 +88,7 @@ class Ui_MainWindowgraph(object):
         self.images.setPixmap(b)
         self.horizontalLayout_5.addWidget(self.images)
         self.gridLayout.addLayout(self.horizontalLayout_5, 0, 0, 1, 2)
+        self.gridLayout.addLayout(self.lastlayout,5,2,1,1)
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
 
@@ -248,8 +251,11 @@ class Ui_MainWindowgraph(object):
             listlisible=[float(x) for x in Ui_MainWindowgraph.données.abscisses]
             histogramme(listlisible,xmin,xmax,ymin,ymax,colorchooser(color),xtitle,ytitle)
         else:
-            #circulaire(list,list2,title,explode)
-            print('you choose a camembert','chosen type')
+            a=[0 for x in range(len(Ui_MainWindowgraph.données.abscisses))]
+            a=tuple(a)
+            circulaire(Ui_MainWindowgraph.données.abscisses,Ui_MainWindowgraph.données.ordonnées,xtitle,explode=a)
+            #en cours d amelioration pour ajout de nouvelles fonctionnalites
+            print('you choose a camembert  chosen type')
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
