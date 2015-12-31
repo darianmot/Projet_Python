@@ -1,12 +1,31 @@
 import matplotlib.pyplot as plt
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSignal
+from mpl_toolkits.mplot3d import axes3d
+import matplotlib.pyplot as plt
+from matplotlib import cm
+def draw_surface(xmin,xmax,ymin,ymax,zmin,zmax,expression):
+    fig = plt.figure()
+    ax = fig.gca(projection='3d')
+    X, Y, Z = axes3d.get_test_data(0.05)
+    ax.plot_surface(X, Y,expression , rstride=8, cstride=8, alpha=0.3)
+    #cset = ax.contourf(X, Y, Z, zdir='z', offset=-100, cmap=cm.coolwarm)
+    #cset = ax.contourf(X, Y, Z, zdir='x', offset=-40, cmap=cm.coolwarm)
+    #cset = ax.contourf(X, Y, Z, zdir='y', offset=40, cmap=cm.coolwarm)
+    ax.set_xlabel('X')
+    ax.set_xlim(xmin, xmax)
+    ax.set_ylabel('Y')
+    ax.set_ylim(ymin, ymax)
+    ax.set_zlabel('Z')
+    ax.set_zlim(zmin, zmax)
+    plt.show()
 
 def circulaire(nom,content,titre,explode):
     plt.pie(content,explode,nom,autopct='%1.1f%%',startangle=90,shadow=True)
     plt.title(titre)
     plt.axis('equal')
     plt.show()
+
 def histogramme(ordonnées,xmin,xmax,ymin,ymax,color,abscisse,ordonné):
     plt.hist(ordonnées)
     plt.xlabel(abscisse)
@@ -14,6 +33,7 @@ def histogramme(ordonnées,xmin,xmax,ymin,ymax,color,abscisse,ordonné):
     plt.axis([xmin,xmax,ymin,ymax])
     plt.grid(True)
     plt.show()
+
 def graph(listeabscisse,listeordonnée,ordonnée,abscisse,title,xmin,xmax,ymin,ymax,color):
     a=[float(x) for x in listeabscisse]
     b=[float(x) for x in listeordonnée]
@@ -33,11 +53,12 @@ def cell(cells_selected,network):
         print(Ui_MainWindowgraph.données.abscisses)
         for i in range(ligne1,ligne2):
             abs = network.getCell(i, cells_selected.leftColumn()).value
-            ord = network.getCell(i,cells_selected.rightColumn()).value
+            ord = network.getCell(i,cells_selected.leftColumn()+1).value
             print(ord)
             Ui_MainWindowgraph.données.abscisses[i-ligne1]=abs
             Ui_MainWindowgraph.données.ordonnées[i-ligne1]=ord
             print(Ui_MainWindowgraph.données.abscisses,Ui_MainWindowgraph.données.ordonnées,'abscisse,ordonéée ')
+
 class  datas(object):
     def __init__(self):
         self.ordonnées=[]
@@ -192,7 +213,6 @@ class Ui_MainWindowgraph(object):
             A=self.listView.currentRow()
             image=self.images
             if A==0:
-
                 print('you choosed courbe','image')
                 image.setPixmap(courbe)
             elif A==1:
@@ -213,7 +233,7 @@ class Ui_MainWindowgraph(object):
         self.buttonBox.accepted.connect(quit)
 
     #selecteur de graphique
-    def chosentype(self):#en construction
+    def chosentype(self):
         A=self.listView.currentRow()
         ymin=self.doubleSpinBox_3.value()
         ymax=self.doubleSpinBox_4.value()
@@ -250,6 +270,7 @@ class Ui_MainWindowgraph(object):
 
         if A==0:
             print(colorchooser(color))
+            print(Ui_MainWindowgraph.données.abscisses,'absci')
             graph(Ui_MainWindowgraph.données.abscisses,Ui_MainWindowgraph.données.ordonnées
                  ,ytitle,xtitle,titleplot,xmin,xmax,ymin,ymax,colorchooser(color))
             print('you choosed courbe','chosen type')

@@ -184,7 +184,7 @@ def graphiques():
 # connexion des boutons de l'interface
 ui_mainwindow.tableWidget.read_value.connect(traitement)
 ui_mainwindow.tableWidget.filter.cellExpended.connect(expension_process)
-ui_graphwindow.buttonBox.accepted.connect(graphiques)
+ui_mainwindow.graph.triggered.connect(graphiques)
 
 ui_mainwindow.functionButton.released.connect(Funwindow.show)
 
