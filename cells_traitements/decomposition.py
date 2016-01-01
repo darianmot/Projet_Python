@@ -5,7 +5,7 @@ OPERATEUR_LOG=['<','>','==','<=','>=','!=']
 OUVRANTES=['(','{']
 FERMANTES=[')','}']
 SEPARATEURS=[',',';']
-SPECIAUX=[':']
+SPECIAUX=[':','=']
 
 CELL_PATTERN=r"^[$]?[{0}]+[$]?[0-9]+$".format(columns_labels.ALPHABET) #Paterne d'une celulle (regex)
 
@@ -257,7 +257,6 @@ def horizontalPull(inputDecomposed,columns,labels):
         if elementType[i]=='cell':
             if elementList[i][0]!='$':
                 letters=''.join([char for char in elementList[i] if char.isalpha()])
-                print(letters)
                 n=columns_labels.getColumn(letters)      #On recupere le label de la colonne pour l'itérer columns fois
                 newletters=columns_labels.getLabel(labels,n+columns)
                 elementList[i]=newletters+elementList[i][n:]    #On change la partie des lettres
