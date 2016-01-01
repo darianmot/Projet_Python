@@ -28,6 +28,18 @@ class MyDelegate(QtWidgets.QItemDelegate):
         self.editorcreated.emit()
         return QtWidgets.QItemDelegate.createEditor(self, QWidget, QStyleOptionViewItem, QModelIndex)
 
+    def paint(self, QPainter, QStyleOptionViewItem, QModelIndex):
+        QtWidgets.QItemDelegate.paint(self,QPainter,QStyleOptionViewItem,QModelIndex)
+        try:
+            if self.table.coin.isSelected:
+                print("QItemDelegate Detection")
+                brush =Qt.QBrush()
+                brush.setColor(Qt.QColor(255,255,255))
+                QPainter.setBrush(brush)
+                self.drawBackground(QPainter,QStyleOptionViewItem,QModelIndex)
+        except:
+            pass
+
 
 class EventEater(QtCore.QObject):
 
@@ -41,7 +53,6 @@ class EventEater(QtCore.QObject):
         if event.type() == 2 and self.target.coin.contains(event.pos().x(),event.pos().y()):
             print('coin selected')
             self.target.coin.isSelected = True
-            # self.cellExpended.emit(self.target.selectedRanges())
             return True
         elif event.type() == 3 and self.target.coin.isSelected == True:
             print('coin released')
