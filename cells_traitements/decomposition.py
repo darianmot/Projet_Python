@@ -5,6 +5,8 @@ OPERATEUR_LOG=['<','>','==','<=','>=','!=']
 OUVRANTES=['(','{']
 FERMANTES=[')','}']
 SEPARATEURS=[',',';']
+SPECIAUX=[':']
+
 
 #Erreur levée lorsqu'on trouve une erreur lors de l'evaluation d'une cellule, que l'on affichera alors dans celle ci
 class Error(Exception):
@@ -79,28 +81,58 @@ def what_type(chaine):
         return 'function'
     else:
         return None
+        # return 'unknown'
+#Découpe en éléments une chaine à traiter et renvoie la liste de ces éléments, ainsi que la liste de leurs types respectifs
+# def decompo(chaine):
+#     chaine=chaine.replace(' ','')  #Supprime les espaces
+#     elementList=[]
+#     elementListType=[]
+#     currentChain=""
+#     type=None
+#     for k in range(len(chaine)):
+#         oldResult=(currentChain,type)
+#         currentChain+=chaine[k]
+#         type=what_type(currentChain)
+#         if type==None:
+#             if oldResult[1]!=None:
+#                 elementList.append(oldResult[0])
+#                 elementListType.append(oldResult[1])
+#                 currentChain=chaine[k]
+#                 type=what_type(currentChain)
+#         if (type!=None and k+1==len(chaine)):
+#             elementList.append(currentChain)
+#             elementListType.append(type)
+#     return (elementList,elementListType)
+
+#Ajoute la chaine à la liste des elements et la liste des types (utile pour decompo)
+def addchain(elementList,elementType,chaine):
+    if len(chaine)>0:
+        elementList.append(chaine)
+        elementType.append(what_type(chaine))
 
 #Découpe en éléments une chaine à traiter et renvoie la liste de ces éléments, ainsi que la liste de leurs types respectifs
-def decompo(chaine):
-    chaine=chaine.replace(' ','')  #Supprime les espaces
+def decompo(string):
+    string=string.replace(' ','')
     elementList=[]
-    elementListType=[]
+    elementType=[]
     currentChain=""
-    type=None
-    for k in range(len(chaine)):
-        oldResult=(currentChain,type)
-        currentChain+=chaine[k]
-        type=what_type(currentChain)
-        if type==None:
-            if oldResult[1]!=None:
-                elementList.append(oldResult[0])
-                elementListType.append(oldResult[1])
-                currentChain=chaine[k]
-                type=what_type(currentChain)
-        if (type!=None and k+1==len(chaine)):
-            elementList.append(currentChain)
-            elementListType.append(type)
-    return (elementList,elementListType)
+    nodes=OPERATEUR_MATH+OPERATEUR_LOG+OUVRANTES+FERMANTES+SEPARATEURS+SPECIAUX
+    for i in range(len(string)):
+        if string[i] in nodes: #Si le caractère qu'on regarde est du type +,-,<,; etc...
+            addchain(elementList,elementType,currentChain)
+            if i==len(string)-1:
+                addchain(elementList,elementType,string[i])
+            elif string[i]+string[i+1] in nodes:
+                addchain(elementList,elementType,string[i]+string[i+1])
+            else:
+                addchain(elementList,elementType,string[i])
+            currentChain=""
+        elif i==len(string)-1:
+            addchain(elementList,elementType,currentChain + string[i])
+        else:
+            currentChain+=string[i]
+    return (elementList,elementType)
+
 
 
 #Renvoie la position de la parenthese fermant une fonction de position de k dans une liste d'élement
