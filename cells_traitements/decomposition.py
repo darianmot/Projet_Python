@@ -1,4 +1,4 @@
-import visu.columns_labels as columns_labels,cells_traitements.functions as functions,copy
+import visu.columns_labels as columns_labels,cells_traitements.functions as functions,copy,re
 
 OPERATEUR_MATH=['+','-','*','/','//','**']
 OPERATEUR_LOG=['<','>','==','<=','>=','!=']
@@ -7,6 +7,7 @@ FERMANTES=[')','}']
 SEPARATEURS=[',',';']
 SPECIAUX=[':']
 
+CELL_PATTERN=r"^[$]?[{0}]+[$]?[0-9]+$".format(columns_labels.ALPHABET) #Paterne d'une celulle (regex)
 
 #Erreur levée lorsqu'on trouve une erreur lors de l'evaluation d'une cellule, que l'on affichera alors dans celle ci
 class Error(Exception):
@@ -14,45 +15,26 @@ class Error(Exception):
         self.reason=reason
         self.disp='#Error : {}'.format(self.reason)
 
-
-#Renvoie True si l'entrée correspond à une celulle
-def isCell(chaine):
-    if len(chaine)<2 or (chaine[0] not in columns_labels.ALPHABET and chaine[0]!='$'): #Le code d'une cellule commence par une lettre ou un $
+#Permet de savoir si la chaine match le patern
+def matchpattern(chaine,patern):
+    if patern.match(chaine)==None:
         return False
-    in_letters=True    #Si in_letters est vérifiée, on est dans la partie des lettres.
-    dollardCount=1 if chaine[0]=='$' else 0
-    for char in chaine[1:]:
-        if dollardCount>2:  #Si on trouve plus de 2 $ dans la chaine
-            return False
-        if (in_letters==False) and (char in columns_labels.ALPHABET): #S'il existe un chiffre placé avant une lettre
-            return False
-        elif char in columns_labels.ALPHABET: pass
-        elif char=='$':      #Si on trouve un dollard, soit on est juste avant les chiffres, soit on est pas une cellule
-            if in_letters:
-                dollardCount+=1
-            else:
-                return False
-        elif char.isdigit():
-            in_letters=False
-        else:                 #Si ce n'est ni un chiffre ni un lettre ni un $
-            return False
-    return  (not in_letters or chaine[-1]=='$') #on vérifie qu'on a bien un chiffre ou un dollard à la fin
+    else:
+        return True
+
+#Renvoie True si l'entrée correspond à une celulle du type A1, $A1, A$1 ou $A$1
+def isCell(chaine):
+    p=re.compile(CELL_PATTERN) #On utilise une expression regulière
+    return matchpattern(chaine,p)
 
 #Renvoie True si l'entrée correspond syntaxiquement à une fonction
 def isfunction(chaine):
-    for char in chaine:
-        if not(char.isalpha() or char=='_'): #On considere que le nom d'une fonction n'est composé que de lettres de underscore
-            return False
-    return True
+    p=re.compile(r"^(?!{0})\w+$".format(CELL_PATTERN)) #Une fonction peut contenir des lettres, chiffres et '_', tant que ce n'est pas le nom d'une celulle
+    return matchpattern(chaine,p)
 
 def isNumber(chaine):
-    dotNumber=0
-    for char in chaine:
-        if char == '.':
-            dotNumber+=1
-        if dotNumber>1 or not(char.isdigit() or char=='.'):
-            return False
-    return True
+    p=re.compile(r"^[0-9]*\.?([0-9])+$") #Si la chaine est un nombre flottant
+    return matchpattern(chaine,p)
 
 def isError(chaine):
     return True if chaine[0]=='#' else False
@@ -80,29 +62,7 @@ def what_type(chaine):
     elif isfunction(chaine):
         return 'function'
     else:
-        return None
-        # return 'unknown'
-#Découpe en éléments une chaine à traiter et renvoie la liste de ces éléments, ainsi que la liste de leurs types respectifs
-# def decompo(chaine):
-#     chaine=chaine.replace(' ','')  #Supprime les espaces
-#     elementList=[]
-#     elementListType=[]
-#     currentChain=""
-#     type=None
-#     for k in range(len(chaine)):
-#         oldResult=(currentChain,type)
-#         currentChain+=chaine[k]
-#         type=what_type(currentChain)
-#         if type==None:
-#             if oldResult[1]!=None:
-#                 elementList.append(oldResult[0])
-#                 elementListType.append(oldResult[1])
-#                 currentChain=chaine[k]
-#                 type=what_type(currentChain)
-#         if (type!=None and k+1==len(chaine)):
-#             elementList.append(currentChain)
-#             elementListType.append(type)
-#     return (elementList,elementListType)
+        return 'unknown'
 
 #Ajoute la chaine à la liste des elements et la liste des types (utile pour decompo)
 def addchain(elementList,elementType,chaine):
@@ -118,9 +78,9 @@ def decompo(string):
     currentChain=""
     nodes=OPERATEUR_MATH+OPERATEUR_LOG+OUVRANTES+FERMANTES+SEPARATEURS+SPECIAUX
     for i in range(len(string)):
-        if string[i] in nodes: #Si le caractère qu'on regarde est du type +,-,<,; etc...
+        if string[i] in nodes: #On decoupe la chaine entre les caractères types +,-,<,; etc...
             addchain(elementList,elementType,currentChain)
-            if i==len(string)-1:
+            if i==len(string)-1: #On regarde si le 'separateur' est composé de 1 ou 2 caractère
                 addchain(elementList,elementType,string[i])
             elif string[i]+string[i+1] in nodes:
                 addchain(elementList,elementType,string[i]+string[i+1])
@@ -132,8 +92,6 @@ def decompo(string):
         else:
             currentChain+=string[i]
     return (elementList,elementType)
-
-
 
 #Renvoie la position de la parenthese fermant une fonction de position de k dans une liste d'élement
 def endOfFunction(elementList,k):

@@ -52,8 +52,7 @@ def traitement(x, y, string):
                 cell.parent_cells = decomposition.parentCells(network, string[1:])
                 for parentCell in cell.parent_cells:
                     parentCell.addChildCell(cell)
-            newValue = str(decomposition.evaluation(network, string[1:], knownFunctions)) if string[
-                                                                                                 0] == '=' else string
+            newValue = str(decomposition.evaluation(network, string[1:], knownFunctions)) if string[0] == '=' else string
             if oldValue != newValue:
                 if string[0] == '=':
                     cell.value = newValue
