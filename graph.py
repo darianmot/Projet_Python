@@ -7,17 +7,17 @@ from matplotlib import cm
 def draw_surface(xmin,xmax,ymin,ymax,zmin,zmax,expression):
     fig = plt.figure()
     ax = fig.gca(projection='3d')
-    X, Y, Z = axes3d.get_test_data(0.05)
-    ax.plot_surface(X, Y,expression , rstride=8, cstride=8, alpha=0.3)
+    x, y, z = axes3d.get_test_data(0.05)
+    ax.plot_surface(x, y,expression , rstride=8, cstride=8, alpha=0.3)
     #cset = ax.contourf(X, Y, Z, zdir='z', offset=-100, cmap=cm.coolwarm)
     #cset = ax.contourf(X, Y, Z, zdir='x', offset=-40, cmap=cm.coolwarm)
     #cset = ax.contourf(X, Y, Z, zdir='y', offset=40, cmap=cm.coolwarm)
-    ax.set_xlabel('X')
-    ax.set_xlim(xmin, xmax)
-    ax.set_ylabel('Y')
-    ax.set_ylim(ymin, ymax)
-    ax.set_zlabel('Z')
-    ax.set_zlim(zmin, zmax)
+    # ax.set_xlabel('X')
+    # ax.set_xlim(xmin, xmax)
+    # ax.set_ylabel('Y')
+    # ax.set_ylim(ymin, ymax)
+    # ax.set_zlabel('Z')
+    # ax.set_zlim(zmin, zmax)
     plt.show()
 
 def circulaire(nom,content,titre,explode):
@@ -82,6 +82,8 @@ class Ui_MainWindowgraph(object):
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
         self.lastlayout= QtWidgets.QHBoxLayout()
         self.lastlayout.setObjectName("lastlayout")
+        self.lastlayout1=QtWidgets.QHBoxLayout()
+        self.lastlayout1.setObjectName("lastlayout1")
 
         #liste des types de graphiques
         self.listView = QtWidgets.QListWidget(self.centralwidget)
@@ -97,16 +99,31 @@ class Ui_MainWindowgraph(object):
         self.camembert=QtWidgets.QListWidgetItem()
         self.listView.addItem(self.camembert)
         self.camembert.setText('camembert')
+        self.fonction_DD=QtWidgets.QListWidgetItem()
+        self.fonction_DD.setText('F(X,Y)')
+        self.listView.addItem(self.fonction_DD)
         self.circulaire=QtWidgets.QLabel(self.centralwidget)
         self.circulaire.setObjectName('label_circulaire')
         self.circulaire.setText('DIAGRAMME CIRCULAIRE')
+        self.doubleSpinBoxZmin=QtWidgets.QDoubleSpinBox(self.centralwidget)
+        self.doubleSpinBoxZmin.setObjectName("zmin")
+        self.doubleSpinBoxZmax=QtWidgets.QDoubleSpinBox(self.centralwidget)
+        self.doubleSpinBoxZmax.setObjectName("zmax")
+        self.zmin=QtWidgets.QLabel(self.centralwidget)
+        self.zmin.setObjectName("Zmin")
+        self.zmin.setText("Zmin")
+        self.zmax=QtWidgets.QLabel(self.centralwidget)
+        self.zmax.setObjectName("Zmin")
+        self.zmax.setText("Zmax")
 
         #ajout de widget aux layouts
         self.horizontalLayout_5.addWidget(self.listView)
         self.lastlayout.addWidget(self.circulaire)
         self.lastlayout.addWidget(self.explode)
-
-
+        self.lastlayout1.addWidget(self.zmin)
+        self.lastlayout1.addWidget(self.doubleSpinBoxZmin)
+        self.lastlayout1.addWidget(self.zmax)
+        self.lastlayout1.addWidget(self.doubleSpinBoxZmax)
 
         #images graphique et layout
         self.images = QtWidgets.QLabel(self.centralwidget)
@@ -115,7 +132,8 @@ class Ui_MainWindowgraph(object):
         self.images.setPixmap(b)
         self.horizontalLayout_5.addWidget(self.images)
         self.gridLayout.addLayout(self.horizontalLayout_5, 0, 0, 1, 2)
-        self.gridLayout.addLayout(self.lastlayout,5,0,1,3)
+        self.gridLayout.addLayout(self.lastlayout1,5,1,1,1)
+        self.gridLayout.addLayout(self.lastlayout,5,0,1,1)
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
 
@@ -200,7 +218,7 @@ class Ui_MainWindowgraph(object):
         self.buttonBox = QtWidgets.QDialogButtonBox(self.centralwidget)
         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName("buttonBox")
-        self.gridLayout.addWidget(self.buttonBox, 6, 0, 1, 1)
+        self.gridLayout.addWidget(self.buttonBox, 7, 0, 1, 1)
         MainWindow.setStatusBar(self.statusbar)
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -278,13 +296,18 @@ class Ui_MainWindowgraph(object):
             print('you choose histogramme','chosen type')
             listlisible=[float(x) for x in Ui_MainWindowgraph.données.abscisses]
             histogramme(listlisible,xmin,xmax,ymin,ymax,colorchooser(color),xtitle,ytitle)
-        else:
+        elif A==2:
             textes=explode.split(',')
             textes=[float(x) for x in textes]
             textes=tuple(textes)
             circulaire(Ui_MainWindowgraph.données.abscisses,Ui_MainWindowgraph.données.ordonnées,xtitle,explode=textes)
             #en cours d amelioration pour ajout de nouvelles fonctionnalites
             print('you choose a camembert  chosen type')
+        else:
+            expressions=[x for x in Ui_MainWindowgraph.données.abscisses]
+            A=expressions[0].strip('')
+            print(A)
+            #draw_surface(5,5,5,5,5,5,A)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
