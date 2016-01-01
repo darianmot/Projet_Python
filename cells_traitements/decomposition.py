@@ -149,12 +149,9 @@ def eval_function(network,elementList,elementType,k,knownFunctions):
         args.append(evaluation(network,currentArg,knownFunctions))
     return knownFunctions.dict[str(element)].value(args)
 
-
-#Renvoie l'évaluation d'une formule, au sein d'un réseau nétwork (ou affiche l'erreur le cas écheant)
-def evaluation(network, chaine,knownFunctions):
-    (elementList,elementType)=decompo(chaine)
-    i=0
-    for j in [k for k, l in enumerate(elementList) if l == ':']: #On remplace c1:c2 par les celulles comprises dans le rectancle d'extrémité (c1,c2)
+#Remplace (sur place) c1:c2 par les celulles comprises dans le rectancle d'extrémité (c1,c2)
+def doublePoint(elementList,elementType,network):
+    for j in [k for k, l in enumerate(elementList) if l == ':']:
         if j==0: raise Error('Syntaxe (\':\' innatendue 1)')
         if elementType[j-1]!='cell' or elementType[j+1]!='cell':
             raise Error('Syntaxe (\':\' innatendue 2)')
@@ -174,6 +171,12 @@ def evaluation(network, chaine,knownFunctions):
                 l_type.append('sep')
         elementList[j-1:j+2]=l_element
         elementType[j-1:j+2]=l_type
+
+#Renvoie l'évaluation d'une formule, au sein d'un réseau nétwork (ou affiche l'erreur le cas écheant)
+def evaluation(network, chaine,knownFunctions):
+    (elementList,elementType)=decompo(chaine)
+    i=0
+    doublePoint(elementList,elementType,network)
     while i<len(elementList):
         if elementType[i]== 'cell':
             try:
@@ -205,6 +208,7 @@ def evaluation(network, chaine,knownFunctions):
 #Renvoie la liste des celulles apparaissant dans un string
 def parentCells(network,chaine):
     (elementList,elementType)=decompo(chaine)
+    doublePoint(elementList,elementType,network)
     l=[]
     for k in range(len(elementList)):
         if elementType[k]=='cell':
