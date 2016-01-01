@@ -303,7 +303,7 @@ class Ui_MainWindowgraph(object):
             circulaire(Ui_MainWindowgraph.données.abscisses,Ui_MainWindowgraph.données.ordonnées,xtitle,explode=textes)
             #en cours d amelioration pour ajout de nouvelles fonctionnalites
             print('you choose a camembert  chosen type')
-        else:
+        else:#a revoir
             expressions=[x for x in Ui_MainWindowgraph.données.abscisses]
             A=expressions[0].strip('')
             print(A)
