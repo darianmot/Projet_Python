@@ -241,29 +241,29 @@ def cellsBetween(network,c1,c2):
             l.append(network.getCell(r,c))
     return l
 
-#Renvoie le input à traiter dans la celulle situé rows lignes plus bas que la celulle initale dans le cas où l'utilisateur tire verticalement sur le coin
-def verticalPull(inputDecomposed,rows):
-    elementList=copy.copy(inputDecomposed[0]) #Pour ne pas changer sur place la decomposition initiale
-    elementType=inputDecomposed[1]
-    for i in range(len(elementList)):
-        if elementType[i]=='cell':
-            dollardcount=elementList[i].count("$")
-            if not((dollardcount==1 and elementList[i][0]!='$') or dollardcount==2): #Si il n'y a pas de $ devant la partie numerique
-                elementList[i]=elementList[i][:-1]+str(int(elementList[i][-1])+rows)
-    return ''.join(elementList)
-
-#Renvoie le input à traiter dans la celulle situé à columns colonnes de la celulle initale dans le cas où l'utilisateur tire horizonatalement sur le coin
-def horizontalPull(inputDecomposed,columns,labels):
-    elementList=copy.copy(inputDecomposed[0]) #Pour ne pas changer sur place la decomposition initiale
-    elementType=inputDecomposed[1]
-    for i in range(len(elementList)):
-        if elementType[i]=='cell':
-            if elementList[i][0]!='$':
-                letters=''.join([char for char in elementList[i] if char.isalpha()])
-                n=columns_labels.getColumn(letters)      #On recupere le label de la colonne pour l'itérer columns fois
-                newletters=columns_labels.getLabel(labels,n+columns)
-                elementList[i]=newletters+elementList[i][n:]    #On change la partie des lettres
-    return ''.join(elementList)
+# #Renvoie le input à traiter dans la celulle situé rows lignes plus bas que la celulle initale dans le cas où l'utilisateur tire verticalement sur le coin
+# def verticalPull(inputDecomposed,rows):
+#     elementList=copy.copy(inputDecomposed[0]) #Pour ne pas changer sur place la decomposition initiale
+#     elementType=inputDecomposed[1]
+#     for i in range(len(elementList)):
+#         if elementType[i]=='cell':
+#             dollardcount=elementList[i].count("$")
+#             if not((dollardcount==1 and elementList[i][0]!='$') or dollardcount==2): #Si il n'y a pas de $ devant la partie numerique
+#                 elementList[i]=elementList[i][:-1]+str(int(elementList[i][-1])+rows)
+#     return ''.join(elementList)
+#
+# #Renvoie le input à traiter dans la celulle situé à columns colonnes de la celulle initale dans le cas où l'utilisateur tire horizonatalement sur le coin
+# def horizontalPull(inputDecomposed,columns,labels):
+#     elementList=copy.copy(inputDecomposed[0]) #Pour ne pas changer sur place la decomposition initiale
+#     elementType=inputDecomposed[1]
+#     for i in range(len(elementList)):
+#         if elementType[i]=='cell':
+#             if elementList[i][0]!='$':
+#                 letters=''.join([char for char in elementList[i] if char.isalpha()])
+#                 n=columns_labels.getColumn(letters)      #On recupere le label de la colonne pour l'itérer columns fois
+#                 newletters=columns_labels.getLabel(labels,n+columns)
+#                 elementList[i]=newletters+elementList[i][n:]    #On change la partie des lettres
+#     return ''.join(elementList)
 
 
 

@@ -2,7 +2,7 @@ __authors__ = "Darian MOTAMED, Hugo CHOULY, Atime RONDA,Anas DARWICH"
 import sys, visu.mainwindow as mainwindow, visu.funwindow as funWindow, visu.addfunwindow as addfunwindow, \
     graph as graphic
 import structures, cells_traitements.functions as functions, recOrd
-import cells_traitements.decomposition as decomposition, cells_traitements.tritopologique as tritopologique
+import cells_traitements.decomposition as decomposition, cells_traitements.tritopologique as tritopologique,cells_traitements.tirette as tirette
 import time, pickle
 from PyQt5 import QtWidgets, Qt
 
@@ -84,46 +84,7 @@ def expension_process(cells_selected):
     print("colonne de droite:", cells_selected.rightColumn())
 
     # application de l'extension de formule (tirette)
-
-    if cells_selected.leftColumn() == cells_selected.rightColumn():
-        column = cells_selected.rightColumn()
-        r0 = cells_selected.topRow()  # Ligne initiale
-        input = network.getCell(r0, column).input
-        if len(input) == 0:
-            pass
-        elif input[0] != '=':
-            for i in range(r0 + 1, cells_selected.bottomRow() + 1):
-                if ui_mainwindow.tableWidget.item(i, column) == None:
-                    ui_mainwindow.tableWidget.setItem(i, column, QtWidgets.QTableWidgetItem())
-                traitement(i, column, input)
-        else:
-            decomposition0 = decomposition.decompo(input)
-            for i in range(r0 + 1, cells_selected.bottomRow() + 1):
-                rows = i - r0
-                newinput = decomposition.verticalPull(decomposition0, rows)
-                if ui_mainwindow.tableWidget.item(i, column) == None:
-                    ui_mainwindow.tableWidget.setItem(i, column, QtWidgets.QTableWidgetItem())
-                traitement(i, column, newinput)
-    elif cells_selected.topRow() == cells_selected.bottomRow():
-        row = cells_selected.bottomRow()
-        c0 = cells_selected.leftColumn()  # Colonne intiale
-        input = network.getCell(row, c0).input
-        if len(input) == 0:
-            pass
-        elif input[0] != '=':
-            for i in range(c0 + 1, cells_selected.rightColumn() + 1):
-                if ui_mainwindow.tableWidget.item(row, i) == None:
-                    ui_mainwindow.tableWidget.setItem(row, i, QtWidgets.QTableWidgetItem())
-                traitement(row, i, input)
-        else:
-            decomposition0 = decomposition.decompo(input)
-            for i in range(c0 + 1, cells_selected.rightColumn() + 1):
-                columns = i - c0
-                newinput = decomposition.horizontalPull(decomposition0, columns,
-                                                        ui_mainwindow.tableWidget.columnsLabels)
-                if ui_mainwindow.tableWidget.item(row, i) == None:
-                    ui_mainwindow.tableWidget.setItem(row, i, QtWidgets.QTableWidgetItem())
-                traitement(row, i, newinput)
+    tirette.formuleExpanse(cells_selected,network,ui_mainwindow)
 
     # efface les rectangles verts, fin de l'effet tirette
     width = ui_mainwindow.tableWidget.columnWidth(ui_mainwindow.tableWidget.currentColumn())
@@ -140,7 +101,7 @@ def expension_process(cells_selected):
 def functionAdded(name, descrition, evaluation, category):
     knownFunctions.addFun(functions.Function(name, evaluation, descrition, category))
     print('Ajout de la fonction {}'.format(name))
-    pickle.dump(knownFunctions, open('knownFunctions.p', 'wb'))
+    pickle.dump(knownFunctions, open('knownFunctions.p', 'wb')) #Sauvegarde de l'ajout pour la prochaine ouverture
     ui_funWinfow.retranslateUi(Funwindow, knownFunctions)
 
 
