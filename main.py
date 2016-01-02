@@ -53,7 +53,7 @@ def traitement(x, y, string):
                 for parentCell in cell.parent_cells:
                     parentCell.addChildCell(cell)
             newValue = str(decomposition.evaluation(network, string[1:], knownFunctions)) if string[0] == '=' else string
-            if oldValue != newValue:
+            if oldValue != newValue: #Cette distinction permet d'éviter de réevaluer toutes les cellules filles si la value ne change pas
                 if string[0] == '=':
                     cell.value = newValue
                 else:
@@ -162,7 +162,8 @@ ui_addfunwindow.sendFunData.connect(functionAdded)
 ui_mainwindow.menu_quit.triggered.connect(MainWindow.close)
 ui_mainwindow.new_button.triggered.connect(reset_table)
 
-
+ui_mainwindow.tableWidget.setItem(0,0,QtWidgets.QTableWidgetItem('Bonne Année!'))
+ui_mainwindow.tableWidget.setColumnWidth(0,110)
 
 MainWindow.showMaximized()  # Pour agrandir au max la fenetre
 splash.finish(MainWindow)
