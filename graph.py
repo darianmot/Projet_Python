@@ -240,6 +240,7 @@ class Ui_MainWindowgraph(object):
             courbe=QtGui.QPixmap('visu/icons/courbe.png')
             histogramme=QtGui.QPixmap('visu/icons/histogramme.jpg')
             camembert=QtGui.QPixmap('visu/icons/camembert.jpg')
+            DD=QtGui.QPixmap('visu/icons/DD.png')
             A=self.listView.currentRow()
             image=self.images
             if A==0:
@@ -251,9 +252,9 @@ class Ui_MainWindowgraph(object):
             elif A==2:
                 image.setPixmap(camembert)
                 print('you choose a camembert','image')
-            else:
-                print('nothing selected','image')
-
+            elif A==3:
+                image.setPixmap(DD)
+                print('you choose a 2D representation')
         def quit():
             MainWindow.close()
         #les connexions
