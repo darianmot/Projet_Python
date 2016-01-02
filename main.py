@@ -66,6 +66,8 @@ def traitement(x, y, string):
                         ui_mainwindow.tableWidget.return_value.emit(child.x, child.y, child.value)
                 except decomposition.Error as e:
                     ui_mainwindow.tableWidget.return_value.emit(x, y, e.disp)
+            else:
+                ui_mainwindow.tableWidget.return_value.emit(x, y, str(cell.value))
         except decomposition.Error as e:
             ui_mainwindow.tableWidget.return_value.emit(x, y, e.disp)
         t_end = time.time()
