@@ -77,13 +77,15 @@ def decompo(string):
     elementType=[]
     currentChain=""
     nodes=OPERATEUR_MATH+OPERATEUR_LOG+OUVRANTES+FERMANTES+SEPARATEURS+SPECIAUX
-    for i in range(len(string)):
+    i=0
+    while i<len(string):
         if string[i] in nodes: #On decoupe la chaine entre les caractères types +,-,<,; etc...
             addchain(elementList,elementType,currentChain)
             if i==len(string)-1: #On regarde si le 'separateur' est composé de 1 ou 2 caractère
                 addchain(elementList,elementType,string[i])
             elif string[i]+string[i+1] in nodes:
                 addchain(elementList,elementType,string[i]+string[i+1])
+                i+=1
             else:
                 addchain(elementList,elementType,string[i])
             currentChain=""
@@ -91,6 +93,7 @@ def decompo(string):
             addchain(elementList,elementType,currentChain + string[i])
         else:
             currentChain+=string[i]
+        i+=1
     return (elementList,elementType)
 
 #Renvoie la position de la parenthese fermant une fonction de position de k dans une liste d'élement
