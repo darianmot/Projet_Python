@@ -9,15 +9,15 @@ def draw_surface(xmin,xmax,ymin,ymax,zmin,zmax,expression):
     ax = fig.gca(projection='3d')
     x, y, z = axes3d.get_test_data(0.05)
     ax.plot_surface(x, y,expression , rstride=8, cstride=8, alpha=0.3)
-    #cset = ax.contourf(X, Y, Z, zdir='z', offset=-100, cmap=cm.coolwarm)
-    #cset = ax.contourf(X, Y, Z, zdir='x', offset=-40, cmap=cm.coolwarm)
-    #cset = ax.contourf(X, Y, Z, zdir='y', offset=40, cmap=cm.coolwarm)
-    # ax.set_xlabel('X')
-    # ax.set_xlim(xmin, xmax)
-    # ax.set_ylabel('Y')
-    # ax.set_ylim(ymin, ymax)
-    # ax.set_zlabel('Z')
-    # ax.set_zlim(zmin, zmax)
+    # cset = ax.contourf(x, y, z, zdir='z', offset=-100, cmap=cm.coolwarm)
+    # cset = ax.contourf(x, y, z, zdir='x', offset=-40, cmap=cm.coolwarm)
+    # cset = ax.contourf(x, y, z, zdir='y', offset=40, cmap=cm.coolwarm)
+    ax.set_xlabel('X')
+    ax.set_xlim(xmin, xmax)
+    ax.set_ylabel('Y')
+    ax.set_ylim(ymin, ymax)
+    ax.set_zlabel('Z')
+    ax.set_zlim(zmin, zmax)
     plt.show()
 
 def circulaire(nom,content,titre,explode):
@@ -107,8 +107,12 @@ class Ui_MainWindowgraph(object):
         self.circulaire.setText('DIAGRAMME CIRCULAIRE')
         self.doubleSpinBoxZmin=QtWidgets.QDoubleSpinBox(self.centralwidget)
         self.doubleSpinBoxZmin.setObjectName("zmin")
+        self.doubleSpinBoxZmin.setMinimum(-100000)
+        self.doubleSpinBoxZmin.setMaximum(10000)
         self.doubleSpinBoxZmax=QtWidgets.QDoubleSpinBox(self.centralwidget)
         self.doubleSpinBoxZmax.setObjectName("zmax")
+        self.doubleSpinBoxZmax.setMinimum(-100000)
+        self.doubleSpinBoxZmax.setMaximum(100000)
         self.zmin=QtWidgets.QLabel(self.centralwidget)
         self.zmin.setObjectName("Zmin")
         self.zmin.setText("Zmin")
@@ -174,12 +178,16 @@ class Ui_MainWindowgraph(object):
         #les xmin xmax  dans la spin box avec les layout associées label associées
         self.doubleSpinBox = QtWidgets.QDoubleSpinBox(self.centralwidget)
         self.doubleSpinBox.setObjectName("doubleSpinBox")
+        self.doubleSpinBox.setMaximum(100000)
+        self.doubleSpinBox.setMinimum(-100000)
         self.horizontalLayout.addWidget(self.doubleSpinBox)
         self.label_6 = QtWidgets.QLabel(self.centralwidget)
         self.label_6.setObjectName("label_6")
         self.horizontalLayout.addWidget(self.label_6)
         self.doubleSpinBox_2 = QtWidgets.QDoubleSpinBox(self.centralwidget)
         self.doubleSpinBox_2.setObjectName("doubleSpinBox_2")
+        self.doubleSpinBox_2.setMinimum(-100000)
+        self.doubleSpinBox_2.setMaximum(100000)
         self.horizontalLayout.addWidget(self.doubleSpinBox_2)
         self.gridLayout.addLayout(self.horizontalLayout, 3, 1, 1, 1)
 
@@ -202,12 +210,16 @@ class Ui_MainWindowgraph(object):
         #valeur des ordonnées ymin ymax et layout associée
         self.doubleSpinBox_3 = QtWidgets.QDoubleSpinBox(self.centralwidget)
         self.doubleSpinBox_3.setObjectName("doubleSpinBox_3")
+        self.doubleSpinBox_3.setMinimum(-100000)
+        self.doubleSpinBox_3.setMaximum(100000)
         self.horizontalLayout_6.addWidget(self.doubleSpinBox_3)
         self.label_8 = QtWidgets.QLabel(self.centralwidget)
         self.label_8.setObjectName("label_8")
         self.horizontalLayout_6.addWidget(self.label_8)
         self.doubleSpinBox_4 = QtWidgets.QDoubleSpinBox(self.centralwidget)
         self.doubleSpinBox_4.setObjectName("doubleSpinBox_4")
+        self.doubleSpinBox_4.setMinimum(-100000)
+        self.doubleSpinBox_4.setMaximum(100000)
         self.horizontalLayout_6.addWidget(self.doubleSpinBox_4)
         self.gridLayout.addLayout(self.horizontalLayout_6, 4, 1, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
@@ -262,6 +274,9 @@ class Ui_MainWindowgraph(object):
         titleplot=self.lineEdit.text()
         color=self.combobox.currentText()
         explode=self.explode.text()
+        zmin=self.doubleSpinBoxZmin.value()
+        zmax=self.doubleSpinBoxZmax.value()
+
         def colorchooser(color):
 
             if color=='rouge':
@@ -293,6 +308,7 @@ class Ui_MainWindowgraph(object):
                  ,ytitle,xtitle,titleplot,xmin,xmax,ymin,ymax,colorchooser(color))
             print('you choosed courbe','chosen type')
         elif A==1:
+
             print('you choose histogramme','chosen type')
             listlisible=[float(x) for x in Ui_MainWindowgraph.données.abscisses]
             histogramme(listlisible,xmin,xmax,ymin,ymax,colorchooser(color),xtitle,ytitle)
@@ -304,11 +320,20 @@ class Ui_MainWindowgraph(object):
             #en cours d amelioration pour ajout de nouvelles fonctionnalites
             print('you choose a camembert  chosen type')
         else:#a revoir
-            expressions=[x for x in Ui_MainWindowgraph.données.abscisses]
-            A=expressions[0].strip('')
-            print(A)
-            #draw_surface(5,5,5,5,5,5,A)
-
+            if xmin==xmax==ymin==ymax==zmin==zmax==0.00 or xmin==xmax or ymin==ymax or zmin==zmax:
+                expressions=[x for x in Ui_MainWindowgraph.données.abscisses]
+                A=expressions[0].strip('')
+                fig = plt.figure()
+                ax = fig.gca(projection='3d')
+                x, y, z = axes3d.get_test_data(0.05)
+                ax.plot_surface(x, y,eval(A) , rstride=8, cstride=8, alpha=0.3)
+                plt.show()
+            else:
+                expressions=[x for x in Ui_MainWindowgraph.données.abscisses]
+                A=expressions[0].strip('')
+                x, y, z = axes3d.get_test_data(0.05)
+                draw_surface(xmin,xmax,ymin,ymax,zmin,zmax,eval(A))
+            #probleme de limite a resoudre
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Graphiques"))
