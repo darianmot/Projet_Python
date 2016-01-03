@@ -164,9 +164,6 @@ ui_addfunwindow.sendFunData.connect(functionAdded)
 ui_mainwindow.menu_quit.triggered.connect(MainWindow.close)
 ui_mainwindow.new_button.triggered.connect(reset_table)
 
-ui_mainwindow.tableWidget.setItem(0,0,QtWidgets.QTableWidgetItem('Bonne Année!'))
-ui_mainwindow.tableWidget.setColumnWidth(0,110)
-
 MainWindow.showMaximized()  # Pour agrandir au max la fenetre
 splash.finish(MainWindow)
 sys.exit(app.exec_())

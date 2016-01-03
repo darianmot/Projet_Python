@@ -30,6 +30,8 @@ class MyDelegate(QtWidgets.QItemDelegate):
 
     def paint(self, QPainter, QStyleOptionViewItem, QModelIndex):
         QtWidgets.QItemDelegate.paint(self,QPainter,QStyleOptionViewItem,QModelIndex)
+       # print("colonne", QModelIndex.column())
+       # print("ligne", QModelIndex.row())
         try:
             if self.table.coin.isSelected:
                 print("QItemDelegate Detection")
