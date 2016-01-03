@@ -2,6 +2,7 @@
 
 import cells_traitements.decomposition as decomposition
 
+#Renvoie la liste des enfants d'une celulle avec comme premier element la cellule elle-meme
 def childrenCellsRec(parent):
     file=[parent]
     visited=[parent]
@@ -12,10 +13,6 @@ def childrenCellsRec(parent):
                 visited.append(child)
                 file.append(child)
     return visited
-
-
-
-
 
 #Renvoie une lise contenant les predecesseurs de chaque celulle d'une liste de celulle donnée
 def predecesorList(cellList):

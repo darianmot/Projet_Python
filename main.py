@@ -59,17 +59,19 @@ def traitement(x, y, string):
                 else:
                     cell.value = string
                 ui_mainwindow.tableWidget.return_value.emit(x, y, str(cell.value))
+                order = tritopologique.evalOrder(cell)
                 try:
-                    order = tritopologique.evalOrder(cell)
                     for child in order:
                         child.value = str(decomposition.evaluation(network, child.input[1:], knownFunctions))
                         ui_mainwindow.tableWidget.return_value.emit(child.x, child.y, child.value)
                 except decomposition.Error as e:
-                    ui_mainwindow.tableWidget.return_value.emit(x, y, e.disp)
+                    for child in tritopologique.childrenCellsRec(cell)[1:]:
+                        ui_mainwindow.tableWidget.return_value.emit(child.x, child.y, e.disp)
             else:
                 ui_mainwindow.tableWidget.return_value.emit(x, y, str(cell.value))
         except decomposition.Error as e:
-            ui_mainwindow.tableWidget.return_value.emit(x, y, e.disp)
+            for child in tritopologique.childrenCellsRec(cell):
+                ui_mainwindow.tableWidget.return_value.emit(child.x, child.y, e.disp)
         t_end = time.time()
         print('Done : {}s'.format(t_end - t_init))
 

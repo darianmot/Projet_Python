@@ -279,28 +279,21 @@ class Ui_MainWindowgraph(object):
         zmax=self.doubleSpinBoxZmax.value()
 
         def colorchooser(color):
-
             if color=='rouge':
-                 color='r'
-                 return color
+                color='r'
             elif color=='bleu':
                 color='b'
-                return color
             elif color=='jaune':
                 color='y'
-                return color
             elif color=='violet':
                 color='p'
-                return color
             elif color=='orange':
                 color='o'
-                return color
             elif color=='vert':
                 color='g'
-                return color
             else:
                 color='b'
-                return color
+            return color
 
         if A==0:
             print(colorchooser(color))

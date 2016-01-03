@@ -7,7 +7,7 @@ FERMANTES=[')','}']
 SEPARATEURS=[',',';']
 SPECIAUX=[':','=']
 
-CELL_PATTERN=r"^[$]?[{0}]+[$]?[0-9]+$".format(columns_labels.ALPHABET) #Paterne d'une celulle (regex)
+CELL_PATTERN=r"^[$]?[{0}]+[$]?[0-9]+$".format(columns_labels.ALPHABET) #Paterne d'une celulle en regex
 
 #Erreur levée lorsqu'on trouve une erreur lors de l'evaluation d'une cellule, que l'on affichera alors dans celle ci
 class Error(Exception):
@@ -208,9 +208,8 @@ def evaluation(network, chaine,knownFunctions):
     except ZeroDivisionError:
         raise Error('Division par 0')
     except Exception as e:
-        print(''.join(elementList))
+        print("Can't evaluate '{0}'".format(''.join(elementList)),end='')
         raise Error(str(e))
-
 
 #Renvoie la liste des celulles apparaissant dans un string
 def parentCells(network,chaine):
@@ -225,14 +224,6 @@ def parentCells(network,chaine):
                 pass
     return l
 
-#Renvoie l'ensemble des cellules filles (récursive) d'une cellule
-def childrenCellsRec(cell):
-    l=[]
-    for c in cell.children_cells:
-       l.append(c)
-       l.append(childrenCellsRec(c))
-    return l
-
 #Retourne la liste de l'ensemble des cellules comprises dans la selection rectangulaire d'extrémité diagonale (c1,c2)
 def cellsBetween(network,c1,c2):
     r_init=min(c1.getRow(),c2.getRow())
@@ -244,30 +235,5 @@ def cellsBetween(network,c1,c2):
         for c in range(c_init,c_end+1):
             l.append(network.getCell(r,c))
     return l
-
-# #Renvoie le input à traiter dans la celulle situé rows lignes plus bas que la celulle initale dans le cas où l'utilisateur tire verticalement sur le coin
-# def verticalPull(inputDecomposed,rows):
-#     elementList=copy.copy(inputDecomposed[0]) #Pour ne pas changer sur place la decomposition initiale
-#     elementType=inputDecomposed[1]
-#     for i in range(len(elementList)):
-#         if elementType[i]=='cell':
-#             dollardcount=elementList[i].count("$")
-#             if not((dollardcount==1 and elementList[i][0]!='$') or dollardcount==2): #Si il n'y a pas de $ devant la partie numerique
-#                 elementList[i]=elementList[i][:-1]+str(int(elementList[i][-1])+rows)
-#     return ''.join(elementList)
-#
-# #Renvoie le input à traiter dans la celulle situé à columns colonnes de la celulle initale dans le cas où l'utilisateur tire horizonatalement sur le coin
-# def horizontalPull(inputDecomposed,columns,labels):
-#     elementList=copy.copy(inputDecomposed[0]) #Pour ne pas changer sur place la decomposition initiale
-#     elementType=inputDecomposed[1]
-#     for i in range(len(elementList)):
-#         if elementType[i]=='cell':
-#             if elementList[i][0]!='$':
-#                 letters=''.join([char for char in elementList[i] if char.isalpha()])
-#                 n=columns_labels.getColumn(letters)      #On recupere le label de la colonne pour l'itérer columns fois
-#                 newletters=columns_labels.getLabel(labels,n+columns)
-#                 elementList[i]=newletters+elementList[i][n:]    #On change la partie des lettres
-#     return ''.join(elementList)
-
 
 
