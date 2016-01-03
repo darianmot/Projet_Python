@@ -8,6 +8,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSignal
+import cells_traitements.decomposition as decomposition
+
 class Ui_Dialog(QtWidgets.QWidget):
     sendFunData=pyqtSignal(str,str,str,str)
 
@@ -96,25 +98,29 @@ class Ui_Dialog(QtWidgets.QWidget):
             description=self.descriptionEdit.text()
             evaluation=self.evalEdit.text()
             category=self.combobox.currentText()
-            if knownFunctions.isFunValid(name,evaluation):
+            if knownFunctions.isFunValid(name,evaluation,decomposition.isfunction):
                 self.retranslateUi(Dialog)
                 self.sendFunData.emit(name,description,evaluation,category)
                 Dialog.accept()
                 Dialog.close()
             else:
-                if evaluation=="":
+                if evaluation == "":
                     self.evalError.setText("<font color='red' size=-1><i>L'expression de la fonction ne peut être vide<i/></font>")
                     self.evalError.show()
                 else:
                     self.evalError.hide()
-                if name=="":
-                    reason='Le nom ne peut être vide'
-                elif not(name.isalpha()):
-                    reason='Le nom ne peut contenir que des lettres'
-                elif name=="args":
-                    reason ="'args' ne peut definir le nom d'une fonction"
+                if name == "":
+                    reason = 'Le nom ne peut être vide'
+                elif name == "args":
+                    reason = "'args' ne peut definir le nom d'une fonction"
                 elif name in knownFunctions.dict.keys():
-                    reason ='La fonction existe déjà'
+                    reason = 'La fonction existe déjà'
+                elif decomposition.isCell(name):
+                    reason = "Le nom d'une fonction ne peut correspondre à celui d'une celulle"
+                elif decomposition.isNumber(name):
+                    reason = "Le nom d'une fonction ne peut correspondre à un nombre"
+                elif not decomposition.isfunction(name):
+                    reason = "Format non valide"
                 try:
                     self.nameError.setText("<font color='red' size=-1><i>{}<i/></font>".format(reason))
                     self.nameError.show()

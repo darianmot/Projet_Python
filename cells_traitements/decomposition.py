@@ -27,14 +27,18 @@ def isCell(chaine):
     p=re.compile(CELL_PATTERN) #On utilise une expression regulière
     return matchpattern(chaine,p)
 
-#Renvoie True si l'entrée correspond syntaxiquement à une fonction
-def isfunction(chaine):
-    p=re.compile(r"^(?!{0})\w+$".format(CELL_PATTERN)) #Une fonction peut contenir des lettres, chiffres et '_', tant que ce n'est pas le nom d'une celulle
+#Renvoie True si la chaine est un nombre (flottant ou non)
+def isNumber(chaine):
+    p=re.compile(r"^[0-9]*\.?([0-9])+$") #Si la chaine est un nombre (flottant ou non)
     return matchpattern(chaine,p)
 
-def isNumber(chaine):
-    p=re.compile(r"^[0-9]*\.?([0-9])+$") #Si la chaine est un nombre flottant
+#Renvoie True si l'entrée correspond syntaxiquement à une fonction
+def isfunction(chaine):
+    if isCell(chaine) or isNumber(chaine):
+        return False
+    p=re.compile(r"^\w+$") #Une fonction peut contenir des lettres, chiffres et '_', sans être une celulle ni un nombre
     return matchpattern(chaine,p)
+
 
 def isError(chaine):
     return True if chaine[0]=='#' else False
