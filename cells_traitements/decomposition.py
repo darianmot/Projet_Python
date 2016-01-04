@@ -17,10 +17,7 @@ class Error(Exception):
 
 #Permet de savoir si la chaine match le patern
 def matchpattern(chaine,patern):
-    if patern.match(chaine)==None:
-        return False
-    else:
-        return True
+    return not patern.match(chaine)==None
 
 #Renvoie True si l'entrée correspond à une celulle du type A1, $A1, A$1 ou $A$1
 def isCell(chaine):
@@ -41,7 +38,7 @@ def isfunction(chaine):
 
 
 def isError(chaine):
-    return True if chaine[0]=='#' else False
+    return chaine[0]=='#'
 
 #Renvoie le type, s'il est connu, d'une chaine de caractère
 def what_type(chaine):

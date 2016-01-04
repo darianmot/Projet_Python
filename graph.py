@@ -244,17 +244,17 @@ class Ui_MainWindowgraph(object):
             A=self.listView.currentRow()
             image=self.images
             if A==0:
-                print('you choosed courbe','image')
+                print('you chose courbe','image')
                 image.setPixmap(courbe)
             elif A==1:
-                print('you choose histogramme','image')
+                print('you chose histogramme','image')
                 image.setPixmap(histogramme)
             elif A==2:
                 image.setPixmap(camembert)
-                print('you choose a camembert','image')
+                print('you chose a camembert','image')
             elif A==3:
                 image.setPixmap(DD)
-                print('you choose a 2D representation')
+                print('you chose a 2D representation')
         def quit():
             MainWindow.close()
         #les connexions
@@ -300,10 +300,10 @@ class Ui_MainWindowgraph(object):
             print(Ui_MainWindowgraph.données.abscisses,'absci')
             graph(Ui_MainWindowgraph.données.abscisses,Ui_MainWindowgraph.données.ordonnées
                  ,ytitle,xtitle,titleplot,xmin,xmax,ymin,ymax,colorchooser(color))
-            print('you choosed courbe','chosen type')
+            print('you chose courbe','chosen type')
         elif A==1:
 
-            print('you choose histogramme','chosen type')
+            print('you chose histogramme','chosen type')
             listlisible=[float(x) for x in Ui_MainWindowgraph.données.abscisses]
             histogramme(listlisible,xmin,xmax,ymin,ymax,colorchooser(color),xtitle,ytitle)
         elif A==2:
@@ -312,7 +312,7 @@ class Ui_MainWindowgraph(object):
             textes=tuple(textes)
             circulaire(Ui_MainWindowgraph.données.abscisses,Ui_MainWindowgraph.données.ordonnées,xtitle,explode=textes)
             #en cours d amelioration pour ajout de nouvelles fonctionnalites
-            print('you choose a camembert  chosen type')
+            print('you chose a camembert  chosen type')
         else:#a revoir
             if xmin==xmax==ymin==ymax==zmin==zmax==0.00 or xmin==xmax or ymin==ymax or zmin==zmax:
                 expressions=[x for x in Ui_MainWindowgraph.données.abscisses]
