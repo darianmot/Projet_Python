@@ -2,7 +2,7 @@
 Exemple: -Function('carre','args[0]**2') correspond à la fonction carré
         -Function('Moyenne','sum(args)/len(args)') correspond à la fonction moyenne
 Elles sont répertoriées dans un objet de type Knownfunctions"""
-import math
+import math, statistics as stat
 class Function():
     def __init__(self,name,output, description,category):
         self.name=name

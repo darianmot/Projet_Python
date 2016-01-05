@@ -211,16 +211,21 @@ def evaluation(network, chaine,knownFunctions):
 
 #Renvoie la liste des celulles apparaissant dans un string
 def parentCells(network,chaine):
-    (elementList,elementType)=decompo(chaine)
-    doublePoint(elementList,elementType,network)
-    l=[]
-    for k in range(len(elementList)):
-        if elementType[k]=='cell':
-            try:
-                l.append(network.getCellByName(elementList[k]))
-            except Error:
-                pass
-    return l
+    if chaine=="":
+        return []
+    elif chaine[0]!='=':
+        return []
+    else:
+        (elementList,elementType)=decompo(chaine)
+        doublePoint(elementList,elementType,network)
+        l=[]
+        for k in range(len(elementList)):
+            if elementType[k]=='cell':
+                try:
+                    l.append(network.getCellByName(elementList[k]))
+                except Error:
+                    pass
+        return l
 
 #Retourne la liste de l'ensemble des cellules comprises dans la selection rectangulaire d'extrémité diagonale (c1,c2)
 def cellsBetween(network,c1,c2):

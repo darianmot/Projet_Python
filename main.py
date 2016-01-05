@@ -44,18 +44,19 @@ def traitement(x, y, string):
     cell = network.getCell(x, y)
     cell.input = string
     oldValue = cell.value
-    cell.parent_cells.clear()
+    cell.updateParents(network)
     t_init = time.time()
     if len(string) > 0:
         print('Evaluation de {0} et de ses cellules filles ... '.format(cell.name, len(cell.children_cells)), end='')
         try:
             if string[0] == '=':
-                cell.parent_cells = decomposition.parentCells(network, string[1:])
                 for parentCell in cell.parent_cells:
                     if parentCell.name==cell.name:
                         raise decomposition.Error('Dépendance récursive')
-                    parentCell.addChildCell(cell)
-            newValue = str(decomposition.evaluation(network, string[1:], knownFunctions)) if string[0] == '=' else string
+                newValue=str(decomposition.evaluation(network, string[1:], knownFunctions))
+            else:
+
+                newValue = string
             if string[0] == '=':
                 cell.value = newValue
             else:

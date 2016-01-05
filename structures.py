@@ -26,6 +26,15 @@ class Cell(object): #caractéristiques et organisation d'une cellule
         except:
             pass
 
+    def updateParents(self,network):
+        newparents=decomposition.parentCells(network,self.input)
+        for cell in self.parent_cells:
+            if cell not in newparents:
+                cell.removeChildCell(self)
+        for cell in newparents:
+            cell.addChildCell(self)
+        self.parent_cells=newparents
+
     def __repr__(self):
         if self.children_cells==[]:
             return '{0}({1},{2})'.format(self.name,self.x,self.y)
