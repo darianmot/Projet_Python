@@ -2,6 +2,10 @@
 
 import cells_traitements.decomposition as decomposition
 
+class CycleError(Exception):
+    def __init__(self):
+        super().__init__(self)
+
 #Renvoie la liste des enfants d'une celulle avec comme premier element la cellule elle-meme
 def childrenCellsRec(parent):
     file=[parent]
@@ -47,7 +51,7 @@ def evalOrder(cell):
                 removePred(pred,element)
             i+=1
         if hasCycle:
-            raise decomposition.Error('Dépendance cyclique')
+            raise CycleError()
     return order[1:]
 
 

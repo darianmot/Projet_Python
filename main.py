@@ -44,6 +44,7 @@ def traitement(x, y, string):
     cell = network.getCell(x, y)
     cell.input = string
     oldValue = cell.value
+    cell.parent_cells.clear()
     t_init = time.time()
     if len(string) > 0:
         print('Evaluation de {0} et de ses cellules filles ... '.format(cell.name, len(cell.children_cells)), end='')
@@ -51,24 +52,26 @@ def traitement(x, y, string):
             if string[0] == '=':
                 cell.parent_cells = decomposition.parentCells(network, string[1:])
                 for parentCell in cell.parent_cells:
+                    if parentCell.name==cell.name:
+                        raise decomposition.Error('Dépendance récursive')
                     parentCell.addChildCell(cell)
             newValue = str(decomposition.evaluation(network, string[1:], knownFunctions)) if string[0] == '=' else string
-            if oldValue != newValue: #Cette distinction permet d'éviter de réevaluer toutes les cellules filles si la value ne change pas
-                if string[0] == '=':
-                    cell.value = newValue
-                else:
-                    cell.value = string
-                ui_mainwindow.tableWidget.return_value.emit(x, y, str(cell.value))
-                order = tritopologique.evalOrder(cell)
-                try:
-                    for child in order:
-                        child.value = str(decomposition.evaluation(network, child.input[1:], knownFunctions))
-                        ui_mainwindow.tableWidget.return_value.emit(child.x, child.y, child.value)
-                except decomposition.Error as e:
-                    for child in tritopologique.childrenCellsRec(cell)[1:]:
-                        ui_mainwindow.tableWidget.return_value.emit(child.x, child.y, e.disp)
+            if string[0] == '=':
+                cell.value = newValue
             else:
-                ui_mainwindow.tableWidget.return_value.emit(x, y, str(cell.value))
+                cell.value = string
+            ui_mainwindow.tableWidget.return_value.emit(x, y, str(cell.value))
+            try:
+                order = tritopologique.evalOrder(cell)
+                for child in order:
+                    child.value = str(decomposition.evaluation(network, child.input[1:], knownFunctions))
+                    ui_mainwindow.tableWidget.return_value.emit(child.x, child.y, child.value)
+            except decomposition.Error as e:
+                for child in tritopologique.childrenCellsRec(cell)[1:]:
+                    ui_mainwindow.tableWidget.return_value.emit(child.x, child.y, e.disp)
+            except tritopologique.CycleError:
+                raise decomposition.Error("Dépendance cyclique")
+            ui_mainwindow.tableWidget.return_value.emit(x, y, str(cell.value))
         except decomposition.Error as e:
             for child in tritopologique.childrenCellsRec(cell):
                 ui_mainwindow.tableWidget.return_value.emit(child.x, child.y, e.disp)
@@ -138,7 +141,6 @@ def reset_table():
     ui_mainwindow.verticalLayout.addWidget(ui_mainwindow.tableWidget)
     ui_mainwindow.verticalLayout.addWidget(ui_mainwindow.indicator)
 
-
 def graphiques():
     cells_selected = ui_mainwindow.tableWidget.selectedRanges()[0]
     graphic.cell(cells_selected, network)
@@ -164,6 +166,6 @@ ui_addfunwindow.sendFunData.connect(functionAdded)
 ui_mainwindow.menu_quit.triggered.connect(MainWindow.close)
 ui_mainwindow.new_button.triggered.connect(reset_table)
 
-MainWindow.showMaximized()  # Pour agrandir au max la fenetre
+MainWindow.showMaximized()
 splash.finish(MainWindow)
 sys.exit(app.exec_())

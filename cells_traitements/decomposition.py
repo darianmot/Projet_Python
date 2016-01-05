@@ -201,6 +201,7 @@ def evaluation(network, chaine,knownFunctions):
     try:
         return eval(''.join(elementList))
     except SyntaxError as e:
+        print("Error de syntaxe: {}".format(elementList))
         raise Error('Syntaxe ({})'.format(e.msg))
     except ZeroDivisionError:
         raise Error('Division par 0')

@@ -63,12 +63,13 @@ class Cell(object): #caractéristiques et organisation d'une cellule
 
 class network(object): #On classe par coordonnées
     def __init__(self):
-        self.labels=columns_labels.generate(1)
-        self.matrix=[[Cell(0,0)]]
+        self.labels=columns_labels.generate(1) #Noms des colonnes
+        self.matrix=[[Cell(0,0)]] #Initialisation de la matrice
         self.matrix[0][0].name=columns_labels.getLabel(self.labels,0)+str(1)
         self.columnNumber=1
         self.rowNumber=1
 
+    #Ajoute une ligne au network
     def addRow(self):
         l=[]
         self.rowNumber+=1
@@ -77,20 +78,24 @@ class network(object): #On classe par coordonnées
             l[-1].name=columns_labels.getLabel(self.labels,c+1)+str(self.rowNumber)
         self.matrix.append(l)
 
+    #Ajoute n lignes au network
     def addRows(self,n):
         for _ in range(n):
             self.addRow()
 
+    #Ajoute une colonne au network
     def addColumn(self):
         self.columnNumber+=1
         for r in range(self.rowNumber):
             self.matrix[r].append(Cell(r,self.columnNumber-1,))
             self.matrix[r][-1].name=columns_labels.getLabel(self.labels,self.columnNumber)+str(r+1)
 
+    #Ajoute n colonnes au network
     def addColumns(self,n):
         for _ in range(n):
             self.addColumn()
 
+    #Renvoie la celulle de coordonnées (x,y)
     def getCell(self,x,y): #Renvoi la cellule (x,y) si elle existe, 0 sinon
         if x<0  or y < 0: return Cell(-1,-1)
         try:
@@ -98,6 +103,7 @@ class network(object): #On classe par coordonnées
         except IndexError:
             return Cell(-1,-1)
 
+    #Renvoie la celulle de nom name
     def getCellByName(self,name): #Renvoi la celulle nommée si elle existe, 0 sinon
         name=''.join([char for char in name if char!='$'])  #On enleve les $ eventuels
         letters=""
@@ -122,6 +128,7 @@ class network(object): #On classe par coordonnées
         except Exception:
             raise decomposition.Error('Cellule {} non trouvée'.format(name))
 
+    #Evalue une liste de celulle du network en vérifiant qu'il n'y ait pas de cycle
     def evalList(self,cellList,knownFunctions):
         try:
             for cell in cellList:
@@ -129,5 +136,6 @@ class network(object): #On classe par coordonnées
         except AttributeError:
             for cell in cellList:
                 self.getCellByName(cell.name).value='#Error : cycle'
+
     def __repr__(self):
         return str(self.matrix)
