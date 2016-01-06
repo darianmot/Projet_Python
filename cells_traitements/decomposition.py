@@ -154,26 +154,29 @@ def eval_function(network,elementList,elementType,k,knownFunctions):
 
 #Remplace (sur place) c1:c2 par les celulles comprises dans le rectancle d'extrémité (c1,c2)
 def doublePoint(elementList,elementType,network):
-    for j in [k for k, l in enumerate(elementList) if l == ':']:
-        if j==0: raise Error('Syntaxe (\':\' innatendue 1)')
-        if elementType[j-1]!='cell' or elementType[j+1]!='cell':
-            raise Error('Syntaxe (\':\' innatendue 2)')
-        try:
-            c1=network.getCellByName(elementList[j-1])
-            c2=network.getCellByName(elementList[j+1])
-        except Error as e:
-            raise Error(e.reason)
-        cells=cellsBetween(network,c1,c2)
-        l_element=[]
-        l_type=[]
-        for cell in cells:
-            l_element.append(cell.name)
-            l_type.append('cell')
-            if cells.index(cell)<len(cells)-1:
-                l_element.append(',')
-                l_type.append('sep')
-        elementList[j-1:j+2]=l_element
-        elementType[j-1:j+2]=l_type
+    j=0
+    while j<len(elementList):
+        if elementList[j]==':':
+            if j==0: raise Error('Syntaxe (\':\' innatendue 1)')
+            if elementType[j-1]!='cell' or elementType[j+1]!='cell':
+                raise Error('Syntaxe (\':\' innatendue 2)')
+            try:
+                c1=network.getCellByName(elementList[j-1])
+                c2=network.getCellByName(elementList[j+1])
+            except Error as e:
+                raise Error(e.reason)
+            cells=cellsBetween(network,c1,c2)
+            l_element=[]
+            l_type=[]
+            for cell in cells:
+                l_element.append(cell.name)
+                l_type.append('cell')
+                if cells.index(cell)<len(cells)-1:
+                    l_element.append(',')
+                    l_type.append('sep')
+            elementList[j-1:j+2]=l_element
+            elementType[j-1:j+2]=l_type
+        j+=1
 
 #Renvoie l'évaluation d'une formule, au sein d'un réseau nétwork (ou affiche l'erreur le cas écheant)
 def evaluation(network, chaine,knownFunctions):
