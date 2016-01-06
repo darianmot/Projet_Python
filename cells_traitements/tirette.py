@@ -12,7 +12,6 @@ def verticalPull(inputDecomposed,rows):
             dollardcount=elementList[i].count('$')
             if not((dollardcount==1 and elementList[i][0]!='$') or dollardcount==2): #Si il n'y a pas de $ devant la partie numerique
                 letters=''.join([char for char in elementList[i] if char.isalpha()])
-                print(elementList[i][:-1])
                 elementList[i]=elementList[i][:len(letters)]+str(int(elementList[i][len(letters):])+rows)
     return ''.join(elementList)
 

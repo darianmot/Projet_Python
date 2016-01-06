@@ -146,8 +146,15 @@ class network(object): #On classe par coordonnées
             for cell in cellList:
                 self.getCellByName(cell.name).value='#Error : cycle'
 
-    def subsitute(self, other):
-        self.matrix=other
+    def subsitute(self, matrix):
+        self.matrix=matrix
+
+    def reset(self,initalRows,initalColumns):
+        self.__init__()
+        self.addColumns(initalColumns-1)
+        self.addRows(initalRows-1)
+
+
 
     def __repr__(self):
         return str(self.matrix)

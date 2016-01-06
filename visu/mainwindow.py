@@ -214,9 +214,8 @@ class MyTableWidget(QtWidgets.QTableWidget):
         return self.editorcount!=0
 
     def recalc(self,network):
-        self.clear()
+        self.clearContents()
         matrix=network.matrix
-        print(matrix)
         for _ in range(self.columnCount(),len(matrix[0])):
             self.insertColumn(self.columnCount())
             item = QtWidgets.QTableWidgetItem()
@@ -228,10 +227,14 @@ class MyTableWidget(QtWidgets.QTableWidget):
             self.insertRow(self.rowCount())
         for c in range(len(matrix[0])):
             for r in range(len(matrix)):
-                print(r,c)
                 self.setItem(r,c,QtWidgets.QTableWidgetItem(network.getCell(r,c).value))
 
-
+    def resetTable(self):
+        self.clearContents()
+        self.setRowCount(self.initialRowsNumber)
+        self.setColumnCount(self.initialColumnsNumber)
+        self.verticalScrollBar().setValue(self.verticalScrollBar().minimum())
+        self.horizontalScrollBar().setValue(self.horizontalScrollBar().minimum())
 
 
 class Ui_MainWindow(QtWidgets.QWidget):

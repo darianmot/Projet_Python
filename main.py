@@ -48,6 +48,7 @@ def traitement(x, y, string):
     t_init = time.time()
     if len(string) > 0:
         print('Evaluation de {0} et de ses cellules filles ... '.format(cell.name, len(cell.children_cells)), end='')
+        ui_mainwindow.indicator.setText('Evaluation de {0} et de ses cellules filles ... '.format(cell.name, len(cell.children_cells)))
         try:
             if string[0] == '=':
                 for parentCell in cell.parent_cells:
@@ -77,19 +78,14 @@ def traitement(x, y, string):
             for child in tritopologique.childrenCellsRec(cell):
                 ui_mainwindow.tableWidget.return_value.emit(child.x, child.y, e.disp)
         t_end = time.time()
-        print('Done : {}s'.format(t_end - t_init))
+        print('Done : ({}s)'.format(t_end - t_init))
+        ui_mainwindow.indicator.setText(ui_mainwindow.indicator.text()+'Done : ({}s)'.format(t_end - t_init))
 
 
 # processus de tirette (coin inférieur droit d'une case sélectionnée)
 
 def expension_process(cells_selected):
     cells_selected = cells_selected[0]
-    print("nombre de colonnes:", cells_selected.columnCount())
-    print("nombre de lignes:", cells_selected.rowCount())
-    print("première ligne:", cells_selected.topRow())
-    print("dernière ligne:", cells_selected.bottomRow())
-    print("colonne de gauche:", cells_selected.leftColumn())
-    print("colonne de droite:", cells_selected.rightColumn())
 
     # application de l'extension de formule (tirette)
     tirette.formuleExpanse(cells_selected,network,ui_mainwindow)
@@ -124,7 +120,7 @@ def windowopen():  # to open the window open....
 
 def windowsave():  # to open the window save....
 
-    a = QtWidgets.QFileDialog.getSaveFileName(MainWindow, 'Enregistrer', '', "(*.pyc *.xls *.csv)")
+    a = QtWidgets.QFileDialog.getSaveFileName(MainWindow, 'Enregistrer', '', "(*.p *.xls *.csv)")
     adress = a[0]  # faut mettre l'extension du format genre fichier.pyc ou fichier.xls dans la barre de saisie
     recOrd.extensionwritter(adress, network,ui_mainwindow)
 
@@ -132,15 +128,9 @@ def windowsave():  # to open the window save....
 
 # destinée à réinitialiser la feuille de calcul (pour nouvelle feuille) en cours de construction
 def reset_table():
-    global ui_mainwindow
-    global network
-    global MainWindow
-    ui_mainwindow.tableWidget.close()
-    ui_mainwindow.indicator.destroy()
-    network = structures.network()
-    ui_mainwindow.setTable(network)
-    ui_mainwindow.verticalLayout.addWidget(ui_mainwindow.tableWidget)
-    ui_mainwindow.verticalLayout.addWidget(ui_mainwindow.indicator)
+    ui_mainwindow.tableWidget.resetTable()
+    network.reset(ui_mainwindow.tableWidget.initialRowsNumber, ui_mainwindow.tableWidget.initialColumnsNumber)
+    ui_mainwindow.indicator.setText("Nouvelle Feuille")
 
 def graphiques():
     cells_selected = ui_mainwindow.tableWidget.selectedRanges()[0]
