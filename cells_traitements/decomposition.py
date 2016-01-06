@@ -132,9 +132,8 @@ def eval_function(network,elementList,elementType,k,knownFunctions):
             args.append(value)
             currentArg=""
         elif elementType[k]=='sep':
-            if currentArg=="":  #S'il n'y a rien avant un separateur, la syntaxe n'est pas correcte
-                raise Error('\'{}\' innatendue'.format(elementList[k]))
-            else:
+            if currentArg!="":  #S'il n'y a rien avant un separateur, la syntaxe n'est pas correcte
+                # raise Error('\'{}\' innatendue'.format(elementList[k]))
                 args.append(evaluation(network,currentArg,knownFunctions))
                 currentArg=""
         elif elementType[k]=='p_fermante':  #On gère le parenthesage
