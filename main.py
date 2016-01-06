@@ -115,9 +115,9 @@ def functionAdded(name, descrition, evaluation, category):
 
 def windowopen():  # to open the window open....
     try:
-        a = QtWidgets.QFileDialog.getOpenFileName(MainWindow, 'Ouvrir', '', "(*.pyc *xls *csv)")
+        a = QtWidgets.QFileDialog.getOpenFileName(MainWindow, 'Ouvrir', '', "(*.p *xls *csv)")
         adress = a[0]
-        recOrd.extensionreader(adress, ui_mainwindow, traitement)
+        recOrd.extensionreader(adress, ui_mainwindow, traitement,network)
     except IndexError:
         print("No file selected")
 

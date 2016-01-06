@@ -85,6 +85,7 @@ class MyTableWidget(QtWidgets.QTableWidget):
 
     def __init__(self,win,network):
         super().__init__()
+        self.network=network
         self.coin = MyRect()
         self.delegate=MyDelegate(self)
         self.setItemPrototype(MyItem())
@@ -211,6 +212,27 @@ class MyTableWidget(QtWidgets.QTableWidget):
 
     def isTapping(self):
         return self.editorcount!=0
+
+    def recalc(self,network):
+        self.clear()
+        matrix=network.matrix
+        print(matrix)
+        for _ in range(self.columnCount(),len(matrix[0])):
+            self.insertColumn(self.columnCount())
+            item = QtWidgets.QTableWidgetItem()
+            self.setHorizontalHeaderItem(self.columnCount()-1, item)
+            item = self.horizontalHeaderItem(self.columnCount()-1)
+            columns_labels.add(self.columnsLabels,1)
+            item.setText(str(self.columnsLabels[self.columnCount()-1]))
+        for _ in range(self.rowCount(),len(matrix)):
+            self.insertRow(self.rowCount())
+        for c in range(len(matrix[0])):
+            for r in range(len(matrix)):
+                print(r,c)
+                self.setItem(r,c,QtWidgets.QTableWidgetItem(network.getCell(r,c).value))
+
+
+
 
 class Ui_MainWindow(QtWidgets.QWidget):
 

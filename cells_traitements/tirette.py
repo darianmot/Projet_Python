@@ -12,7 +12,7 @@ def verticalPull(inputDecomposed,rows):
             dollardcount=elementList[i].count('$')
             if not((dollardcount==1 and elementList[i][0]!='$') or dollardcount==2): #Si il n'y a pas de $ devant la partie numerique
                 letters=''.join([char for char in elementList[i] if char.isalpha()])
-                elementList[i]=elementList[i][:len(letters)]+str(int(elementList[i][-1])+rows)
+                elementList[i]=elementList[i][:len(letters)]+str(int(elementList[i][:-1])+rows)
     return ''.join(elementList)
 
 #Renvoie le input à traiter dans la celulle situé à columns colonnes de la celulle initale dans le cas où l'utilisateur tire horizonatalement sur le coin
