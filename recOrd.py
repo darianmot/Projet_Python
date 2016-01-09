@@ -24,11 +24,12 @@ def reader_xls(file, ui_mainwindow, network):
     network.reset(1,1)
     network.addRows(sheet.nrows-1)
     network.addColumns(sheet.ncols-1)
+    ui_mainwindow.tableWidget.recalc(network)
     for i in range(sheet.nrows):
         for j in range(sheet.ncols):
             content=str(sheet.cell_value(i,j))
             network.getCell(i,j).input = content
-            network.getCell(i,j).value = content
+            network.getCell(i,j).value = None if content=="" else content
             ui_mainwindow.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem(content))
 
 def writter_csv(network, name):
@@ -40,25 +41,32 @@ def writter_csv(network, name):
     print('saved')
 
 
-def reader_csv(file, ui_mainwindow, traitement):
-    sheet = csv.reader(open(file))  # opening
+def reader_csv(file, ui_mainwindow, network):
+    f=open(file)
+    sheet = csv.reader(f)  # opening
+    rows=len(f.readlines())
+    f.seek(0)
+    columns=len(next(sheet))
+    f.seek(0)
+    network.addRows(rows)
+    network.addColumns(columns)
+    ui_mainwindow.tableWidget.recalc(network)
     i = 0
     for row in sheet:
-        i += 1
         for j in range(0, len(row)):  # for each content or cell, a new QtWidget item is created
-            j += 1
-            content = row[j - 1]
-            item = QtWidgets.QTableWidgetItem(content)
-            ui_mainwindow.tableWidget.setItem(i - 1, j - 1, item)
-            traitement(i - 1, j - 1, content)
-
+            content = row[j]
+            network.getCell(i,j).input = content
+            network.getCell(i,j).value = None if content=="" else content
+            ui_mainwindow.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem(content))
+        i += 1
+    print(network.getCellByName('B2').value)
 
 def writter_marshalling(network, name):
     pickle.dump(network.matrix,open('{}.p'.format(name),'wb'))
     print('saved')
 
 
-def reader_marshalling(file, ui_mainwindow, traitement,network):
+def reader_marshalling(file, ui_mainwindow,network):
     network.subsitute(pickle.load(open(file, 'rb')))  # opening
     ui_mainwindow.tableWidget.recalc(network)
 
@@ -69,13 +77,13 @@ def extensionreader(a, ui_mainwindow, traitement,network):  # permet la lecture
         chaine = a.split(os.extsep)
         key = chaine[1]
         if key == 'csv':
-            reader_csv(a, ui_mainwindow, traitement)
+            reader_csv(a, ui_mainwindow, network)
             print('it is a csv file')
         elif key == 'xls':
             reader_xls(a, ui_mainwindow, network)
             print('it is a xls file')
         else:
-            reader_marshalling(a, ui_mainwindow, traitement, network)
+            reader_marshalling(a, ui_mainwindow, network)
             print('it is a binary file')
         ui_mainwindow.indicator.setText("Ouvert")
     except IndexError:

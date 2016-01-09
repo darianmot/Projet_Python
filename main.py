@@ -81,7 +81,8 @@ def traitement(x, y, string):
         print('Done : ({}s)'.format(t_end - t_init))
         ui_mainwindow.indicator.setText(ui_mainwindow.indicator.text()+'Done : ({}s)'.format(t_end - t_init))
     else:
-        cell.value=""
+        cell.value=None
+        # ui_mainwindow.tableWidget.setItem(x,y,None)
 
 # processus de tirette (coin inférieur droit d'une case sélectionnée)
 
