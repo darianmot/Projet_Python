@@ -113,19 +113,24 @@ def functionAdded(name, descrition, evaluation, category):
 
 def windowopen():  # to open the window open....
     try:
-        a = QtWidgets.QFileDialog.getOpenFileName(MainWindow, 'Ouvrir', '', "(*.p *xls *csv)")
-        adress = a[0]
-        recOrd.extensionreader(adress, ui_mainwindow, traitement,network)
+        fileWindow = QtWidgets.QFileDialog.getOpenFileName(MainWindow, 'Ouvrir', '', "(*.p *xls *csv)")
+        address = fileWindow[0]
+        recOrd.extensionreader(address, ui_mainwindow, network)
     except IndexError:
         print("No file selected")
 
 
 def windowsave():  # to open the window save....
+    fileWindow = QtWidgets.QFileDialog.getSaveFileName(MainWindow, 'Enregistrer', '', "(*.p)")
+    address = fileWindow[0]  # faut mettre l'extension du format genre fichier.pyc ou fichier.xls dans la barre de saisie
+    name=recOrd.fileName(address)
+    recOrd.writter_marshalling(network,name)
+    ui_mainwindow.indicator.setText('Sauvegardé')
 
-    a = QtWidgets.QFileDialog.getSaveFileName(MainWindow, 'Enregistrer', '', "(*.p *.xls *.csv)")
-    adress = a[0]  # faut mettre l'extension du format genre fichier.pyc ou fichier.xls dans la barre de saisie
-    recOrd.extensionwritter(adress, network,ui_mainwindow)
-
+def export():
+    fileWindow = QtWidgets.QFileDialog.getSaveFileName(MainWindow, 'Enregistrer', '', "(*.xls *.csv)")
+    address = fileWindow[0]
+    recOrd.extensionwritter(address, network, ui_mainwindow)
 
 
 # destinée à réinitialiser la feuille de calcul (pour nouvelle feuille) en cours de construction
@@ -154,6 +159,7 @@ ui_mainwindow.menu_ouvrir.triggered.connect(windowopen)
 
 ui_mainwindow.actionenregistrer.triggered.connect(windowsave)
 ui_mainwindow.menu_enregistrer.triggered.connect(windowsave)
+ui_mainwindow.actionExport.triggered.connect(export)
 ui_mainwindow.graph.triggered.connect(graphwindow.show)
 
 ui_funWinfow.toolAdd.released.connect(AddFunwindow.show)

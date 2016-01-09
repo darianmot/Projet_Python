@@ -71,7 +71,7 @@ def reader_marshalling(file, ui_mainwindow,network):
     ui_mainwindow.tableWidget.recalc(network)
 
 
-def extensionreader(a, ui_mainwindow, traitement,network):  # permet la lecture
+def extensionreader(a, ui_mainwindow, network):  # permet la lecture
     try:
         ui_mainwindow.indicator.setText("Ouverture en cours")
         chaine = a.split(os.extsep)
@@ -105,10 +105,13 @@ def extensionwritter(a, network, ui_mainwindow):  # permet la lecture
             writter_xls(network, name)
             print('it is a xls file')
         else:
-            writter_marshalling(network, name)
-            print('it is a binary file')
-        ui_mainwindow.indicator.setText("Sauvegardé")
+            print("Can't open this file")
+        ui_mainwindow.indicator.setText("Exporté")
     except IndexError:
         pass
     finally:
         print('save window closed')
+
+def fileName(chaine):
+    string=chaine.split(os.extsep)
+    return  string[0]
