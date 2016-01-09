@@ -1,6 +1,6 @@
-import xlrd
+import xlrd, csv
 from xlwt import Workbook
-import csv
+import structures
 import pickle
 from PyQt5 import QtWidgets
 import os
@@ -10,25 +10,26 @@ def writter_xls(network, name):
     content = name + '.xls'
     binder = Workbook()  # creation of the binder
     sheet = binder.add_sheet('page')  # creation of the sheet
-    for x in range(0, len(network.matrix)):  # writting of each cell
-        for y in range(0, len(network.matrix[x])):
+    for x in range(0, len(network.matrix[0])):  # writting of each cell
+        for y in range(0, len(network.matrix)):
             sheet.write(y, x, network.getCell(y, x).value)
-            print(network.getCell(x, y).value)
     binder.save(content)  # save file
     print('file saved')
 
 
-def reader_xls(file, ui_mainwindow, traitement):
+def reader_xls(file, ui_mainwindow, network):
     binder = xlrd.open_workbook(file)  # opening of the file as a binder
     sheets = binder.sheet_names()  # listing of sheet names
     sheet = binder.sheet_by_name(sheets[0])  # recovering of the i eme sheet
-    for i in range(1, sheet.nrows):
-        for j in range(1, sheet.ncols):
-            content = str(sheet.cell_value(i, j))
-            item = QtWidgets.QTableWidgetItem()
-            ui_mainwindow.tableWidget.setItem(i - 1, j - 1, item)
-            traitement(i - 1, j - 1, content)
-
+    network.reset(1,1)
+    network.addRows(sheet.nrows-1)
+    network.addColumns(sheet.ncols-1)
+    for i in range(sheet.nrows):
+        for j in range(sheet.ncols):
+            content=str(sheet.cell_value(i,j))
+            network.getCell(i,j).input = content
+            network.getCell(i,j).value = content
+            ui_mainwindow.tableWidget.setItem(i,j,QtWidgets.QTableWidgetItem(content))
 
 def writter_csv(network, name):
     content = name + '.csv'
@@ -71,7 +72,7 @@ def extensionreader(a, ui_mainwindow, traitement,network):  # permet la lecture
             reader_csv(a, ui_mainwindow, traitement)
             print('it is a csv file')
         elif key == 'xls':
-            reader_xls(a, ui_mainwindow, traitement)
+            reader_xls(a, ui_mainwindow, network)
             print('it is a xls file')
         else:
             reader_marshalling(a, ui_mainwindow, traitement, network)
