@@ -145,7 +145,7 @@ def eval_function(network, elementList, elementType, k, knownFunctions):
         elif elementType[k] == 'sep':
             if currentArg != "":  # S'il n'y a rien avant un separateur, la syntaxe n'est pas correcte
                 # raise Error('\'{}\' innatendue'.format(elementList[k]))
-                args.append(evaluation(network, currentArg, knownFunctions))
+                args.append(chainEvaluation(network, currentArg, knownFunctions))
                 currentArg = ""
         elif elementType[k] == 'p_fermante':  # On gère le parenthesage
             p_count -= 1
@@ -160,7 +160,7 @@ def eval_function(network, elementList, elementType, k, knownFunctions):
     if p_count != 0:
         raise Error('parenthesage incorrect')
     if currentArg != "":
-        args.append(evaluation(network, currentArg, knownFunctions))
+        args.append(chainEvaluation(network, currentArg, knownFunctions))
     return knownFunctions.dict[str(element)].value(args)
 
 
@@ -192,7 +192,7 @@ def doublePoint(elementList, elementType, network):
 
 
 # Renvoie l'évaluation d'une formule, au sein d'un réseau nétwork (ou affiche l'erreur le cas écheant)
-def evaluation(network, chaine, knownFunctions):
+def chainEvaluation(network, chaine, knownFunctions):
     (elementList, elementType) = decompo(chaine)
     i = 0
     doublePoint(elementList, elementType, network)

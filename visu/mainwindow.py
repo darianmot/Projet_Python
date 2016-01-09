@@ -353,6 +353,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.menuFichier.addAction(self.menu_enregistrer)
         self.menuFichier.addAction(self.menu_quit)
             #Toolbar
+        self.toolBar.addAction(self.new_button)
         self.toolBar.addAction(self.actionOuvrir)
         self.toolBar.addAction(self.actionenregistrer)
         self.toolBar.addAction(self.graph)
@@ -365,7 +366,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         def change_cell(x, y, value):
             try:
                 self.tableWidget.item(x,y).setText(value)
-            except AttributeError as e:
+            except AttributeError:
                 pass
         self.tableWidget.return_value.connect(change_cell)
 
@@ -384,6 +385,13 @@ class Ui_MainWindow(QtWidgets.QWidget):
                                  self.lineEdit.text())
         self.lineEdit.editingFinished.connect(line_changed)
         self.lineEdit.returnPressed.connect(line_changed)
+
+        def cell_doubleClicked():
+            x=self.tableWidget.currentRow()
+            y=self.tableWidget.currentColumn()
+            if self.tableWidget.item(x,y)!=None:
+                self.tableWidget.item(x,y).setText(network.getCell(x,y).input)
+        self.tableWidget.doubleClicked.connect(cell_doubleClicked)
 
     def setup(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate

@@ -53,8 +53,8 @@ def traitement(x, y, string):
             if string[0] == '=':
                 for parentCell in cell.parent_cells:
                     if parentCell.name==cell.name:
-                        raise decomposition.Error('Dépendance récursive')
-                newValue=str(decomposition.evaluation(network, string[1:], knownFunctions))
+                        raise decomposition.Error('Dépendance récursive de la celulle {}'.format(cell.name))
+                newValue=str(decomposition.chainEvaluation(network, string[1:], knownFunctions))
             else:
 
                 newValue = string
@@ -66,7 +66,7 @@ def traitement(x, y, string):
             try:
                 order = tritopologique.evalOrder(cell)
                 for child in order:
-                    child.value = str(decomposition.evaluation(network, child.input[1:], knownFunctions))
+                    child.value = str(decomposition.chainEvaluation(network, child.input[1:], knownFunctions))
                     ui_mainwindow.tableWidget.return_value.emit(child.x, child.y, child.value)
             except decomposition.Error as e:
                 for child in tritopologique.childrenCellsRec(cell)[1:]:
@@ -130,6 +130,8 @@ def windowsave():  # to open the window save....
 def reset_table():
     ui_mainwindow.tableWidget.resetTable()
     network.reset(ui_mainwindow.tableWidget.initialRowsNumber, ui_mainwindow.tableWidget.initialColumnsNumber)
+    ui_mainwindow.lineEdit.clear()
+    ui_mainwindow.tableWidget.setFocus()
     ui_mainwindow.indicator.setText("Nouvelle Feuille")
 
 def graphiques():

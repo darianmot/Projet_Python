@@ -46,13 +46,12 @@ def reader_csv(file, ui_mainwindow, traitement):
         i += 1
         for j in range(0, len(row)):  # for each content or cell, a new QtWidget item is created
             j += 1
-            item = QtWidgets.QTableWidgetItem()
-            ui_mainwindow.tableWidget.setItem(i - 1, j - 1, item)
             content = row[j - 1]
+            item = QtWidgets.QTableWidgetItem(content)
+            ui_mainwindow.tableWidget.setItem(i - 1, j - 1, item)
             traitement(i - 1, j - 1, content)
 
 
-# probleme a prendre en compte le fait que la matrice d'origine soit plus grande que celle qui sera ecrite par dessus
 def writter_marshalling(network, name):
     pickle.dump(network.matrix,open('{}.p'.format(name),'wb'))
     print('saved')
@@ -90,7 +89,6 @@ def extensionwritter(a, network, ui_mainwindow):  # permet la lecture
     ui_mainwindow.indicator.setText("Sauvegarde en cours")
     try:
         key = chaine[1]
-        print(key)
         if key == 'csv':
             writter_csv(network, name)
             print('it is a csv file')
