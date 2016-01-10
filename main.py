@@ -181,7 +181,7 @@ def action2(btn2, L1):
         if L2[0].x == L2[i].x or L2[0].y == L2[i].y:
             pass
         else:
-            ui_mainwindow.indicator.setText("Erreur: veuillez selectionner une seule ligne ou colonne")
+            ui_mainwindow.indicator.setText("Erreur: veuillez selectionner une seule ligne ou une seule colonne")
             b = False
             break
     if b:
