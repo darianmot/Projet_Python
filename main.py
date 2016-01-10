@@ -4,7 +4,7 @@ import sys, visu.mainwindow as mainwindow, visu.funwindow as funWindow, visu.add
 import structures, cells_traitements.functions as functions, recOrd
 import cells_traitements.decomposition as decomposition, cells_traitements.tritopologique as tritopologique,cells_traitements.tirette as tirette
 import time, pickle
-from PyQt5 import QtWidgets, Qt
+from PyQt5 import QtWidgets, Qt, QtCore
 
 knownFunctions = pickle.load(open('knownFunctions.p', 'rb'))
 app = mainwindow.QtWidgets.QApplication(sys.argv)
@@ -141,16 +141,64 @@ def reset_table():
     ui_mainwindow.tableWidget.setFocus()
     ui_mainwindow.indicator.setText("Nouvelle Feuille")
 
+
+
+#Partie Graphique
+
 def graphiques():
-    cells_selected = ui_mainwindow.tableWidget.selectedRanges()[0]
-    graphic.cell(cells_selected, network)
-    print('données envoyées')
+    ui_mainwindow.indicator.setText("Sélectionnez une ligne ou colonne et appuyez sur Valider")
+    btn = QtWidgets.QPushButton("Valider")
+    btn.clicked.connect(lambda : action1(btn))
+    MainWindow.statusBar().addWidget(btn)
+
+def action1(btn):
+    L1=[]
+    for item in ui_mainwindow.tableWidget.selectedItems():
+        L1.append(network.getCell(item.row(), item.column()))
+    b = True
+    for i in range(1, len(L1)):
+        if L1[0].x == L1[i].x or L1[0].y == L1[i].y:
+            pass
+        else:
+            ui_mainwindow.indicator.setText("Erreur: veuillez selectionner une seule ligne ou colonne")
+            b = False
+            break
+    if b:
+        print(L1)
+        ui_mainwindow.indicator.setText("Sélectionnez une nouvelle ligne ou colonne et appuyez sur Valider")
+        MainWindow.statusBar().removeWidget(btn)
+        btn2 = QtWidgets.QPushButton("Valider")
+        btn2.clicked.connect(lambda : action2(btn2, L1))
+        MainWindow.statusBar().addWidget(btn2)
+    MainWindow.statusBar().removeWidget(btn)
+
+def action2(btn2, L1):
+    L2=[]
+    for item in ui_mainwindow.tableWidget.selectedItems():
+        L2.append(network.getCell(item.row(), item.column()))
+    b = True
+    for i in range(1, len(L2)):
+        if L2[0].x == L2[i].x or L2[0].y == L2[i].y:
+            pass
+        else:
+            ui_mainwindow.indicator.setText("Erreur: veuillez selectionner une seule ligne ou colonne")
+            b = False
+            break
+    if b:
+        print(L1, L2)
+        if len(L1) == len(L2):
+            graphic.mainGraphFunction(L1, L2, A=0)
+            ui_mainwindow.indicator.setText("La sélection est correcte")
+        else:
+            ui_mainwindow.indicator.setText("Erreur: Sélections de tailles différentes")
+    MainWindow.statusBar().removeWidget(btn2)
 
 
+ui_graphwindow.buttonBox.accepted.connect(graphiques)
 # connexion des boutons de l'interface
 ui_mainwindow.tableWidget.read_value.connect(traitement)
 ui_mainwindow.tableWidget.filter.cellExpended.connect(expension_process)
-ui_mainwindow.graph.triggered.connect(graphiques)
+ui_mainwindow.graph.triggered.connect(graphwindow.show)
 
 ui_mainwindow.functionButton.released.connect(Funwindow.show)
 
@@ -160,7 +208,7 @@ ui_mainwindow.menu_ouvrir.triggered.connect(windowopen)
 ui_mainwindow.actionenregistrer.triggered.connect(windowsave)
 ui_mainwindow.menu_enregistrer.triggered.connect(windowsave)
 ui_mainwindow.actionExport.triggered.connect(export)
-ui_mainwindow.graph.triggered.connect(graphwindow.show)
+
 
 ui_funWinfow.toolAdd.released.connect(AddFunwindow.show)
 ui_addfunwindow.sendFunData.connect(functionAdded)

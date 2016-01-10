@@ -1,71 +1,24 @@
-import matplotlib.pyplot as plt
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSignal
 from mpl_toolkits.mplot3d import axes3d
 import matplotlib.pyplot as plt
 from matplotlib import cm
-def draw_surface(xmin,xmax,ymin,ymax,zmin,zmax,expression):
-    fig = plt.figure()
-    ax = fig.gca(projection='3d')
-    x, y, z = axes3d.get_test_data(0.05)
-    ax.plot_surface(x, y,expression , rstride=8, cstride=8, alpha=0.3)
-    # cset = ax.contourf(x, y, z, zdir='z', offset=-100, cmap=cm.coolwarm)
-    # cset = ax.contourf(x, y, z, zdir='x', offset=-40, cmap=cm.coolwarm)
-    # cset = ax.contourf(x, y, z, zdir='y', offset=40, cmap=cm.coolwarm)
-    ax.set_xlabel('X')
-    ax.set_xlim(xmin, xmax)
-    ax.set_ylabel('Y')
-    ax.set_ylim(ymin, ymax)
-    ax.set_zlabel('Z')
-    ax.set_zlim(zmin, zmax)
-    plt.show()
 
-def circulaire(nom,content,titre,explode):
-    plt.pie(content,explode,nom,autopct='%1.1f%%',startangle=90,shadow=True)
-    plt.title(titre)
-    plt.axis('equal')
-    plt.show()
+def mainGraphFunction(L1, L2, A):
+    if A == 0:
+        x = []
+        y = []
+        for cell in L1:
+            x.append(cell.value)
+        for cell in L2:
+            y.append(cell.value)
+        plt.plot(x, y)
+        plt.show()
 
-def histogramme(ordonnées,xmin,xmax,ymin,ymax,color,abscisse,ordonné):
-    plt.hist(ordonnées)
-    plt.xlabel(abscisse)
-    plt.ylabel(ordonné)
-    plt.axis([xmin,xmax,ymin,ymax])
-    plt.grid(True)
-    plt.show()
 
-def graph(listeabscisse,listeordonnée,ordonnée,abscisse,title,xmin,xmax,ymin,ymax,color):
-    a=[float(x) for x in listeabscisse]
-    b=[float(x) for x in listeordonnée]
-    print(a,b)
-    plt.plot(a, b,color)
-    plt.ylabel(ordonnée)
-    plt.xlabel(abscisse)
-    plt.title(title)
-    plt.axis([xmin,xmax,ymin,ymax])
-    plt.show()
-
-def cell(cells_selected,network):
-        ligne1=cells_selected.topRow()
-        ligne2=cells_selected.bottomRow()+1
-        Ui_MainWindowgraph.données.abscisses=[0 for i in range(ligne1,ligne2)]
-        Ui_MainWindowgraph.données.ordonnées=[0  for i in range(ligne1,ligne2)]
-        print(Ui_MainWindowgraph.données.abscisses)
-        for i in range(ligne1,ligne2):
-            abs = network.getCell(i, cells_selected.leftColumn()).value
-            ord = network.getCell(i,cells_selected.leftColumn()+1).value
-            print(ord)
-            Ui_MainWindowgraph.données.abscisses[i-ligne1]=abs
-            Ui_MainWindowgraph.données.ordonnées[i-ligne1]=ord
-            print(Ui_MainWindowgraph.données.abscisses,Ui_MainWindowgraph.données.ordonnées,'abscisse,ordonéée ')
-
-class  datas(object):
-    def __init__(self):
-        self.ordonnées=[]
-        self.abscisses= []
 
 class Ui_MainWindowgraph(object):
-    données=datas()
+
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -105,29 +58,13 @@ class Ui_MainWindowgraph(object):
         self.circulaire=QtWidgets.QLabel(self.centralwidget)
         self.circulaire.setObjectName('label_circulaire')
         self.circulaire.setText('DIAGRAMME CIRCULAIRE')
-        self.doubleSpinBoxZmin=QtWidgets.QDoubleSpinBox(self.centralwidget)
-        self.doubleSpinBoxZmin.setObjectName("zmin")
-        self.doubleSpinBoxZmin.setMinimum(-100000)
-        self.doubleSpinBoxZmin.setMaximum(10000)
-        self.doubleSpinBoxZmax=QtWidgets.QDoubleSpinBox(self.centralwidget)
-        self.doubleSpinBoxZmax.setObjectName("zmax")
-        self.doubleSpinBoxZmax.setMinimum(-100000)
-        self.doubleSpinBoxZmax.setMaximum(100000)
-        self.zmin=QtWidgets.QLabel(self.centralwidget)
-        self.zmin.setObjectName("Zmin")
-        self.zmin.setText("Zmin")
-        self.zmax=QtWidgets.QLabel(self.centralwidget)
-        self.zmax.setObjectName("Zmin")
-        self.zmax.setText("Zmax")
+
 
         #ajout de widget aux layouts
         self.horizontalLayout_5.addWidget(self.listView)
         self.lastlayout.addWidget(self.circulaire)
         self.lastlayout.addWidget(self.explode)
-        self.lastlayout1.addWidget(self.zmin)
-        self.lastlayout1.addWidget(self.doubleSpinBoxZmin)
-        self.lastlayout1.addWidget(self.zmax)
-        self.lastlayout1.addWidget(self.doubleSpinBoxZmax)
+
 
         #images graphique et layout
         self.images = QtWidgets.QLabel(self.centralwidget)
@@ -175,21 +112,6 @@ class Ui_MainWindowgraph(object):
         self.label_5.setObjectName("label_5")
         self.horizontalLayout.addWidget(self.label_5)
 
-        #les xmin xmax  dans la spin box avec les layout associées label associées
-        self.doubleSpinBox = QtWidgets.QDoubleSpinBox(self.centralwidget)
-        self.doubleSpinBox.setObjectName("doubleSpinBox")
-        self.doubleSpinBox.setMaximum(100000)
-        self.doubleSpinBox.setMinimum(-100000)
-        self.horizontalLayout.addWidget(self.doubleSpinBox)
-        self.label_6 = QtWidgets.QLabel(self.centralwidget)
-        self.label_6.setObjectName("label_6")
-        self.horizontalLayout.addWidget(self.label_6)
-        self.doubleSpinBox_2 = QtWidgets.QDoubleSpinBox(self.centralwidget)
-        self.doubleSpinBox_2.setObjectName("doubleSpinBox_2")
-        self.doubleSpinBox_2.setMinimum(-100000)
-        self.doubleSpinBox_2.setMaximum(100000)
-        self.horizontalLayout.addWidget(self.doubleSpinBox_2)
-        self.gridLayout.addLayout(self.horizontalLayout, 3, 1, 1, 1)
 
         #label axe des ordonnees
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
@@ -208,20 +130,7 @@ class Ui_MainWindowgraph(object):
         self.horizontalLayout_6.addWidget(self.label_7)
 
         #valeur des ordonnées ymin ymax et layout associée
-        self.doubleSpinBox_3 = QtWidgets.QDoubleSpinBox(self.centralwidget)
-        self.doubleSpinBox_3.setObjectName("doubleSpinBox_3")
-        self.doubleSpinBox_3.setMinimum(-100000)
-        self.doubleSpinBox_3.setMaximum(100000)
-        self.horizontalLayout_6.addWidget(self.doubleSpinBox_3)
-        self.label_8 = QtWidgets.QLabel(self.centralwidget)
-        self.label_8.setObjectName("label_8")
-        self.horizontalLayout_6.addWidget(self.label_8)
-        self.doubleSpinBox_4 = QtWidgets.QDoubleSpinBox(self.centralwidget)
-        self.doubleSpinBox_4.setObjectName("doubleSpinBox_4")
-        self.doubleSpinBox_4.setMinimum(-100000)
-        self.doubleSpinBox_4.setMaximum(100000)
-        self.horizontalLayout_6.addWidget(self.doubleSpinBox_4)
-        self.gridLayout.addLayout(self.horizontalLayout_6, 4, 1, 1, 1)
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -260,85 +169,43 @@ class Ui_MainWindowgraph(object):
         #les connexions
         self.listView.itemClicked.connect(image)
         self.buttonBox.rejected.connect(quit)
-        self.buttonBox.accepted.connect(self.chosentype)
         self.buttonBox.accepted.connect(quit)
 
-    #selecteur de graphique
-    def chosentype(self):
-        A=self.listView.currentRow()
-        ymin=self.doubleSpinBox_3.value()
-        ymax=self.doubleSpinBox_4.value()
-        xmax=self.doubleSpinBox_2.value()
-        xmin=self.doubleSpinBox.value()
-        xtitle=self.lineEdit_2.text()
-        ytitle=self.lineEdit_3.text()
-        titleplot=self.lineEdit.text()
-        color=self.combobox.currentText()
-        explode=self.explode.text()
-        zmin=self.doubleSpinBoxZmin.value()
-        zmax=self.doubleSpinBoxZmax.value()
+    #
+    # #selecteur de graphique
+    # def chosentype(self):
+    #     A=self.listView.currentRow()
+    #     xtitle=self.lineEdit_2.text()
+    #     ytitle=self.lineEdit_3.text()
+    #     titleplot=self.lineEdit.text()
+    #     color=self.combobox.currentText()
+    #     explode=self.explode.text()
+    #
+    #     def colorchooser(color):
+    #         if color=='rouge':
+    #             color='r'
+    #         elif color=='bleu':
+    #             color='b'
+    #         elif color=='jaune':
+    #             color='y'
+    #         elif color=='violet':
+    #             color='p'
+    #         elif color=='orange':
+    #             color='o'
+    #         elif color=='vert':
+    #             color='g'
+    #         else:
+    #             color='b'
+    #         return color
 
-        def colorchooser(color):
-            if color=='rouge':
-                color='r'
-            elif color=='bleu':
-                color='b'
-            elif color=='jaune':
-                color='y'
-            elif color=='violet':
-                color='p'
-            elif color=='orange':
-                color='o'
-            elif color=='vert':
-                color='g'
-            else:
-                color='b'
-            return color
 
-        if A==0:
-            print(colorchooser(color))
-            print(Ui_MainWindowgraph.données.abscisses,'absci')
-            graph(Ui_MainWindowgraph.données.abscisses,Ui_MainWindowgraph.données.ordonnées
-                 ,ytitle,xtitle,titleplot,xmin,xmax,ymin,ymax,colorchooser(color))
-            print('you chose courbe','chosen type')
-        elif A==1:
-
-            print('you chose histogramme','chosen type')
-            listlisible=[float(x) for x in Ui_MainWindowgraph.données.abscisses]
-            histogramme(listlisible,xmin,xmax,ymin,ymax,colorchooser(color),xtitle,ytitle)
-        elif A==2:
-            textes=explode.split(',')
-            textes=[float(x) for x in textes]
-            textes=tuple(textes)
-            circulaire(Ui_MainWindowgraph.données.abscisses,Ui_MainWindowgraph.données.ordonnées,xtitle,explode=textes)
-            #en cours d amelioration pour ajout de nouvelles fonctionnalites
-            print('you chose a camembert  chosen type')
-        else:#a revoir
-            if xmin==xmax==ymin==ymax==zmin==zmax==0.00 or xmin==xmax or ymin==ymax or zmin==zmax:
-                expressions=[x for x in Ui_MainWindowgraph.données.abscisses]
-                A=expressions[0].strip('')
-                fig = plt.figure()
-                ax = fig.gca(projection='3d')
-                x, y, z = axes3d.get_test_data(0.05)
-                ax.plot_surface(x, y,eval(A) , rstride=8, cstride=8, alpha=0.3)
-                plt.show()
-            else:
-                expressions=[x for x in Ui_MainWindowgraph.données.abscisses]
-                A=expressions[0].strip('')
-                x, y, z = axes3d.get_test_data(0.05)
-                draw_surface(xmin,xmax,ymin,ymax,zmin,zmax,eval(A))
-            #probleme de limite a resoudre
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Graphiques"))
         self.label_4.setText(_translate("MainWindow", "     TITLE       "))
         self.label_2.setText(_translate("MainWindow", "    X AXIS TITLE"))
-        self.label_5.setText(_translate("MainWindow", "Xmin"))
-        self.label_6.setText(_translate("MainWindow", "Xmax"))
-        self.label.setText(_translate("MainWindow", "    Y AXIS TITLE"))
-        self.label_7.setText(_translate("MainWindow", "Ymin"))
-        self.label_8.setText(_translate("MainWindow", "Ymax"))
 
+        self.label.setText(_translate("MainWindow", "    Y AXIS TITLE"))
 
 
 
