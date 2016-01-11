@@ -82,7 +82,10 @@ def traitement(x, y, string):
         ui_mainwindow.indicator.setText(ui_mainwindow.indicator.text()+'Done : ({}s)'.format(t_end - t_init))
     else:
         cell.value=None
-        # ui_mainwindow.tableWidget.setItem(x,y,None)
+        ui_mainwindow.tableWidget.setItem(x,y,None)
+        order = tritopologique.evalOrder(cell)
+        for child in order:
+            ui_mainwindow.tableWidget.return_value.emit(child.x, child.y, "#Error : la cellule {} est vide".format(cell.name))
 
 # processus de tirette (coin inférieur droit d'une case sélectionnée)
 
@@ -152,6 +155,7 @@ def graphiques():
     MainWindow.statusBar().addWidget(btn)
 
 def action1(btn):
+    ui_mainwindow.lineEdit.blockSignals(True) #Pour éviter les interactions de la lineEdit pendant la selection
     L1=[]
     for item in ui_mainwindow.tableWidget.selectedItems():
         L1.append(network.getCell(item.row(), item.column()))
@@ -192,6 +196,8 @@ def action2(btn2, L1):
         else:
             ui_mainwindow.indicator.setText("Erreur: Sélections de tailles différentes")
     MainWindow.statusBar().removeWidget(btn2)
+    ui_mainwindow.lineEdit.setText(network.getCell(ui_mainwindow.tableWidget.currentRow(),ui_mainwindow.tableWidget.currentColumn()).input)
+    ui_mainwindow.lineEdit.blockSignals(False)
 
 
 ui_graphwindow.buttonBox.accepted.connect(graphiques)
