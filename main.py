@@ -43,7 +43,6 @@ ui_addfunwindow.setupUi(AddFunwindow, knownFunctions)
 def traitement(x, y, string):
     cell = network.getCell(x, y)
     cell.input = string
-    oldValue = cell.value
     cell.updateParents(network)
     t_init = time.time()
     if len(string) > 0:
@@ -62,7 +61,6 @@ def traitement(x, y, string):
                 cell.value = newValue
             else:
                 cell.value = string
-            ui_mainwindow.tableWidget.return_value.emit(x, y, str(cell.value))
             try:
                 order = tritopologique.evalOrder(cell)
                 for child in order:

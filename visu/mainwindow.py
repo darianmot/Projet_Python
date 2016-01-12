@@ -377,7 +377,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
             try:
                 self.tableWidget.item(x,y).setText(value)
             except AttributeError:
-                pass
+                self.tableWidget.setItem(x,y,QtWidgets.QTableWidgetItem(value))
         self.tableWidget.return_value.connect(change_cell)
 
         # Affiche le input dans la ligne d'edition
@@ -391,10 +391,10 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.tableWidget.print_input.connect(changeLineEdit)
 
         def line_changed():
-            self.tableWidget.read_value.emit(self.tableWidget.currentRow(),self.tableWidget.currentColumn(),
-                                 self.lineEdit.text())
+            x=self.tableWidget.currentRow()
+            y=self.tableWidget.currentColumn()
+            self.tableWidget.read_value.emit(x,y,self.lineEdit.text())
         self.lineEdit.editingFinished.connect(line_changed)
-        self.lineEdit.returnPressed.connect(line_changed)
 
         def cell_doubleClicked():
             x=self.tableWidget.currentRow()
