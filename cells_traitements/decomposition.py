@@ -222,7 +222,7 @@ def chainEvaluation(network, chaine, knownFunctions):
         raise Error('Division par 0')
     except Exception as e:
         print("Can't evaluate '{0}'".format(''.join(elementList)), end='')
-        raise Error(str(e))
+        return ''.join(elementList)
 
 
 # Renvoie la liste des celulles apparaissant dans un string
