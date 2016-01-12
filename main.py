@@ -198,26 +198,30 @@ def action2(btn2, L1):
     ui_mainwindow.lineEdit.blockSignals(False)
 
 
-ui_graphwindow.buttonBox.accepted.connect(graphiques)
-# connexion des boutons de l'interface
-ui_mainwindow.tableWidget.read_value.connect(traitement)
-ui_mainwindow.tableWidget.filter.cellExpended.connect(expension_process)
-ui_mainwindow.graph.triggered.connect(graphwindow.show)
-
-ui_mainwindow.functionButton.released.connect(Funwindow.show)
-
-ui_mainwindow.actionOuvrir.triggered.connect(windowopen)
-ui_mainwindow.menu_ouvrir.triggered.connect(windowopen)
-
+# Connexion des boutons de l'interface
+    #Menus
 ui_mainwindow.actionenregistrer.triggered.connect(windowsave)
 ui_mainwindow.menu_enregistrer.triggered.connect(windowsave)
 ui_mainwindow.actionExport.triggered.connect(export)
-
-
-ui_funWinfow.toolAdd.released.connect(AddFunwindow.show)
-ui_addfunwindow.sendFunData.connect(functionAdded)
+ui_mainwindow.actionOuvrir.triggered.connect(windowopen)
+ui_mainwindow.menu_ouvrir.triggered.connect(windowopen)
 ui_mainwindow.menu_quit.triggered.connect(MainWindow.close)
 ui_mainwindow.new_button.triggered.connect(reset_table)
+
+    #Table
+ui_mainwindow.tableWidget.read_input.connect(traitement)
+ui_mainwindow.tableWidget.filter.cellExpended.connect(expension_process)
+
+    #Function windows
+ui_funWinfow.toolAdd.released.connect(AddFunwindow.show)
+ui_mainwindow.functionButton.released.connect(Funwindow.show)
+ui_addfunwindow.sendFunData.connect(functionAdded)
+
+    #Graphs
+ui_mainwindow.graph.triggered.connect(graphwindow.show)
+ui_graphwindow.buttonBox.accepted.connect(graphiques)
+
+
 
 MainWindow.showMaximized()
 splash.finish(MainWindow)

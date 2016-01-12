@@ -79,9 +79,9 @@ class MyItem(QtWidgets.QTableWidgetItem):
 
 class MyTableWidget(QtWidgets.QTableWidget):
 
-    read_value = pyqtSignal(int,int,str)
-    return_value = pyqtSignal(int,int,str)
-    print_input= pyqtSignal(int,int)
+    read_input = pyqtSignal(int,int,str) #Permet de retourner l'input à traiter d'une cellule
+    return_value = pyqtSignal(int,int,str) #Permet d'afficher la valeur d'une celulle après l'evaluation du input
+    print_input= pyqtSignal(int,int) #Permet d'afficher le input de la celulle selectionnée dans la lineEdit
 
     def __init__(self,win,network):
         super().__init__()
@@ -198,7 +198,7 @@ class MyTableWidget(QtWidgets.QTableWidget):
         print('Editor closed')
         self.editorcount-=1
         QtWidgets.QTableWidget.closeEditor(self,editor,hint)
-        self.read_value.emit(self.currentRow(),self.currentColumn(),self.currentItem().text())
+        self.read_input.emit(self.currentRow(),self.currentColumn(),self.currentItem().text())
         self.print_input.emit(self.currentRow(),self.currentColumn())
 
     #Synchronise le input lorsque l'utilsateur change de cellule avec le clavier
@@ -373,35 +373,40 @@ class Ui_MainWindow(QtWidgets.QWidget):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     #Signaux et slots
-        def change_cell(x, y, value):
+
+        #Change la valeur affichée d'une cellule
+        def changeCellValue(x, y, value):
             try:
                 self.tableWidget.item(x,y).setText(value)
             except AttributeError:
                 self.tableWidget.setItem(x,y,QtWidgets.QTableWidgetItem(value))
-        self.tableWidget.return_value.connect(change_cell)
+        self.tableWidget.return_value.connect(changeCellValue)
 
         # Affiche le input dans la ligne d'edition
-        def cell_clicked():
+        def cellClicked():
             self.tableWidget.print_input.emit(self.tableWidget.currentRow(),self.tableWidget.currentColumn())
-        self.tableWidget.cellClicked.connect(cell_clicked)
-        self.tableWidget.cellChanged.connect(cell_clicked)
+        self.tableWidget.cellClicked.connect(cellClicked)
+        self.tableWidget.cellChanged.connect(cellClicked)
 
+        # Detecte si la lineEdit est éditée
         def changeLineEdit(x,y):
             self.lineEdit.setText(network.getCell(x,y).input)
         self.tableWidget.print_input.connect(changeLineEdit)
 
-        def line_changed():
+        # Change la valeur affichée de la lineEdit
+        def lineEditChanged():
             x=self.tableWidget.currentRow()
             y=self.tableWidget.currentColumn()
-            self.tableWidget.read_value.emit(x,y,self.lineEdit.text())
-        self.lineEdit.editingFinished.connect(line_changed)
+            self.tableWidget.read_input.emit(x,y,self.lineEdit.text())
+        self.lineEdit.editingFinished.connect(lineEditChanged)
 
-        def cell_doubleClicked():
+        #Affiche le input d'une celulle lorsqu'on double clique dessus
+        def cellDoubleClicked():
             x=self.tableWidget.currentRow()
             y=self.tableWidget.currentColumn()
             if self.tableWidget.item(x,y)!=None:
                 self.tableWidget.item(x,y).setText(network.getCell(x,y).input)
-        self.tableWidget.doubleClicked.connect(cell_doubleClicked)
+        self.tableWidget.doubleClicked.connect(cellDoubleClicked)
 
     def setup(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
