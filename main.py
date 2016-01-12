@@ -23,6 +23,7 @@ network = structures.network()
 MainWindow = mainwindow.QtWidgets.QMainWindow()
 ui_mainwindow = mainwindow.Ui_MainWindow()
 ui_mainwindow.setupUi(MainWindow, network)
+recOrd.etatXls(ui_mainwindow)
 
 # Function Window
 Funwindow = QtWidgets.QDialog()
@@ -114,7 +115,8 @@ def functionAdded(name, descrition, evaluation, category):
 
 def windowopen():  # to open the window open....
     try:
-        fileWindow = QtWidgets.QFileDialog.getOpenFileName(MainWindow, 'Ouvrir', '', "(*.p *xls *csv)")
+        extension = "(*.p *.xls *.csv)" if recOrd.HASXLRD else "(*.p *.csv)"
+        fileWindow = QtWidgets.QFileDialog.getOpenFileName(MainWindow, 'Ouvrir', '', extension)
         address = fileWindow[0]
         recOrd.extensionreader(address, ui_mainwindow, network)
     except IndexError:
@@ -129,7 +131,8 @@ def windowsave():  # to open the window save....
     ui_mainwindow.indicator.setText('Sauvegardé')
 
 def export():
-    fileWindow = QtWidgets.QFileDialog.getSaveFileName(MainWindow, 'Enregistrer', '', "(*.xls *.csv)")
+    extension = "(*.xls *.csv)" if recOrd.HASXLWT else "(*.p *.csv)"
+    fileWindow = QtWidgets.QFileDialog.getSaveFileName(MainWindow, 'Enregistrer', '', extension)
     address = fileWindow[0]
     recOrd.extensionwritter(address, network, ui_mainwindow)
 

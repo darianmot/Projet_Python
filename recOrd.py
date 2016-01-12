@@ -1,9 +1,27 @@
-import xlrd, csv
-from xlwt import Workbook
-import structures
-import pickle
+try:
+    import xlrd
+    HASXLRD = True
+except ImportError:
+    HASXLRD = False
+try:
+    from xlwt import Workbook
+    HASXLWT = True
+except ImportError:
+    HASXLWT = False
+import csv, pickle, os
 from PyQt5 import QtWidgets
-import os
+
+#Renvoie un message d'erreur à l'indicator si les modules pour le .xls ne sont pas installés
+def etatXls(window):
+    if (not HASXLRD) and (not HASXLWT):
+        window.indicator.setText("<html><head/><body>{0} - <font color='red'>Les modules 'xlrd' et 'xlwt' n'étant pas installés,\
+        l'ouverture et l'exportation des fichiers en .xls sont impossibles.</font></body></html>".format(window.indicator.text()))
+    elif not HASXLRD and HASXLWT:
+        window.indicator.setText("<html><head/><body>{0} - <font color='red'>Le module 'xlrd' n'étant pas installé,\
+        l'ouverture des fichiers en .xls est impossible.</font></body></html>".format(window.indicator.text()))
+    elif HASXLRD and not HASXLWT:
+        window.indicator.setText("<html><head/><body>{0} - <font color='red'>Le module 'xlwt' n'étant pas installé,\
+        l'exportation des fichiers en .xls est impossible.</font></body></html>".format(window.indicator.text()))
 
 
 def writter_xls(network, name):
@@ -67,7 +85,7 @@ def writter_marshalling(network, name):
 
 
 def reader_marshalling(file, ui_mainwindow,network):
-    network.subsitute(pickle.load(open(file, 'rb')))  # opening
+    network.subsitute(pickle.load(open(file, 'rb')))
     ui_mainwindow.tableWidget.recalc(network)
 
 

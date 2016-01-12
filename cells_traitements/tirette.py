@@ -40,7 +40,7 @@ def formuleExpanse(cells_selected,network,ui_mainwindow):
             for i in range(r0 + 1, cells_selected.bottomRow() + 1):
                 if ui_mainwindow.tableWidget.item(i, column) == None:
                     ui_mainwindow.tableWidget.setItem(i, column, QtWidgets.QTableWidgetItem())
-                ui_mainwindow.tableWidget.read_value.emit(i, column, input)
+                ui_mainwindow.tableWidget.read_input.emit(i, column, input)
         else:
             decomposition0 = decomposition.decompo(input)
             for i in range(r0 + 1, cells_selected.bottomRow() + 1):
@@ -48,7 +48,7 @@ def formuleExpanse(cells_selected,network,ui_mainwindow):
                 newinput = verticalPull(decomposition0, rows)
                 if ui_mainwindow.tableWidget.item(i, column) == None:
                     ui_mainwindow.tableWidget.setItem(i, column, QtWidgets.QTableWidgetItem())
-                ui_mainwindow.tableWidget.read_value.emit(i, column, newinput)
+                ui_mainwindow.tableWidget.read_input.emit(i, column, newinput)
     elif cells_selected.topRow() == cells_selected.bottomRow():
         row = cells_selected.bottomRow()
         c0 = cells_selected.leftColumn()  # Colonne intiale
@@ -59,7 +59,7 @@ def formuleExpanse(cells_selected,network,ui_mainwindow):
             for i in range(c0 + 1, cells_selected.rightColumn() + 1):
                 if ui_mainwindow.tableWidget.item(row, i) == None:
                     ui_mainwindow.tableWidget.setItem(row, i, QtWidgets.QTableWidgetItem())
-                ui_mainwindow.tableWidget.read_value.emit(row, i, input)
+                ui_mainwindow.tableWidget.read_input.emit(row, i, input)
         else:
             decomposition0 = decomposition.decompo(input)
             for i in range(c0 + 1, cells_selected.rightColumn() + 1):
@@ -67,4 +67,4 @@ def formuleExpanse(cells_selected,network,ui_mainwindow):
                 newinput = horizontalPull(decomposition0, columns,ui_mainwindow.tableWidget.columnsLabels)
                 if ui_mainwindow.tableWidget.item(row, i) == None:
                     ui_mainwindow.tableWidget.setItem(row, i, QtWidgets.QTableWidgetItem())
-                ui_mainwindow.tableWidget.read_value.emit(row, i, newinput)
+                ui_mainwindow.tableWidget.read_input.emit(row, i, newinput)
