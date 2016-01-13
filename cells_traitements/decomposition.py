@@ -119,51 +119,6 @@ def endOfFunction(elementList, k):
             return i
     return len(elementList) - 1
 
-
-# Renvoie l'évaluation d'une fonction en position k dans une liste d'element
-def eval_function(network, elementList, elementType, k, knownFunctions):
-    element = elementList[k]
-    if element not in knownFunctions.dict:  # Si la fonction n'est pas connue, on renvoie une erreur
-        raise Error('{} n\'est pas connue'.format(elementList[k]))
-    try:
-        if elementType[k + 1] != 'p_ouvrante':
-            raise Error('\'(\' attendue après {}'.format(elementList[k]))
-    except IndexError:
-        raise Error('\'()\' attendue après {}'.format(elementList[k]))
-    p_count = 1  # Pour verifier le parenthesage
-    args = []
-    currentArg = ""
-    k += 2
-    while p_count > 0 and k < len(elementList):
-        if elementType[k] == 'function':  # Si c'est une fonction, on l'évalue recursivement
-            value = eval_function(network, elementList, elementType, k, knownFunctions)
-            if isError(str(value)):
-                return value
-            k = endOfFunction(elementList, k)
-            args.append(value)
-            currentArg = ""
-        elif elementType[k] == 'sep':
-            if currentArg != "":  # S'il n'y a rien avant un separateur, la syntaxe n'est pas correcte
-                # raise Error('\'{}\' innatendue'.format(elementList[k]))
-                args.append(chainEvaluation(network, currentArg, knownFunctions))
-                currentArg = ""
-        elif elementType[k] == 'p_fermante':  # On gère le parenthesage
-            p_count -= 1
-            if p_count > 0:
-                currentArg += elementList[k]
-        elif elementType[k] == 'p_ouvrante':
-            p_count += 1
-            currentArg += elementList[k]
-        else:
-            currentArg += elementList[k]
-        k += 1
-    if p_count != 0:
-        raise Error('parenthesage incorrect')
-    if currentArg != "":
-        args.append(chainEvaluation(network, currentArg, knownFunctions))
-    return knownFunctions.dict[str(element)].value(args)
-
-
 # Remplace (sur place) c1:c2 par les celulles comprises dans le rectancle d'extrémité (c1,c2)
 def doublePoint(elementList, elementType, network):
     j = 0
@@ -189,41 +144,6 @@ def doublePoint(elementList, elementType, network):
             elementList[j - 1:j + 2] = l_element
             elementType[j - 1:j + 2] = l_type
         j += 1
-
-
-# Renvoie l'évaluation d'une formule, au sein d'un réseau nétwork (ou affiche l'erreur le cas écheant)
-def chainEvaluation(network, chaine, knownFunctions):
-    (elementList, elementType) = decompo(chaine)
-    i = 0
-    doublePoint(elementList, elementType, network)
-    while i < len(elementList):
-        if elementType[i] == 'cell':
-            try:
-                elementList[i] = str(network.getCellByName(elementList[i]).value)
-            except Error as e:
-                raise Error(e.reason)
-        elif elementType[i] == 'function':
-            try:
-                value = eval_function(network, elementList, elementType, i, knownFunctions)
-            except Error as e:
-                raise Error(e.reason)
-            if isError(str(value)):
-                return value
-            end = endOfFunction(elementList, i)
-            elementList[i:end + 1] = [str(value)]
-            elementType[i:end + 1] = ['nombre']
-        i += 1
-    try:
-        return eval(''.join(elementList))
-    except SyntaxError as e:
-        print("Error de syntaxe: {}".format(elementList))
-        raise Error('Syntaxe ({})'.format(e.msg))
-    except ZeroDivisionError:
-        raise Error('Division par 0')
-    except Exception as e:
-        print("Can't evaluate '{0}'".format(''.join(elementList)), end='')
-        return ''.join(elementList)
-
 
 # Renvoie la liste des celulles apparaissant dans un string
 def parentCells(network, chaine):

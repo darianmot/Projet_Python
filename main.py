@@ -2,8 +2,8 @@ __authors__ = "Darian MOTAMED, Hugo CHOULY, Atime RONDA,Anas DARWICH"
 import sys, visu.mainwindow as mainwindow, visu.funwindow as funWindow, visu.addfunwindow as addfunwindow, \
     graph as graphic
 import structures, cells_traitements.functions as functions, recOrd
-import cells_traitements.decomposition as decomposition, cells_traitements.tritopologique as tritopologique,cells_traitements.tirette as tirette
-import time, pickle
+import cells_traitements.tirette as tirette, cells_traitements.evaluation as evalutation
+import pickle
 from PyQt5 import QtWidgets, Qt, QtCore
 
 knownFunctions = pickle.load(open('knownFunctions.p', 'rb'))
@@ -37,54 +37,6 @@ ui_graphwindow.setupUi((graphwindow))
 AddFunwindow = QtWidgets.QDialog()
 ui_addfunwindow = addfunwindow.Ui_Dialog()
 ui_addfunwindow.setupUi(AddFunwindow, knownFunctions)
-
-
-# Traitement des cellules (peut être faudrait il trouver moyen de bouger ça dans un module)
-
-def traitement(x, y, string):
-    cell = network.getCell(x, y)
-    cell.input = string
-    cell.updateParents(network)
-    t_init = time.time()
-    if len(string) > 0:
-        print('Evaluation de {0} et de ses cellules filles ... '.format(cell.name, len(cell.children_cells)), end='')
-        ui_mainwindow.indicator.setText('Evaluation de {0} et de ses cellules filles ... '.format(cell.name, len(cell.children_cells)))
-        try:
-            if string[0] == '=':
-                for parentCell in cell.parent_cells:
-                    if parentCell.name==cell.name:
-                        raise decomposition.Error('Dépendance récursive de la celulle {}'.format(cell.name))
-                newValue=str(decomposition.chainEvaluation(network, string[1:], knownFunctions))
-            else:
-
-                newValue = string
-            if string[0] == '=':
-                cell.value = newValue
-            else:
-                cell.value = string
-            try:
-                order = tritopologique.evalOrder(cell)
-                for child in order:
-                    child.value = str(decomposition.chainEvaluation(network, child.input[1:], knownFunctions))
-                    ui_mainwindow.tableWidget.return_value.emit(child.x, child.y, child.value)
-            except decomposition.Error as e:
-                for child in tritopologique.childrenCellsRec(cell)[1:]:
-                    ui_mainwindow.tableWidget.return_value.emit(child.x, child.y, e.disp)
-            except tritopologique.CycleError:
-                raise decomposition.Error("Dépendance cyclique")
-            ui_mainwindow.tableWidget.return_value.emit(x, y, str(cell.value))
-        except decomposition.Error as e:
-            for child in tritopologique.childrenCellsRec(cell):
-                ui_mainwindow.tableWidget.return_value.emit(child.x, child.y, e.disp)
-        t_end = time.time()
-        print('Done : ({}s)'.format(t_end - t_init))
-        ui_mainwindow.indicator.setText(ui_mainwindow.indicator.text()+'Done : ({}s)'.format(t_end - t_init))
-    else:
-        cell.value=None
-        ui_mainwindow.tableWidget.setItem(x,y,None)
-        order = tritopologique.evalOrder(cell)
-        for child in order:
-            ui_mainwindow.tableWidget.return_value.emit(child.x, child.y, "#Error : la cellule {} est vide".format(cell.name))
 
 # processus de tirette (coin inférieur droit d'une case sélectionnée)
 
@@ -235,7 +187,7 @@ ui_mainwindow.menu_quit.triggered.connect(MainWindow.close)
 ui_mainwindow.new_button.triggered.connect(reset_table)
 
     #Table
-ui_mainwindow.tableWidget.read_input.connect(traitement)
+ui_mainwindow.tableWidget.read_input.connect(lambda x, y, string : evalutation.cellEvaluation(x, y, string, network, ui_mainwindow, knownFunctions))
 ui_mainwindow.tableWidget.filter.cellExpended.connect(expension_process)
 
     #Function windows

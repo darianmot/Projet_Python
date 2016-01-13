@@ -1,7 +1,6 @@
-""" Dans ce module, on s'occupe d'ordonner une liste de celulles à évaluer selon le tri topologique """
+""" Dans ce module, on s'occupe d'ordonner une liste de celulles filles à évaluer selon le tri topologique """
 
-import cells_traitements.decomposition as decomposition
-
+#Erreur levée si un cycle est trouvé parmi les celulles filles
 class CycleError(Exception):
     def __init__(self):
         super().__init__(self)
