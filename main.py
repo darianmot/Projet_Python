@@ -194,14 +194,37 @@ def action2(btn2, L1):
         if len(L1) == len(L2):
             graphic.mainGraphFunction(L1, L2, A=0)
             ui_mainwindow.indicator.setText("La sélection est correcte")
+            add(L1,L2)
+
         else:
             ui_mainwindow.indicator.setText("Erreur: Sélections de tailles différentes")
     MainWindow.statusBar().removeWidget(btn2)
     ui_mainwindow.lineEdit.setText(network.getCell(ui_mainwindow.tableWidget.currentRow(),ui_mainwindow.tableWidget.currentColumn()).input)
     ui_mainwindow.lineEdit.blockSignals(False)
 
+def add(L1,L2):
 
-# Connexion des boutons de l'interface
+    ui_mainwindow.indicator.setText("voulez vous superposer une autre courbe?")
+    btn_add=QtWidgets.QPushButton("+add")
+    MainWindow.statusBar().addWidget(btn_add)
+    btn_cancel=QtWidgets.QPushButton("annuler")
+    MainWindow.statusBar().addWidget(btn_cancel)
+    def add_2():
+        MainWindow.statusBar().removeWidget(btn_add)
+        MainWindow.statusBar().removeWidget(btn_cancel)
+        graphiques()
+        graphic.close_graph()
+
+    def cancel():
+        MainWindow.statusBar().removeWidget(btn_add)
+        MainWindow.statusBar().removeWidget(btn_cancel)
+        ui_mainwindow.indicator.setText("")
+    btn_add.clicked.connect(add_2)
+    btn_cancel.clicked.connect(cancel)
+
+
+
+    #Connexion des boutons de l'interface
     #Menus
 ui_mainwindow.actionenregistrer.triggered.connect(windowsave)
 ui_mainwindow.menu_enregistrer.triggered.connect(windowsave)

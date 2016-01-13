@@ -14,7 +14,8 @@ def mainGraphFunction(L1, L2, A):
             y.append(cell.value)
         plt.plot(x, y)
         plt.show()
-
+def close_graph():
+    plt.close()
 
 
 class Ui_MainWindowgraph(object):
