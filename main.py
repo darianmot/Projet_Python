@@ -1,7 +1,7 @@
 __authors__ = "Darian MOTAMED, Hugo CHOULY, Atime RONDA,Anas DARWICH"
 import sys, visu.mainwindow as mainwindow, visu.funwindow as funWindow, visu.addfunwindow as addfunwindow, \
     graph as graphic
-import structures, cells_traitements.functions as functions, recOrd
+import structures, cells_traitements.functions as functions, record
 import cells_traitements.tirette as tirette, cells_traitements.evaluation as evalutation
 import pickle
 from PyQt5 import QtWidgets, Qt, QtCore
@@ -23,7 +23,7 @@ network = structures.network()
 MainWindow = mainwindow.QtWidgets.QMainWindow()
 ui_mainwindow = mainwindow.Ui_MainWindow()
 ui_mainwindow.setupUi(MainWindow, network)
-recOrd.etatXls(ui_mainwindow)
+record.etatXls(ui_mainwindow)
 
 # Function Window
 Funwindow = QtWidgets.QDialog()
@@ -67,10 +67,10 @@ def functionAdded(name, descrition, evaluation, category):
 
 def windowopen():  # to open the window open....
     try:
-        extension = "(*.p *.xls *.csv)" if recOrd.HASXLRD else "(*.p *.csv)"
+        extension = "(*.p *.xls *.csv)" if record.HASXLRD else "(*.p *.csv)"
         fileWindow = QtWidgets.QFileDialog.getOpenFileName(MainWindow, 'Ouvrir', '', extension)
         address = fileWindow[0]
-        recOrd.extensionreader(address, ui_mainwindow, network)
+        record.extensionreader(address, ui_mainwindow, network)
     except IndexError:
         print("No file selected")
 
@@ -78,15 +78,15 @@ def windowopen():  # to open the window open....
 def windowsave():  # to open the window save....
     fileWindow = QtWidgets.QFileDialog.getSaveFileName(MainWindow, 'Enregistrer', '', "(*.p)")
     address = fileWindow[0]  # faut mettre l'extension du format genre fichier.pyc ou fichier.xls dans la barre de saisie
-    name=recOrd.fileName(address)
-    recOrd.writter_marshalling(network,name)
+    name=record.fileName(address)
+    record.writter_marshalling(network,name)
     ui_mainwindow.indicator.setText('Sauvegardé')
 
 def export():
-    extension = "(*.xls *.csv)" if recOrd.HASXLWT else "(*.p *.csv)"
+    extension = "(*.xls *.csv)" if record.HASXLWT else "(*.p *.csv)"
     fileWindow = QtWidgets.QFileDialog.getSaveFileName(MainWindow, 'Enregistrer', '', extension)
     address = fileWindow[0]
-    recOrd.extensionwritter(address, network, ui_mainwindow)
+    record.extensionwritter(address, network, ui_mainwindow)
 
 
 # destinée à réinitialiser la feuille de calcul (pour nouvelle feuille) en cours de construction
