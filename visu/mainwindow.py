@@ -1,8 +1,6 @@
-# ATTENTION : vu qu'on a modifié ce fichier, mainwindow.ui est devenu obsolète
-import structures
 from PyQt5 import QtCore, QtGui, QtWidgets,Qt
 from PyQt5.QtCore import pyqtSignal
-import visu.columns_labels as columns_labels,random
+import visu.columns_labels as columns_labels
 CELLWIDTH=100
 CELLHEIGHT=30
 
@@ -201,10 +199,15 @@ class MyTableWidget(QtWidgets.QTableWidget):
         self.read_input.emit(self.currentRow(),self.currentColumn(),self.currentItem().text())
         self.print_input.emit(self.currentRow(),self.currentColumn())
 
-    #Synchronise le input lorsque l'utilsateur change de cellule avec le clavier
+    #Synchronise le input lorsque l'utilsateur change de cellule avec le clavier, et supprime la selection en cas de 'Suppr'
     def keyPressEvent(self, event):
         QtWidgets.QTableWidget.keyPressEvent(self,event)
         self.print_input.emit(self.currentRow(),self.currentColumn())
+        if event.key() == QtCore.Qt.Key_Delete:
+            for cell in self.selectedIndexes():
+                x = cell.row()
+                y = cell.column()
+                self.read_input.emit(x , y, "")
 
     #Ajoute un incrément au compteur d'editeur si un éditeur est ouvert (connecte au signal editocreated du delegate)
     def itemeditoropened(self):

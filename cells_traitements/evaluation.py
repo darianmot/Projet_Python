@@ -122,7 +122,8 @@ def cellEvaluation(x, y, string, network, ui_mainwindow, knownFunctions):
         ui_mainwindow.indicator.setText(ui_mainwindow.indicator.text() + 'Done : ({}s)'.format(t_end - t_init))
     else:
         cell.value = None
-        ui_mainwindow.tableWidget.setItem(x, y, None)
+        # ui_mainwindow.tableWidget.setItem(x, y, None)
+        ui_mainwindow.tableWidget.takeItem(x,y)
         order = tritopologique.evalOrder(cell)
         for child in order:
             ui_mainwindow.tableWidget.return_value.emit(child.x, child.y, "#Error : la cellule {} est vide".format(cell.name))
