@@ -174,8 +174,6 @@ def add(L1,L2):
     btn_add.clicked.connect(add_2)
     btn_cancel.clicked.connect(cancel)
 
-
-
     #Connexion des boutons de l'interface
     #Menus
 ui_mainwindow.actionenregistrer.triggered.connect(windowsave)
