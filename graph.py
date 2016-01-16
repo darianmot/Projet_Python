@@ -93,6 +93,10 @@ def mainGraphFunction(L1, L2, A, settings):
             y.append(cell.value)
         plt.plot(x, y)
         plt.show()
+def graph_add(list_graph):
+    plt.plot(list_graph)
+    plt.show()
+
 def close_graph():
     plt.close()
 

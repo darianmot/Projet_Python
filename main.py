@@ -98,6 +98,82 @@ def reset_table():
     ui_mainwindow.indicator.setText("Nouvelle Feuille")
 
 
+
+#Partie Graphique
+
+def graphiques():
+    ui_mainwindow.indicator.setText("Sélectionnez une ligne ou colonne et appuyez sur Valider")
+    btn = QtWidgets.QPushButton("Valider")
+    btn.clicked.connect(lambda : action1(btn))
+    MainWindow.statusBar().addWidget(btn)
+
+def action1(btn):
+    ui_mainwindow.lineEdit.blockSignals(True) #Pour éviter les interactions de la lineEdit pendant la selection
+    L1=[]
+    for item in ui_mainwindow.tableWidget.selectedItems():
+        L1.append(network.getCell(item.row(), item.column()))
+    b = True
+    for i in range(1, len(L1)):
+        if L1[0].x == L1[i].x or L1[0].y == L1[i].y:
+            pass
+        else:
+            ui_mainwindow.indicator.setText("Erreur: veuillez selectionner une seule ligne ou colonne")
+            b = False
+            break
+    if b:
+        print(L1)
+        ui_mainwindow.indicator.setText("Sélectionnez une nouvelle ligne ou colonne et appuyez sur Valider")
+        MainWindow.statusBar().removeWidget(btn)
+        btn2 = QtWidgets.QPushButton("Valider")
+        btn2.clicked.connect(lambda : action2(btn2, L1))
+        MainWindow.statusBar().addWidget(btn2)
+    MainWindow.statusBar().removeWidget(btn)
+
+def action2(btn2, L1):
+    L2=[]
+    for item in ui_mainwindow.tableWidget.selectedItems():
+        L2.append(network.getCell(item.row(), item.column()))
+    b = True
+    for i in range(1, len(L2)):
+        if L2[0].x == L2[i].x or L2[0].y == L2[i].y:
+            pass
+        else:
+            ui_mainwindow.indicator.setText("Erreur: veuillez selectionner une seule ligne ou une seule colonne")
+            b = False
+            break
+    if b:
+        print(L1, L2)
+        if len(L1) == len(L2):
+            graphic.mainGraphFunction(L1, L2, A=0)
+            ui_mainwindow.indicator.setText("La sélection est correcte")
+            add(L1,L2)
+
+        else:
+            ui_mainwindow.indicator.setText("Erreur: Sélections de tailles différentes")
+    MainWindow.statusBar().removeWidget(btn2)
+    ui_mainwindow.lineEdit.setText(network.getCell(ui_mainwindow.tableWidget.currentRow(),ui_mainwindow.tableWidget.currentColumn()).input)
+    ui_mainwindow.lineEdit.blockSignals(False)
+
+def add(L1,L2):
+
+    ui_mainwindow.indicator.setText("voulez vous superposer une autre courbe?")
+    btn_add=QtWidgets.QPushButton("+add")
+    MainWindow.statusBar().addWidget(btn_add)
+    btn_cancel=QtWidgets.QPushButton("annuler")
+    MainWindow.statusBar().addWidget(btn_cancel)
+    def add_2():
+        MainWindow.statusBar().removeWidget(btn_add)
+        MainWindow.statusBar().removeWidget(btn_cancel)
+        graphiques()
+        graphic.close_graph()
+
+    def cancel():
+        MainWindow.statusBar().removeWidget(btn_add)
+        MainWindow.statusBar().removeWidget(btn_cancel)
+        ui_mainwindow.indicator.setText("")
+    btn_add.clicked.connect(add_2)
+    btn_cancel.clicked.connect(cancel)
+
     #Connexion des boutons de l'interface
     #Menus
 ui_mainwindow.actionenregistrer.triggered.connect(windowsave)
@@ -118,11 +194,8 @@ ui_mainwindow.functionButton.released.connect(Funwindow.show)
 ui_addfunwindow.sendFunData.connect(functionAdded)
 
     #Graphs
-def fonction(a, L):
-    graphic.graphiques(ui_mainwindow, MainWindow.statusBar, network, a, L)
-
 ui_mainwindow.graph.triggered.connect(graphwindow.show)
-ui_graphwindow.okSignal.connect(fonction)
+ui_graphwindow.buttonBox.accepted.connect(graphiques)
 
 
 
