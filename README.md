@@ -2,7 +2,7 @@
 
 ###LISTE de bugs:
 
-	- Graphique ne marche pas
+	- Graphique : bug de selection de courbe : impossible de cliquer sur "courbe" si on clique avant sur une autre représentation
 	- L'ouverture de fichiers reste assez aléatoire en pyc ou xls (notemment en xls) il faudra faire de grosses vérifs là-dessus
 	- Enlever le fond bleu de sélection des cases, qui interfère avec nos outils de sélection (tirette en particulier)
 

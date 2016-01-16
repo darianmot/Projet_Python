@@ -4,13 +4,16 @@ from mpl_toolkits.mplot3d import axes3d
 import matplotlib.pyplot as plt
 from matplotlib import cm
 
-def graphiques(ui_mainwindow, statusBar, network):
+
+
+#Partie concernant la sélection des données
+def graphiques(ui_mainwindow, statusBar, network, A, settings):
     ui_mainwindow.indicator.setText("Sélectionnez une ligne ou colonne et appuyez sur Valider")
     btn = QtWidgets.QPushButton("Valider")
-    btn.clicked.connect(lambda : action1(btn, ui_mainwindow, statusBar, network))
+    btn.clicked.connect(lambda : action1(btn, ui_mainwindow, statusBar, network, A, settings))
     statusBar().addWidget(btn)
 
-def action1(btn, ui_mainwindow, statusBar, network):
+def action1(btn, ui_mainwindow, statusBar, network, A, settings):
     ui_mainwindow.lineEdit.blockSignals(True) #Pour éviter les interactions de la lineEdit pendant la selection
     L1=[]
     for item in ui_mainwindow.tableWidget.selectedItems():
@@ -28,11 +31,11 @@ def action1(btn, ui_mainwindow, statusBar, network):
         ui_mainwindow.indicator.setText("Sélectionnez une nouvelle ligne ou colonne et appuyez sur Valider")
         statusBar().removeWidget(btn)
         btn2 = QtWidgets.QPushButton("Valider")
-        btn2.clicked.connect(lambda : action2(btn2, L1, ui_mainwindow, statusBar, network))
+        btn2.clicked.connect(lambda : action2(btn2, L1, ui_mainwindow, statusBar, network, A, settings))
         statusBar().addWidget(btn2)
     statusBar().removeWidget(btn)
 
-def action2(btn2, L1, ui_mainwindow, statusBar, network):
+def action2(btn2, L1, ui_mainwindow, statusBar, network, A, settings):
     L2=[]
     for item in ui_mainwindow.tableWidget.selectedItems():
         L2.append(network.getCell(item.row(), item.column()))
@@ -47,7 +50,7 @@ def action2(btn2, L1, ui_mainwindow, statusBar, network):
     if b:
         print(L1, L2)
         if len(L1) == len(L2):
-            mainGraphFunction(L1, L2, A=0)
+            mainGraphFunction(L1, L2, A, settings)
             ui_mainwindow.indicator.setText("La sélection est correcte")
             #add(L1,L2)
 
@@ -79,8 +82,8 @@ def action2(btn2, L1, ui_mainwindow, statusBar, network):
 
 
 
-
-def mainGraphFunction(L1, L2, A):
+#Tracé des courbes
+def mainGraphFunction(L1, L2, A, settings):
     if A == 0:
         x = []
         y = []
@@ -93,8 +96,10 @@ def mainGraphFunction(L1, L2, A):
 def close_graph():
     plt.close()
 
+#Fenetre de sélection
+class Ui_MainWindowgraph(QtWidgets.QWidget):
 
-class Ui_MainWindowgraph(object):
+    okSignal = pyqtSignal(int,list)
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -131,14 +136,10 @@ class Ui_MainWindowgraph(object):
         self.fonction_DD=QtWidgets.QListWidgetItem()
         self.fonction_DD.setText('F(X,Y)')
         self.listView.addItem(self.fonction_DD)
-        self.circulaire=QtWidgets.QLabel(self.centralwidget)
-        self.circulaire.setObjectName('label_circulaire')
-        self.circulaire.setText('DIAGRAMME CIRCULAIRE')
 
 
         #ajout de widget aux layouts
         self.horizontalLayout_5.addWidget(self.listView)
-        self.lastlayout.addWidget(self.circulaire)
         self.lastlayout.addWidget(self.explode)
 
 
@@ -205,8 +206,6 @@ class Ui_MainWindowgraph(object):
         self.label_7.setObjectName("label_7")
         self.horizontalLayout_6.addWidget(self.label_7)
 
-        #valeur des ordonnées ymin ymax et layout associée
-
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -242,37 +241,14 @@ class Ui_MainWindowgraph(object):
                 print('you chose a 2D representation')
         def quit():
             MainWindow.close()
+
+        def okGraph():
+            self.okSignal.emit(self.listView.currentRow(), ['fsdv', 'cds0', 'vcdhbs', 'b'])
         #les connexions
         self.listView.itemClicked.connect(image)
         self.buttonBox.rejected.connect(quit)
+        self.buttonBox.accepted.connect(okGraph)
         self.buttonBox.accepted.connect(quit)
-
-    #
-    # #selecteur de graphique
-    # def chosentype(self):
-    #     A=self.listView.currentRow()
-    #     xtitle=self.lineEdit_2.text()
-    #     ytitle=self.lineEdit_3.text()
-    #     titleplot=self.lineEdit.text()
-    #     color=self.combobox.currentText()
-    #     explode=self.explode.text()
-    #
-    #     def colorchooser(color):
-    #         if color=='rouge':
-    #             color='r'
-    #         elif color=='bleu':
-    #             color='b'
-    #         elif color=='jaune':
-    #             color='y'
-    #         elif color=='violet':
-    #             color='p'
-    #         elif color=='orange':
-    #             color='o'
-    #         elif color=='vert':
-    #             color='g'
-    #         else:
-    #             color='b'
-    #         return color
 
 
     def retranslateUi(self, MainWindow):
@@ -280,7 +256,6 @@ class Ui_MainWindowgraph(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "Graphiques"))
         self.label_4.setText(_translate("MainWindow", "     TITLE       "))
         self.label_2.setText(_translate("MainWindow", "    X AXIS TITLE"))
-
         self.label.setText(_translate("MainWindow", "    Y AXIS TITLE"))
 
 

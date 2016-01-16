@@ -118,11 +118,11 @@ ui_mainwindow.functionButton.released.connect(Funwindow.show)
 ui_addfunwindow.sendFunData.connect(functionAdded)
 
     #Graphs
-def fonction():
-    graphic.graphiques(ui_mainwindow, MainWindow.statusBar, network)
+def fonction(a, L):
+    graphic.graphiques(ui_mainwindow, MainWindow.statusBar, network, a, L)
 
 ui_mainwindow.graph.triggered.connect(graphwindow.show)
-ui_graphwindow.buttonBox.accepted.connect(fonction)
+ui_graphwindow.okSignal.connect(fonction)
 
 
 
