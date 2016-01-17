@@ -9,6 +9,7 @@ class Cell(object): #caractéristiques et organisation d'une cellule
         self.name = None     #chaine de caractères
         self.children_cells = [] #liste des cellules filles
         self.parent_cells = []
+        self.chainDict = {}
 
     def getRow(self):
         return self.x

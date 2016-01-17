@@ -50,6 +50,7 @@ def expension_process(cells_selected):
     tirette.endTirette(ui_mainwindow, cells_selected)
 
 
+
 def functionAdded(name, descrition, evaluation, category):
     knownFunctions.addFun(functions.Function(name, evaluation, descrition, category))
     print('Ajout de la fonction {}'.format(name))

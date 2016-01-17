@@ -3,7 +3,7 @@ import time
 
 
 # Renvoie l'évaluation d'une formule, au sein d'un réseau nétwork (ou affiche l'erreur le cas écheant)
-def chainEvaluation(network, chaine, knownFunctions):
+def chainEvaluation(network, chaine, knownFunctions, stringDict):
     (elementList, elementType) = decomposition.decompo(chaine)
     i = 0
     decomposition.doublePoint(elementList, elementType, network)
@@ -13,7 +13,7 @@ def chainEvaluation(network, chaine, knownFunctions):
                 elementList[i] = str(network.getCellByName(elementList[i]).value)
             except decomposition.Error as e:
                 raise decomposition.Error(e.reason)
-        elif elementType[i] == 'function':
+        elif elementType[i] == 'function' and elementList[i] not in stringDict:
             try:
                 value = eval_function(network, elementList, elementType, i, knownFunctions)
             except decomposition.Error as e:
@@ -25,15 +25,18 @@ def chainEvaluation(network, chaine, knownFunctions):
             elementType[i:end + 1] = ['nombre']
         i += 1
     try:
-        return eval(''.join(elementList))
+        return eval(''.join(elementList), None, stringDict)
     except SyntaxError as e:
         print("Error de syntaxe: {}".format(elementList))
         raise decomposition.Error('Syntaxe ({})'.format(e.msg))
     except ZeroDivisionError:
         raise decomposition.Error('Division par 0')
+    except NameError as e:
+        stringDict[str(e).split("'")[1]]=str(e).split("'")[1]
+        return chainEvaluation(network, ''.join(elementList), knownFunctions, stringDict)
     except Exception as e:
         print("Can't evaluate '{0}'".format(''.join(elementList)), end='')
-        return ''.join(elementList)
+        raise decomposition.Error(str(e))
 
 
 # Renvoie l'évaluation d'une fonction en position k dans une liste d'element
@@ -60,8 +63,7 @@ def eval_function(network, elementList, elementType, k, knownFunctions):
             currentArg = ""
         elif elementType[k] == 'sep':
             if currentArg != "":  # S'il n'y a rien avant un separateur, la syntaxe n'est pas correcte
-                # raise decomposition.Error('\'{}\' innatendue'.format(elementList[k]))
-                args.append(chainEvaluation(network, currentArg, knownFunctions))
+                args.append(chainEvaluation(network, currentArg, knownFunctions, {}))
                 currentArg = ""
         elif elementType[k] == 'p_fermante':  # On gère le parenthesage
             p_count -= 1
@@ -76,7 +78,7 @@ def eval_function(network, elementList, elementType, k, knownFunctions):
     if p_count != 0:
         raise decomposition.Error('parenthesage incorrect')
     if currentArg != "":
-        args.append(chainEvaluation(network, currentArg, knownFunctions))
+        args.append(chainEvaluation(network, currentArg, knownFunctions, {}))
     return knownFunctions.dict[str(element)].value(args)
 
 
@@ -95,7 +97,7 @@ def cellEvaluation(x, y, string, network, ui_mainwindow, knownFunctions):
                 for parentCell in cell.parent_cells:
                     if parentCell.name == cell.name:
                         raise decomposition.Error('Dépendance récursive de la celulle {}'.format(cell.name))
-                newValue = str(chainEvaluation(network, string[1:], knownFunctions))
+                newValue = str(chainEvaluation(network, string[1:], knownFunctions, {}))
             else:
 
                 newValue = string
@@ -106,7 +108,7 @@ def cellEvaluation(x, y, string, network, ui_mainwindow, knownFunctions):
             try:
                 order = tritopologique.evalOrder(cell)
                 for child in order:
-                    child.value = str(chainEvaluation(network, child.input[1:], knownFunctions))
+                    child.value = str(chainEvaluation(network, child.input[1:], knownFunctions,{}))
                     ui_mainwindow.tableWidget.return_value.emit(child.x, child.y, child.value)
             except decomposition.Error as e:
                 for child in tritopologique.childrenCellsRec(cell)[1:]:
@@ -122,7 +124,6 @@ def cellEvaluation(x, y, string, network, ui_mainwindow, knownFunctions):
         ui_mainwindow.indicator.setText(ui_mainwindow.indicator.text() + 'Done : ({}s)'.format(t_end - t_init))
     else:
         cell.value = None
-        # ui_mainwindow.tableWidget.setItem(x, y, None)
         ui_mainwindow.tableWidget.takeItem(x,y)
         order = tritopologique.evalOrder(cell)
         for child in order:

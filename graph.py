@@ -164,6 +164,7 @@ class Ui_MainWindowgraph(QtWidgets.QWidget):
         self.lastlayout= QtWidgets.QHBoxLayout()
         self.lastlayout.setObjectName("lastlayout")
         self.lastlayout1=QtWidgets.QHBoxLayout()
+
         self.lastlayout1.setObjectName("lastlayout1")
 
         #liste des types de graphiques
