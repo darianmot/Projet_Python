@@ -49,54 +49,68 @@ def action2(btn2, L1, ui_mainwindow, statusBar, network, A, settings):
             break
     if b:
         print(L1, L2)
-        if len(L1) == len(L2):
-            mainGraphFunction(L1, L2, A, settings)
-            ui_mainwindow.indicator.setText("La sélection est correcte")
-            #add(L1,L2)
 
+        if len(L1) == len(L2):
+            L=[[x.value for x in L1],[y.value for y in L2]]
+            add_graph(L,ui_mainwindow,statusBar,network,settings,A)
+            ui_mainwindow.indicator.setText("La sélection est correcte")
         else:
             ui_mainwindow.indicator.setText("Erreur: Sélections de tailles différentes")
     statusBar().removeWidget(btn2)
     ui_mainwindow.lineEdit.setText(network.getCell(ui_mainwindow.tableWidget.currentRow(),ui_mainwindow.tableWidget.currentColumn()).input)
     ui_mainwindow.lineEdit.blockSignals(False)
+    ui_mainwindow.indicator.setText("voulez vous superposer une autre courbe?")
 
-# def add(L1,L2):
-#
-#     ui_mainwindow.indicator.setText("voulez vous superposer une autre courbe?")
-#     btn_add=QtWidgets.QPushButton("+add")
-#     MainWindow.statusBar().addWidget(btn_add)
-#     btn_cancel=QtWidgets.QPushButton("annuler")
-#     MainWindow.statusBar().addWidget(btn_cancel)
-#     def add_2():
-#         MainWindow.statusBar().removeWidget(btn_add)
-#         MainWindow.statusBar().removeWidget(btn_cancel)
-#         graphiques()
-#         graphic.close_graph()
-#
-#     def cancel():
-#         MainWindow.statusBar().removeWidget(btn_add)
-#         MainWindow.statusBar().removeWidget(btn_cancel)
-#         ui_mainwindow.indicator.setText("")
-#     btn_add.clicked.connect(add_2)
-#     btn_cancel.clicked.connect(cancel)
+def add_graph(L,ui_mainwindow,statusBar,network,settings,A):
+    settings=settings
+    list_to_plot=L
+    print(list_to_plot)
+    btn_add=QtWidgets.QPushButton("+add")
+    statusBar().addWidget(btn_add)
+    btn_cancel=QtWidgets.QPushButton("annuler")
+    statusBar().addWidget(btn_cancel)
+    def affichage(statusBar):
+        print('affichage')
+        btn_validate=QtWidgets.QPushButton('validate')
+        statusBar.addWidget(btn_validate)
+        def remove1():
+            statusBar.removeWidget(btn_validate)
+        btn_validate.clicked.connect(plot_graph)
+        btn_validate.clicked.connect(remove1)
+    def plot_graph():
+        list_to_plot=add_liste(L)
+        print(list_to_plot,'list_to_plot')
+        for i in range(0,int((len(list_to_plot)/2))):
+            plt.plot(list_to_plot[2*i],list_to_plot[2*i+1])
+            print(i)
+        plt.show()
+        print('graphique affiché')
+        add_graph(L,ui_mainwindow,statusBar,network,settings,A)
+    def add_liste(L):
+        new_liste=[network.getCell(item.row(), item.column()).value for item in ui_mainwindow.tableWidget.selectedItems()]
+        list_to_plot.append(L[0])
+        list_to_plot.append(new_liste)
+        return list_to_plot
+    def add_2():
+         statusBar().removeWidget(btn_add)
+         statusBar().removeWidget(btn_cancel)
+         affichage(statusBar())
+    def cancel():
+         statusBar().removeWidget(btn_add)
+         statusBar().removeWidget(btn_cancel)
+         ui_mainwindow.indicator.setText("")
+         mainGraphFunction(list_to_plot,A, settings)
+
+    btn_add.clicked.connect(add_2)
+    btn_cancel.clicked.connect(cancel)
 
 
 
 #Tracé des courbes
-def mainGraphFunction(L1, L2, A, settings):
+def mainGraphFunction(L, A, settings):
     if A == 0:
-        x = []
-        y = []
-        for cell in L1:
-            x.append(cell.value)
-        for cell in L2:
-            y.append(cell.value)
-        plt.plot(x, y)
-        plt.show()
-def graph_add(list_graph):
-    plt.plot(list_graph)
+        plt.plot(L[0],L[1])
     plt.show()
-
 def close_graph():
     plt.close()
 
@@ -261,6 +275,7 @@ class Ui_MainWindowgraph(QtWidgets.QWidget):
         self.label_4.setText(_translate("MainWindow", "     TITLE       "))
         self.label_2.setText(_translate("MainWindow", "    X AXIS TITLE"))
         self.label.setText(_translate("MainWindow", "    Y AXIS TITLE"))
+
 
 
 
