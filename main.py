@@ -47,15 +47,7 @@ def expension_process(cells_selected):
     tirette.formuleExpanse(cells_selected,network,ui_mainwindow)
 
     # efface les rectangles verts, fin de l'effet tirette
-    width = ui_mainwindow.tableWidget.columnWidth(ui_mainwindow.tableWidget.currentColumn())
-    height = ui_mainwindow.tableWidget.rowHeight(ui_mainwindow.tableWidget.currentRow())
-    x = cells_selected.leftColumn() * width
-    y = cells_selected.topRow() * height
-    range_width = cells_selected.rightColumn() - cells_selected.leftColumn() + 1
-    range_height = cells_selected.bottomRow() - cells_selected.topRow() + 1
-    reset_rect = Qt.QRect()
-    reset_rect.setRect(x, y, range_width * width, range_height * height)
-    ui_mainwindow.tableWidget.viewport().repaint(reset_rect)
+    tirette.endTirette(ui_mainwindow, cells_selected)
 
 
 def functionAdded(name, descrition, evaluation, category):

@@ -33,13 +33,16 @@ def isNumber(chaine):
     p = re.compile(r"^[0-9]*\.?([0-9])+$")  # Si la chaine est un nombre (flottant ou non)
     return matchpattern(chaine, p)
 
+# Renvoie True si la chaine est une chaine de char
+def isString(chaine):
+    p = re.compile(r"^['\"][^'\"]*['\"]$")
+    return matchpattern(chaine, p)
 
 # Renvoie True si l'entrée correspond syntaxiquement à une fonction
 def isfunction(chaine):
     if isCell(chaine) or isNumber(chaine):
         return False
-    p = re.compile(
-        r"^\w+$")  # Une fonction peut contenir des lettres, chiffres et '_', sans être une celulle ni un nombre
+    p = re.compile(r"^\w+$")  # Une fonction peut contenir des lettres, chiffres et '_', sans être une celulle ni un nombre
     return matchpattern(chaine, p)
 
 
@@ -67,6 +70,8 @@ def what_type(chaine):
         return '='
     elif isCell(chaine):
         return 'cell'
+    elif isString(chaine):
+        return 'string'
     elif isfunction(chaine):
         return 'function'
     else:

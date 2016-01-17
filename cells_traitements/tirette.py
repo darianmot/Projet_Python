@@ -1,7 +1,7 @@
 import cells_traitements.decomposition as decomposition
 import visu.columns_labels as columns_labels
 import copy
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, Qt
 
 #Renvoie le input à traiter dans la celulle situé rows lignes plus bas que la celulle initale dans le cas où l'utilisateur tire verticalement sur le coin
 def verticalPull(inputDecomposed,rows):
@@ -69,3 +69,16 @@ def formuleExpanse(cells_selected,network,ui_mainwindow):
                 if ui_mainwindow.tableWidget.item(row, i) == None:
                     ui_mainwindow.tableWidget.setItem(row, i, QtWidgets.QTableWidgetItem())
                 ui_mainwindow.tableWidget.read_input.emit(row, i, newinput)
+
+
+# Efface les rectangles verts, fin de l'effet tirette
+def endTirette(ui_mainwindow, cells_selected):
+    width = ui_mainwindow.tableWidget.columnWidth(ui_mainwindow.tableWidget.currentColumn())
+    height = ui_mainwindow.tableWidget.rowHeight(ui_mainwindow.tableWidget.currentRow())
+    x = cells_selected.leftColumn() * width
+    y = cells_selected.topRow() * height
+    range_width = cells_selected.rightColumn() - cells_selected.leftColumn() + 1
+    range_height = cells_selected.bottomRow() - cells_selected.topRow() + 1
+    reset_rect = Qt.QRect()
+    reset_rect.setRect(x, y, range_width * width, range_height * height)
+    ui_mainwindow.tableWidget.viewport().repaint(reset_rect)
