@@ -10,10 +10,10 @@ from matplotlib import cm
 def graphiques(ui_mainwindow, statusBar, network, A, settings):
     ui_mainwindow.indicator.setText("Sélectionnez une ligne ou colonne et appuyez sur Valider")
     btn = QtWidgets.QPushButton("Valider")
-    btn.clicked.connect(lambda : action1(btn, ui_mainwindow, statusBar, network, A, settings))
+    btn.clicked.connect(lambda : premiere_selection_de_données(btn, ui_mainwindow, statusBar, network, A, settings))
     statusBar().addWidget(btn)
 
-def action1(btn, ui_mainwindow, statusBar, network, A, settings):
+def premiere_selection_de_données(btn, ui_mainwindow, statusBar, network, A, settings):
     ui_mainwindow.lineEdit.blockSignals(True) #Pour éviter les interactions de la lineEdit pendant la selection
     L1=[]
     for item in ui_mainwindow.tableWidget.selectedItems():
@@ -31,11 +31,11 @@ def action1(btn, ui_mainwindow, statusBar, network, A, settings):
         ui_mainwindow.indicator.setText("Sélectionnez une nouvelle ligne ou colonne et appuyez sur Valider")
         statusBar().removeWidget(btn)
         btn2 = QtWidgets.QPushButton("Valider")
-        btn2.clicked.connect(lambda : action2(btn2, L1, ui_mainwindow, statusBar, network, A, settings))
+        btn2.clicked.connect(lambda : seconde_selection_de_données(btn2, L1, ui_mainwindow, statusBar, network, A, settings))
         statusBar().addWidget(btn2)
     statusBar().removeWidget(btn)
 
-def action2(btn2, L1, ui_mainwindow, statusBar, network, A, settings):
+def seconde_selection_de_données(btn2, L1, ui_mainwindow, statusBar, network, A, settings):
     L2=[]
     for item in ui_mainwindow.tableWidget.selectedItems():
         L2.append(network.getCell(item.row(), item.column()))
@@ -49,7 +49,6 @@ def action2(btn2, L1, ui_mainwindow, statusBar, network, A, settings):
             break
     if b:
         print(L1, L2)
-
         if len(L1) == len(L2):
             L=[[x.value for x in L1],[y.value for y in L2]]
             add_graph(L,ui_mainwindow,statusBar,network,settings,A)
@@ -59,54 +58,84 @@ def action2(btn2, L1, ui_mainwindow, statusBar, network, A, settings):
     statusBar().removeWidget(btn2)
     ui_mainwindow.lineEdit.setText(network.getCell(ui_mainwindow.tableWidget.currentRow(),ui_mainwindow.tableWidget.currentColumn()).input)
     ui_mainwindow.lineEdit.blockSignals(False)
-    ui_mainwindow.indicator.setText("voulez vous superposer une autre courbe?")
+    ui_mainwindow.indicator.setText("Voulez vous superposer une autre courbe? Si oui appuyez sur VALIDER sinon su ANNULER")
 
+#fonction ajout d autres graphes
 def add_graph(L,ui_mainwindow,statusBar,network,settings,A):
     settings=settings
     list_to_plot=L
-    print(list_to_plot)
     btn_add=QtWidgets.QPushButton("+add")
     statusBar().addWidget(btn_add)
     btn_cancel=QtWidgets.QPushButton("annuler")
     statusBar().addWidget(btn_cancel)
-    def affichage(statusBar):
-        print('affichage')
+
+    #affichage du bouton valider pour selectionner une serie de valeurs en plus si l on a accepter d ajouter une autre serie de valeurs
+    def affichage_btn_add_cancel(statusBar):
+        print('veuillez selectionner une nouvelle série de valeurs')
+        ui_mainwindow.indicator.setText('->Veuillez selectionner une nouvelle série de valeurs s il vous plait')
         btn_validate=QtWidgets.QPushButton('validate')
         statusBar.addWidget(btn_validate)
-        def remove1():
+
+        #suppression du bouton valider
+        def remove_btn_validate():
             statusBar.removeWidget(btn_validate)
+
         btn_validate.clicked.connect(plot_graph)
-        btn_validate.clicked.connect(remove1)
+        btn_validate.clicked.connect(remove_btn_validate)
+
+    #affichage du graphique
     def plot_graph():
         list_to_plot=add_liste(L)
-        print(list_to_plot,'list_to_plot')
         for i in range(0,int((len(list_to_plot)/2))):
             plt.plot(list_to_plot[2*i],list_to_plot[2*i+1])
             print(i)
         plt.show()
         print('graphique affiché')
+        ui_mainwindow.indicator.setText('')
         add_graph(L,ui_mainwindow,statusBar,network,settings,A)
+
+    #fonction d'ajout d une autre liste de valeurs aux autres deja selectionnees
     def add_liste(L):
         new_liste=[network.getCell(item.row(), item.column()).value for item in ui_mainwindow.tableWidget.selectedItems()]
         list_to_plot.append(L[0])
         list_to_plot.append(new_liste)
         return list_to_plot
-    def add_2():
+
+    #supprime les boutons cancel et add dans le cas ou l on desire afficher une serie de valeur en plus
+    def add_function():
+         print('Vous voulez superposer une autre série de valeurs a celles deja existente')
          statusBar().removeWidget(btn_add)
          statusBar().removeWidget(btn_cancel)
-         affichage(statusBar())
+         affichage_btn_add_cancel(statusBar())
+
+    #fonction d annulation qui sort du processus d ajout
     def cancel():
+         print('vous ne voulez pas ajouter dautres valeurs')
          statusBar().removeWidget(btn_add)
          statusBar().removeWidget(btn_cancel)
          ui_mainwindow.indicator.setText("")
          mainGraphFunction(list_to_plot,A, settings)
-
-    btn_add.clicked.connect(add_2)
+         ui_mainwindow.indicator.setText('')
+    btn_add.clicked.connect(add_function)
     btn_cancel.clicked.connect(cancel)
 
 
 
 #Tracé des courbes
+def color_chooser(combobox):
+    color=combobox.currentText()
+    if color=='rouge':
+        return 'red'
+    elif color=='bleu':
+        return 'blue'
+    elif color=='jaune':
+        return 'yellow'
+    elif color=='noir':
+        return 'black'
+    elif color=='violet':
+        return 'purple'
+    else:
+        return 'green'
 def mainGraphFunction(L, A, settings):
     if A == 0:
         plt.plot(L[0],L[1])
@@ -140,8 +169,7 @@ class Ui_MainWindowgraph(QtWidgets.QWidget):
         #liste des types de graphiques
         self.listView = QtWidgets.QListWidget(self.centralwidget)
         self.listView.setObjectName("listView")
-        self.explode=QtWidgets.QLineEdit(self.centralwidget)
-        self.explode.setObjectName('explode')
+
         self.courbe=QtWidgets.QListWidgetItem()
         self.listView.addItem(self.courbe)
         self.courbe.setText('courbe')
@@ -158,7 +186,6 @@ class Ui_MainWindowgraph(QtWidgets.QWidget):
 
         #ajout de widget aux layouts
         self.horizontalLayout_5.addWidget(self.listView)
-        self.lastlayout.addWidget(self.explode)
 
 
         #images graphique et layout
@@ -243,8 +270,13 @@ class Ui_MainWindowgraph(QtWidgets.QWidget):
             histogramme=QtGui.QPixmap('visu/icons/histogramme.jpg')
             camembert=QtGui.QPixmap('visu/icons/camembert.jpg')
             DD=QtGui.QPixmap('visu/icons/DD.png')
-            A=self.listView.currentRow()
             image=self.images
+            #au cas ou on aurait le temps pour letirement
+            #self.explode=QtWidgets.QLineEdit(self.centralwidget)
+            #self.explode.setObjectName('explode')
+            #self.lastlayout.addWidget(self.explode)
+            A=self.listView.currentRow()
+
             if A==0:
                 print('you chose courbe','image')
                 image.setPixmap(courbe)
