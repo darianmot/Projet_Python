@@ -20,6 +20,8 @@ class MyDelegate(QtWidgets.QItemDelegate):
     def __init__(self, table):
         super().__init__()
         self.table = table
+        self.filter = EventEater(self)
+        self.installEventFilter(self.filter)
 
     def createEditor(self, QWidget, QStyleOptionViewItem, QModelIndex):
         print('Editor created')
@@ -38,8 +40,14 @@ class MyDelegate(QtWidgets.QItemDelegate):
                 QPainter.setBrush(brush)
                 self.drawBackground(QPainter, QStyleOptionViewItem, QModelIndex)
         except:
-            pass
+            print("Fatal error painting background")
 
+    def eventFilter(self, QObject, event):
+        if event.type() == 6 and event.key() == QtCore.Qt.Key_Tab:
+            print("tab press")
+            return True
+        QtWidgets.QItemDelegate.eventFilter(self,QObject,event)
+        return False
 
 class EventEater(QtCore.QObject):
     cellExpended = pyqtSignal(list)
@@ -64,6 +72,7 @@ class EventEater(QtCore.QObject):
             else:
                 self.target.coin.isUnder = False
         return False
+
 
 
 class MyItem(QtWidgets.QTableWidgetItem):
@@ -154,8 +163,10 @@ class MyTableWidget(QtWidgets.QTableWidget):
         width = self.columnWidth(self.currentColumn())
         height = self.rowHeight(self.currentRow())
 
+
         # dessine les rectangles verts de la tirette
-        if self.coin.isSelected:
+        if self.coin.isSelected :
+            print('Entering green rect mode')
             cells_selected = self.selectedRanges()[0]
             if cells_selected.columnCount() == 1 or cells_selected.rowCount() == 1:
                 pen.setColor(QtGui.QColor(0, 225, 0))

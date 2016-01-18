@@ -112,6 +112,7 @@ ui_funWinfow.toolAdd.released.connect(AddFunwindow.show)
 ui_mainwindow.functionButton.released.connect(Funwindow.show)
 ui_addfunwindow.sendFunData.connect(functionAdded)
 
+
     #Graphs
 ui_mainwindow.graph.triggered.connect(graphwindow.show)
 def draw_graph(current_row):
