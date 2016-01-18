@@ -30,7 +30,7 @@ Funwindow = QtWidgets.QDialog()
 ui_funWinfow = funWindow.Ui_funwindow()
 ui_funWinfow.setupUi(Funwindow, knownFunctions)
 # graphwindow
-graphwindow = QtWidgets.QMainWindow()
+graphwindow = QtWidgets.QDialog()
 ui_graphwindow = graphic.Ui_MainWindowgraph()
 ui_graphwindow.setupUi((graphwindow))
 # AddFunction Window
