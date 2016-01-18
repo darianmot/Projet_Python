@@ -6,12 +6,12 @@ from matplotlib import cm
 
 
 
-#Partie concernant la sélection des données
+#Partie concernant la sélection des donnees
 def graph_selector(current_row,ui_mainwindow,statusBar,network,ui_graphwindow):
     if current_row==0:
-        ui_mainwindow.indicator.setText("Sélectionnez une ligne ou colonne et appuyez sur Valider")
+        ui_mainwindow.indicator.setText("<html>Sélectionnez la liste des <b>abscisses</b></html>")
         btn = QtWidgets.QPushButton("Valider")
-        btn.clicked.connect(lambda : premiere_selection_de_données(btn, ui_mainwindow, statusBar, network,ui_graphwindow))
+        btn.clicked.connect(lambda : abscisseSelection(btn, ui_mainwindow, statusBar, network,ui_graphwindow))
         statusBar().addWidget(btn)
         print('vous avez choisi les courbes')
     elif current_row==1:
@@ -23,7 +23,7 @@ def graph_selector(current_row,ui_mainwindow,statusBar,network,ui_graphwindow):
     else:
         pass
 
-def premiere_selection_de_données(btn, ui_mainwindow, statusBar, network,graphwindow):
+def abscisseSelection(btn, ui_mainwindow, statusBar, network,graphwindow):
     ui_mainwindow.lineEdit.blockSignals(True) #Pour éviter les interactions de la lineEdit pendant la selection
     L1=[]
     for item in ui_mainwindow.tableWidget.selectedItems():
@@ -37,15 +37,14 @@ def premiere_selection_de_données(btn, ui_mainwindow, statusBar, network,graphw
             b = False
             break
     if b:
-        print(L1)
-        ui_mainwindow.indicator.setText("Sélectionnez une nouvelle ligne ou colonne et appuyez sur Valider")
+        ui_mainwindow.indicator.setText("<html>Sélectionnez la liste des <b>abscisses</b></html>")
         statusBar().removeWidget(btn)
         btn2 = QtWidgets.QPushButton("Valider")
-        btn2.clicked.connect(lambda : seconde_selection_de_données(btn2, L1, ui_mainwindow, statusBar, network,graphwindow))
+        btn2.clicked.connect(lambda : seconde_selection_de_donnees(btn2, L1, ui_mainwindow, statusBar, network,graphwindow))
         statusBar().addWidget(btn2)
     statusBar().removeWidget(btn)
 
-def seconde_selection_de_données(btn2, L1, ui_mainwindow, statusBar, network,ui_graphwindow):
+def seconde_selection_de_donnees(btn2, L1, ui_mainwindow, statusBar, network,ui_graphwindow):
     L2=[]
     for item in ui_mainwindow.tableWidget.selectedItems():
         L2.append(network.getCell(item.row(), item.column()))
@@ -73,9 +72,9 @@ def seconde_selection_de_données(btn2, L1, ui_mainwindow, statusBar, network,ui
 #fonction ajout d autres graphes
 def add_graph(L,ui_mainwindow,statusBar,network,ui_graphwindow):
     list_to_plot=L
-    btn_add=QtWidgets.QPushButton("+add")
+    btn_add=QtWidgets.QPushButton("Add")
     statusBar().addWidget(btn_add)
-    btn_cancel=QtWidgets.QPushButton("annuler")
+    btn_cancel=QtWidgets.QPushButton("Tracer")
     statusBar().addWidget(btn_cancel)
 
     #affichage du bouton valider pour selectionner une serie de valeurs en plus si l on a accepter d ajouter une autre serie de valeurs.
@@ -189,6 +188,7 @@ class Ui_MainWindowgraph(QtWidgets.QWidget):
         self.fonction_DD=QtWidgets.QListWidgetItem()
         self.fonction_DD.setText('F(X,Y)')
         self.listView.addItem(self.fonction_DD)
+        self.listView.setCurrentRow(0)
 
 
         #ajout de widget aux layouts
