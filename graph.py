@@ -7,13 +7,23 @@ from matplotlib import cm
 
 
 #Partie concernant la sélection des données
-def graphiques(ui_mainwindow, statusBar, network, A, settings):
-    ui_mainwindow.indicator.setText("Sélectionnez une ligne ou colonne et appuyez sur Valider")
-    btn = QtWidgets.QPushButton("Valider")
-    btn.clicked.connect(lambda : premiere_selection_de_données(btn, ui_mainwindow, statusBar, network, A, settings))
-    statusBar().addWidget(btn)
+def graph_selector(current_row,ui_mainwindow,statusBar,network,ui_graphwindow):
+    if current_row==0:
+        ui_mainwindow.indicator.setText("Sélectionnez une ligne ou colonne et appuyez sur Valider")
+        btn = QtWidgets.QPushButton("Valider")
+        btn.clicked.connect(lambda : premiere_selection_de_données(btn, ui_mainwindow, statusBar, network,ui_graphwindow))
+        statusBar().addWidget(btn)
+        print('vous avez choisi les courbes')
+    elif current_row==1:
+        print('vous avez choisi l histogramme')
+        pass
+    elif current_row==2:
+        print('vous avez choisi ')
+        pass
+    else:
+        pass
 
-def premiere_selection_de_données(btn, ui_mainwindow, statusBar, network, A, settings):
+def premiere_selection_de_données(btn, ui_mainwindow, statusBar, network,graphwindow):
     ui_mainwindow.lineEdit.blockSignals(True) #Pour éviter les interactions de la lineEdit pendant la selection
     L1=[]
     for item in ui_mainwindow.tableWidget.selectedItems():
@@ -31,11 +41,11 @@ def premiere_selection_de_données(btn, ui_mainwindow, statusBar, network, A, se
         ui_mainwindow.indicator.setText("Sélectionnez une nouvelle ligne ou colonne et appuyez sur Valider")
         statusBar().removeWidget(btn)
         btn2 = QtWidgets.QPushButton("Valider")
-        btn2.clicked.connect(lambda : seconde_selection_de_données(btn2, L1, ui_mainwindow, statusBar, network, A, settings))
+        btn2.clicked.connect(lambda : seconde_selection_de_données(btn2, L1, ui_mainwindow, statusBar, network,graphwindow))
         statusBar().addWidget(btn2)
     statusBar().removeWidget(btn)
 
-def seconde_selection_de_données(btn2, L1, ui_mainwindow, statusBar, network, A, settings):
+def seconde_selection_de_données(btn2, L1, ui_mainwindow, statusBar, network,ui_graphwindow):
     L2=[]
     for item in ui_mainwindow.tableWidget.selectedItems():
         L2.append(network.getCell(item.row(), item.column()))
@@ -51,7 +61,7 @@ def seconde_selection_de_données(btn2, L1, ui_mainwindow, statusBar, network, A
         print(L1, L2)
         if len(L1) == len(L2):
             L=[[x.value for x in L1],[y.value for y in L2]]
-            add_graph(L,ui_mainwindow,statusBar,network,settings,A)
+            add_graph(L,ui_mainwindow,statusBar,network,ui_graphwindow)
             ui_mainwindow.indicator.setText("La sélection est correcte")
         else:
             ui_mainwindow.indicator.setText("Erreur: Sélections de tailles différentes")
@@ -61,8 +71,7 @@ def seconde_selection_de_données(btn2, L1, ui_mainwindow, statusBar, network, A
     ui_mainwindow.indicator.setText("Voulez vous superposer une autre courbe? Si oui appuyez sur VALIDER sinon su ANNULER")
 
 #fonction ajout d autres graphes
-def add_graph(L,ui_mainwindow,statusBar,network,settings,A):
-    settings=settings
+def add_graph(L,ui_mainwindow,statusBar,network,ui_graphwindow):
     list_to_plot=L
     btn_add=QtWidgets.QPushButton("+add")
     statusBar().addWidget(btn_add)
@@ -76,12 +85,9 @@ def add_graph(L,ui_mainwindow,statusBar,network,settings,A):
         btn_validate=QtWidgets.QPushButton('validate')
         statusBar.addWidget(btn_validate)
 
-        #suppression du bouton valider
-        def remove_btn_validate():
-            statusBar.removeWidget(btn_validate)
 
         btn_validate.clicked.connect(plot_graph)
-        btn_validate.clicked.connect(remove_btn_validate)
+        btn_validate.clicked.connect(lambda : statusBar.removeWidget(btn_validate))
 
     #affichage du graphique
     def plot_graph():
@@ -92,7 +98,7 @@ def add_graph(L,ui_mainwindow,statusBar,network,settings,A):
         plt.show()
         print('graphique affiché')
         ui_mainwindow.indicator.setText('')
-        add_graph(L,ui_mainwindow,statusBar,network,settings,A)
+        add_graph(L,ui_graphwindow,statusBar,network,ui_graphwindow)
 
     #fonction d'ajout d une autre liste de valeurs aux autres deja selectionnees
     def add_liste(L):
@@ -114,7 +120,7 @@ def add_graph(L,ui_mainwindow,statusBar,network,settings,A):
          statusBar().removeWidget(btn_add)
          statusBar().removeWidget(btn_cancel)
          ui_mainwindow.indicator.setText("")
-         mainGraphFunction(list_to_plot,A, settings)
+         mainGraphFunction(list_to_plot,ui_graphwindow)
          ui_mainwindow.indicator.setText('')
     btn_add.clicked.connect(add_function)
     btn_cancel.clicked.connect(cancel)
@@ -128,6 +134,8 @@ def color_chooser(combobox):
         return 'red'
     elif color=='bleu':
         return 'blue'
+    elif color=='orange':
+        return 'orange'
     elif color=='jaune':
         return 'yellow'
     elif color=='noir':
@@ -136,9 +144,9 @@ def color_chooser(combobox):
         return 'purple'
     else:
         return 'green'
-def mainGraphFunction(L, A, settings):
-    if A == 0:
-        plt.plot(L[0],L[1])
+def mainGraphFunction(L,ui_graphwindow):
+    color=color_chooser(ui_graphwindow.combobox)
+    plt.plot(L[0],L[1],color)
     plt.show()
 def close_graph():
     plt.close()
@@ -146,7 +154,7 @@ def close_graph():
 #Fenetre de sélection
 class Ui_MainWindowgraph(QtWidgets.QWidget):
 
-    okSignal = pyqtSignal(int,list)
+    okSignal = pyqtSignal(int)
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -168,10 +176,10 @@ class Ui_MainWindowgraph(QtWidgets.QWidget):
         #liste des types de graphiques
         self.listView = QtWidgets.QListWidget()
         self.listView.setObjectName("listView")
-
         self.courbe=QtWidgets.QListWidgetItem()
-        self.listView.addItem(self.courbe)
         self.courbe.setText('courbe')
+        self.listView.addItem(self.courbe)
+
         self.histogramme=QtWidgets.QListWidgetItem()
         self.listView.addItem(self.histogramme)
         self.histogramme.setText('histogramme')
@@ -259,33 +267,35 @@ class Ui_MainWindowgraph(QtWidgets.QWidget):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         #selecteur d'image
+
+
         def image():
+            A=self.listView.currentRow()
+            print(A)
             courbe=QtGui.QPixmap('visu/icons/courbe.png')
             histogramme=QtGui.QPixmap('visu/icons/histogramme.jpg')
             camembert=QtGui.QPixmap('visu/icons/camembert.jpg')
             DD=QtGui.QPixmap('visu/icons/DD.png')
-            image=self.images
             A=self.listView.currentRow()
-
             if A==0:
                 print('you chose courbe','image')
-                image.setPixmap(courbe)
+                self.images.setPixmap(courbe)
             elif A==1:
                 print('you chose histogramme','image')
-                image.setPixmap(histogramme)
+                self.images.setPixmap(histogramme)
             elif A==2:
-                image.setPixmap(camembert)
+                self.images.setPixmap(camembert)
                 print('you chose a camembert','image')
             elif A==3:
-                image.setPixmap(DD)
+                self.images.setPixmap(DD)
                 print('you chose a 2D representation')
         def quit():
             MainWindow.close()
 
         def okGraph():
-            self.okSignal.emit(self.listView.currentRow(), ['fsdv', 'cds0', 'vcdhbs', 'b'])
+            self.okSignal.emit(self.listView.currentRow())
         #les connexions
-        self.listView.itemClicked.connect(image)
+        self.listView.itemSelectionChanged.connect(image)
         self.buttonBox.rejected.connect(quit)
         self.buttonBox.accepted.connect(okGraph)
         self.buttonBox.accepted.connect(quit)

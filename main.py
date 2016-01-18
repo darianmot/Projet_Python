@@ -114,10 +114,11 @@ ui_addfunwindow.sendFunData.connect(functionAdded)
 
     #Graphs
 ui_mainwindow.graph.triggered.connect(graphwindow.show)
-def fonction(a,L):
-    graphic.graphiques(ui_mainwindow,MainWindow.statusBar,network,a,L)
+def draw_graph(current_row):
+    graphic.graph_selector(current_row,ui_mainwindow,MainWindow.statusBar,network,ui_graphwindow)
 
-ui_graphwindow.okSignal.connect(fonction)
+
+ui_graphwindow.okSignal.connect(draw_graph)
 MainWindow.showMaximized()
 splash.finish(MainWindow)
 sys.exit(app.exec_())
