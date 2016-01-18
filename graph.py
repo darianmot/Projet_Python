@@ -78,7 +78,7 @@ def add_graph(L,ui_mainwindow,statusBar,network,ui_graphwindow):
     btn_cancel=QtWidgets.QPushButton("annuler")
     statusBar().addWidget(btn_cancel)
 
-    #affichage du bouton valider pour selectionner une serie de valeurs en plus si l on a accepter d ajouter une autre serie de valeurs
+    #affichage du bouton valider pour selectionner une serie de valeurs en plus si l on a accepter d ajouter une autre serie de valeurs.
     def affichage_btn_add_cancel(statusBar):
         print('veuillez selectionner une nouvelle série de valeurs')
         ui_mainwindow.indicator.setText('->Veuillez selectionner une nouvelle série de valeurs s il vous plait')
