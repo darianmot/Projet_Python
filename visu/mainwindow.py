@@ -6,6 +6,22 @@ CELLWIDTH = 100
 CELLHEIGHT = 30
 
 
+
+class MyMainWindow(QtWidgets.QMainWindow):
+    asked_quit = pyqtSignal()
+    def __init__(self):
+        super().__init__()
+        self.network = None
+
+    def closeEvent(self, QCloseEvent):
+        if not self.network.saved:
+            QCloseEvent.ignore()
+            self.asked_quit.emit()
+        else:
+            QCloseEvent.accept()
+
+
+
 class MyRect(Qt.QRect):
     def __init__(self):
         super().__init__()
@@ -252,12 +268,12 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.tableWidget = MyTableWidget(self.centralwidget, network)
         self.tableWidget.setObjectName("tableWidget")
 
-    #def closeEvent(self, QCloseEvent):
 
 
     def setupUi(self, MainWindow, network):
         # La fenetre
         MainWindow.setObjectName("MainWindow")
+        MainWindow.network = network
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
