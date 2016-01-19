@@ -1,10 +1,10 @@
 __authors__ = "Darian MOTAMED, Hugo CHOULY, Atime RONDA,Anas DARWICH"
-import sys, visu.mainwindow as mainwindow, visu.funwindow as funWindow, visu.addfunwindow as addfunwindow, \
+import sys, visu.mainwindow as mainwindow, visu.funwindow as funWindow, visu.addfunwindow as addfunwindow, visu.quitwin as quitWindow,  \
     graph as graphic
 import structures, cells_traitements.functions as functions, record
 import cells_traitements.tirette as tirette, cells_traitements.evaluation as evalutation
 import pickle
-from PyQt5 import QtWidgets, Qt, QtCore
+from PyQt5 import QtWidgets, Qt
 
 knownFunctions = pickle.load(open('knownFunctions.p', 'rb'))
 knownFunctions.addCategory("Date et heure")
@@ -35,11 +35,15 @@ ui_funWinfow.setupUi(Funwindow, knownFunctions)
 # graphwindow
 graphwindow = QtWidgets.QDialog()
 ui_graphwindow = graphic.Ui_MainWindowgraph()
-ui_graphwindow.setupUi((graphwindow))
+ui_graphwindow.setupUi(graphwindow)
 # AddFunction Window
 AddFunwindow = QtWidgets.QDialog()
 ui_addfunwindow = addfunwindow.Ui_Dialog()
 ui_addfunwindow.setupUi(AddFunwindow, knownFunctions)
+#Quit/Save window
+Quitwindow= QtWidgets.QDialog()
+ui_quitWindow = quitWindow.Ui_quitwin()
+ui_quitWindow.setupUi(Quitwindow)
 
 # processus de tirette (coin inférieur droit d'une case sélectionnée)
 
@@ -76,13 +80,14 @@ def windowsave():  # to open the window save....
     address = fileWindow[0]  # faut mettre l'extension du format genre fichier.pyc ou fichier.xls dans la barre de saisie
     name=record.fileName(address)
     record.writter_marshalling(network,name)
-    ui_mainwindow.indicator.setText('Sauvegardé')
+
 
 def export():
-    extension = "(*.xls *.csv)" if record.HASXLWT else "(*.p *.csv)"
+    extension = "(*.xls *.csv)" if record.HASXLWT else "(*.csv)"
     fileWindow = QtWidgets.QFileDialog.getSaveFileName(MainWindow, 'Enregistrer', '', extension)
     address = fileWindow[0]
     record.extensionwritter(address, network, ui_mainwindow)
+
 
 
 # destinée à réinitialiser la feuille de calcul (pour nouvelle feuille) en cours de construction
@@ -92,9 +97,28 @@ def reset_table():
     ui_mainwindow.lineEdit.clear()
     ui_mainwindow.tableWidget.setFocus()
     ui_mainwindow.indicator.setText("Nouvelle Feuille")
+    ui_mainwindow.tableWidget.network.saved = False
 
 
 
+  #Quit
+
+def quit_enacell():
+    if ui_mainwindow.tableWidget.network.saved:
+        MainWindow.close()
+    else:
+        Quitwindow.show()
+
+def force_quit():
+    Quitwindow.close()
+    Funwindow.close()
+    graphwindow.close()
+    MainWindow.close()
+
+
+ui_quitWindow.buttonBox.button(QtWidgets.QDialogButtonBox.Save).clicked.connect(windowsave)
+ui_quitWindow.buttonBox.button(QtWidgets.QDialogButtonBox.Cancel).clicked.connect(Quitwindow.close)
+ui_quitWindow.buttonBox.button(QtWidgets.QDialogButtonBox.Discard).clicked.connect(force_quit)
 
     #Connexion des boutons de l'interface
     #Menus
@@ -103,8 +127,9 @@ ui_mainwindow.menu_enregistrer.triggered.connect(windowsave)
 ui_mainwindow.actionExport.triggered.connect(export)
 ui_mainwindow.actionOuvrir.triggered.connect(windowopen)
 ui_mainwindow.menu_ouvrir.triggered.connect(windowopen)
-ui_mainwindow.menu_quit.triggered.connect(MainWindow.close)
+ui_mainwindow.menu_quit.triggered.connect(quit_enacell)
 ui_mainwindow.new_button.triggered.connect(reset_table)
+
 
     #Table
 ui_mainwindow.tableWidget.read_input.connect(lambda x, y, string : evalutation.cellEvaluation(x, y, string, network, ui_mainwindow, knownFunctions))
@@ -120,6 +145,10 @@ ui_addfunwindow.sendFunData.connect(functionAdded)
 ui_mainwindow.graph.triggered.connect(graphwindow.show)
 def draw_graph(current_row):
     graphic.graph_selector(current_row,ui_mainwindow,MainWindow.statusBar,network,ui_graphwindow)
+
+
+
+
 
 
 ui_graphwindow.okSignal.connect(draw_graph)

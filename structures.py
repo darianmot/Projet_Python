@@ -78,6 +78,7 @@ class network(object): #On classe par coordonnées
         self.matrix[0][0].name=columns_labels.getLabel(self.labels,0)+str(1)
         self.columnNumber=1
         self.rowNumber=1
+        self.saved = False
 
     #Ajoute une ligne au network
     def addRow(self):
