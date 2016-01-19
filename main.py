@@ -20,7 +20,7 @@ app.processEvents()
 
 # Main Window
 network = structures.network()
-MainWindow = mainwindow.QtWidgets.QMainWindow()
+MainWindow = mainwindow.MyMainWindow()
 ui_mainwindow = mainwindow.Ui_MainWindow()
 ui_mainwindow.setupUi(MainWindow, network)
 record.etatXls(ui_mainwindow)
@@ -107,10 +107,9 @@ def quit_enacell():
         Quitwindow.show()
 
 def force_quit():
+    ui_mainwindow.tableWidget.network.saved = True
     Quitwindow.close()
-    Funwindow.close()
-    graphwindow.close()
-    MainWindow.close()
+    quit_enacell()
 
 
 ui_quitWindow.buttonBox.button(QtWidgets.QDialogButtonBox.Save).clicked.connect(windowsave)
@@ -126,6 +125,7 @@ ui_mainwindow.actionOuvrir.triggered.connect(windowopen)
 ui_mainwindow.menu_ouvrir.triggered.connect(windowopen)
 ui_mainwindow.menu_quit.triggered.connect(quit_enacell)
 ui_mainwindow.new_button.triggered.connect(reset_table)
+MainWindow.asked_quit.connect(Quitwindow.show)
 
 
     #Table
