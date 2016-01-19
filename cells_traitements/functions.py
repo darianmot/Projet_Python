@@ -43,11 +43,15 @@ class Knownfunctions():
             l.append(fun)
         return sorted(l,key=lambda x:x.name)
 
-    def addCategory(self,string):
+    def addCategory(self, string):
         self.category.append(string)
 
+    def delCategory(self, string):
+        self.category.remove(string)
+
     def getCategoryList(self):
-        return sorted(self.category)
+        categories = [category for category in self.category if category != "Other"]
+        return sorted(categories) + ["Other"]
 
     def functionOfCategory(self,string):
         l=[]

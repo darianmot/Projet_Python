@@ -30,11 +30,8 @@ class MyDelegate(QtWidgets.QItemDelegate):
 
     def paint(self, QPainter, QStyleOptionViewItem, QModelIndex):
         QtWidgets.QItemDelegate.paint(self, QPainter, QStyleOptionViewItem, QModelIndex)
-        # print("colonne", QModelIndex.column())
-        # print("ligne", QModelIndex.row())
         try:
             if self.table.coin.isSelected:
-                print("QItemDelegate Detection")
                 brush = Qt.QBrush()
                 brush.setColor(Qt.QColor(255, 255, 255))
                 QPainter.setBrush(brush)
@@ -44,10 +41,9 @@ class MyDelegate(QtWidgets.QItemDelegate):
 
     def eventFilter(self, QObject, event):
         if event.type() == 6 and event.key() == QtCore.Qt.Key_Tab:
-            print("tab press")
-            return True
-        QtWidgets.QItemDelegate.eventFilter(self,QObject,event)
-        return False
+            print("Tab press")
+            return False
+        return QtWidgets.QItemDelegate.eventFilter(self,QObject,event)
 
 class EventEater(QtCore.QObject):
     cellExpended = pyqtSignal(list)

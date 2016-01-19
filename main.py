@@ -7,6 +7,9 @@ import pickle
 from PyQt5 import QtWidgets, Qt, QtCore
 
 knownFunctions = pickle.load(open('knownFunctions.p', 'rb'))
+knownFunctions.addCategory("Date et heure")
+knownFunctions.addCategory("Texte")
+knownFunctions.addCategory("Physique")
 app = mainwindow.QtWidgets.QApplication(sys.argv)
 
 pixmap = Qt.QPixmap("visu/icons/Logo_ENAC.png")
