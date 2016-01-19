@@ -8,6 +8,7 @@ from matplotlib import cm
 
 #Partie concernant la sélection des donnees
 def graph_selector(current_row,ui_mainwindow,statusBar,network,ui_graphwindow):
+    ui_mainwindow.lineEdit.blockSignals(True) #Pour éviter les interactions de la lineEdit pendant la selection
     if current_row==0:
         ui_mainwindow.indicator.setText("<html>Sélectionnez la liste des <b>abscisses</b></html>")
         btn_validate1 = QtWidgets.QPushButton("Valider")
@@ -24,7 +25,6 @@ def graph_selector(current_row,ui_mainwindow,statusBar,network,ui_graphwindow):
         pass
 
 def abscisseSelection(btn_validate1, ui_mainwindow, statusBar, network,graphwindow):
-    ui_mainwindow.lineEdit.blockSignals(True) #Pour éviter les interactions de la lineEdit pendant la selection
     L = []
     L1 = []
     for item in ui_mainwindow.tableWidget.selectedItems():
@@ -68,94 +68,13 @@ def ordonneesSelection(btnList, L, ui_mainwindow, statusBar, network, graphwindo
     btn_ajouter=QtWidgets.QPushButton("Ajouter")
     statusBar().addWidget(btn_ajouter)
     btnList=[btn_ajouter,btn_tracer]
-    ui_mainwindow.indicator.setText("<html>Pour tracer le graphique appuyez sur <b>Tracer</b> sinon pour superposer les graphiques appuyez sur <b>Ajouter</b></html>")
+    ui_mainwindow.indicator.setText("<html>Pour tracer le graphique appuyez sur <b>Tracer</b> sinon pour superposer les graphiques, <i><font color='red'>effectuez une nouvelle sélection</font></i> puis appuyez sur <b>Ajouter</b></html>")
     btn_ajouter.clicked.connect(lambda : ordonneesSelection(btnList, L, ui_mainwindow, statusBar, network, graphwindow))
-    btn_tracer.clicked.connect(lambda : mainGraphFunction(L, graphwindow,btnList,statusBar))
-#
-# def seconde_selection_de_donnees(btn2, L1, ui_mainwindow, statusBar, network,ui_graphwindow):
-#     L2=[]
-#     for item in ui_mainwindow.tableWidget.selectedItems():
-#         L2.append(network.getCell(item.row(), item.column()))
-#     b = True
-#     for i in range(1, len(L2)):
-#         if L2[0].x == L2[i].x or L2[0].y == L2[i].y:
-#             pass
-#         else:
-#             ui_mainwindow.indicator.setText("Erreur: veuillez selectionner une seule ligne ou une seule colonne")
-#             b = False
-#             break
-#     if b:
-#         print(L1, L2)
-#         if len(L1) == len(L2):
-#             L=[[x.value for x in L1],[y.value for y in L2]]
-#             add_graph(L,ui_mainwindow,statusBar,network,ui_graphwindow)
-#             ui_mainwindow.indicator.setText("La sélection est correcte")
-#         else:
-#             ui_mainwindow.indicator.setText("Erreur: Sélections de tailles différentes")
-#     statusBar().removeWidget(btn2)
-#     ui_mainwindow.lineEdit.setText(network.getCell(ui_mainwindow.tableWidget.currentRow(),ui_mainwindow.tableWidget.currentColumn()).input)
-#     ui_mainwindow.lineEdit.blockSignals(False)
-#     ui_mainwindow.indicator.setText("Voulez vous superposer une autre courbe? Si oui appuyez sur VALIDER sinon su ANNULER")
-#
-# #fonction ajout d autres graphes
-# def add_graph(L,ui_mainwindow,statusBar,network,ui_graphwindow):
-#     list_to_plot=L
-#     btn_add=QtWidgets.QPushButton("Add")
-#     statusBar().addWidget(btn_add)
-#     btn_cancel=QtWidgets.QPushButton("Tracer")
-#     statusBar().addWidget(btn_cancel)
-#
-#     #affichage du bouton valider pour selectionner une serie de valeurs en plus si l on a accepter d ajouter une autre serie de valeurs.
-#     def affichage_btn_add_cancel(statusBar):
-#         print('veuillez selectionner une nouvelle série de valeurs')
-#         ui_mainwindow.indicator.setText('->Veuillez selectionner une nouvelle série de valeurs s il vous plait')
-#         btn_validate=QtWidgets.QPushButton('validate')
-#         statusBar.addWidget(btn_validate)
-#         btn_cancel=QtWidgets.QPushButton('cancel')
-#         statusBar.addWidget(btn_cancel)
-#
-#         btn_validate.clicked.connect(add_graph(L,ui_mainwindow, statusBar, network, ui_graphwindow))
-#         btn_validate.clicked.connect(lambda : statusBar.removeWidget(btn_validate))
-#
-#     #affichage du graphique
-#     def plot_graph():
-#         list_to_plot=add_liste(L)
-#         for i in range(0,int((len(list_to_plot)/2))):
-#             plt.plot(list_to_plot[2*i],list_to_plot[2*i+1])
-#             print(i)
-#         plt.show()
-#         print('graphique affiché')
-#         ui_mainwindow.indicator.setText('')
-#         add_graph(L,ui_graphwindow,statusBar,network,ui_graphwindow)
-#
-#     #fonction d'ajout d une autre liste de valeurs aux autres deja selectionnees
-#     def add_liste(L):
-#         new_liste=[network.getCell(item.row(), item.column()).value for item in ui_mainwindow.tableWidget.selectedItems()]
-#         list_to_plot.append(L[0])
-#         list_to_plot.append(new_liste)
-#         return list_to_plot
-#
-#     #supprime les boutons cancel et add dans le cas ou l on desire afficher une serie de valeur en plus
-#     def add_function():
-#          print('Vous voulez superposer une autre série de valeurs a celles deja existente')
-#          statusBar().removeWidget(btn_add)
-#          statusBar().removeWidget(btn_cancel)
-#          affichage_btn_add_cancel(statusBar())
-#
-#     #fonction d annulation qui sort du processus d ajout
-#     def cancel():
-#          print('vous ne voulez pas ajouter dautres valeurs')
-#          statusBar().removeWidget(btn_add)
-#          statusBar().removeWidget(btn_cancel)
-#          ui_mainwindow.indicator.setText("")
-#          mainGraphFunction(list_to_plot,ui_graphwindow)
-#          ui_mainwindow.indicator.setText('')
-#     btn_add.clicked.connect(add_function)
-#     btn_cancel.clicked.connect(cancel)
+    btn_tracer.clicked.connect(lambda : mainGraphFunction(L, graphwindow,btnList,statusBar, ui_mainwindow, network))
 
 
 
-#Tracé des courbes
+#Tracé des courbes.
 def color_chooser(combobox):
     color=combobox.currentText()
     if color=='rouge':
@@ -172,8 +91,10 @@ def color_chooser(combobox):
         return 'purple'
     else:
         return 'green'
-def mainGraphFunction(L,ui_graphwindow,btn_List,statusBar):
-
+def mainGraphFunction(L,ui_graphwindow,btn_List,statusBar, ui_mainwindow, network):
+    ui_mainwindow.indicator.setText("")
+    ui_mainwindow.lineEdit.setText(network.getCell(ui_mainwindow.tableWidget.currentRow(),ui_mainwindow.tableWidget.currentColumn()).input)
+    ui_mainwindow.lineEdit.blockSignals(False)
     for btn in btn_List:
             statusBar().removeWidget(btn)
     New_list=[]
@@ -191,7 +112,6 @@ def mainGraphFunction(L,ui_graphwindow,btn_List,statusBar):
         for i in range(0,int((len(New_list_2)/2))):
             plt.plot(New_list_2[2*i],New_list_2[2*i+1])
             print(i)
-    print(New_list_2)
     plt.show()
 def close_graph():
     plt.close()
