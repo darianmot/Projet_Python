@@ -86,6 +86,7 @@ def reader_csv(file, ui_mainwindow, network):
 def writter_marshalling(network, name):
     pickle.dump(network.matrix, open('{}.p'.format(name), 'wb'))
     print('saved')
+    network.saved=True
 
 
 def reader_marshalling(file, ui_mainwindow, network):
@@ -129,6 +130,7 @@ def extensionwritter(a, network, ui_mainwindow):  # permet la lecture
         else:
             print("Can't open this file")
         ui_mainwindow.indicator.setText("Exporté")
+        network.saved = True
     except IndexError:
         pass
     finally:
