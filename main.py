@@ -90,7 +90,7 @@ def export():
 
 
 
-# destinée à réinitialiser la feuille de calcul (pour nouvelle feuille) en cours de construction
+# Renitialise la feuille de calcul
 def reset_table():
     ui_mainwindow.tableWidget.resetTable()
     network.reset(ui_mainwindow.tableWidget.initialRowsNumber, ui_mainwindow.tableWidget.initialColumnsNumber)

@@ -4,6 +4,18 @@ from mpl_toolkits.mplot3d import axes3d
 import matplotlib.pyplot as plt
 from matplotlib import cm
 
+def barDiagramme(data):
+    plt.clf()
+    colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k']
+    abscisse = data[0]
+    ordonnee = data[1:]
+    barWidth = .5/len(ordonnee)
+    x0 = range(len(abscisse))
+    for k in range(len(ordonnee)):
+        couleur = colors[k%len(colors)]
+        x = [i + barWidth*k for i in x0]
+        plt.bar(x, ordonnee[k], width = barWidth, color = couleur, linewidth = 1)
+    plt.xticks([i + .5/2 for i in range(len(abscisse))], abscisse, rotation = 45)
 
 
 #Partie concernant la sélection des donnees
