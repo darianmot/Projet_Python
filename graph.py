@@ -74,7 +74,7 @@ def ordonneesSelection(btnList, L, ui_mainwindow, statusBar, network, graphwindo
 
 
 
-#Tracé des courbes
+#Tracé des courbes.
 def color_chooser(combobox):
     color=combobox.currentText()
     if color=='rouge':
