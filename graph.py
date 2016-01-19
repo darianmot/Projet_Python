@@ -196,7 +196,7 @@ def mainGraphFunction(L,ui_graphwindow,btn_List,statusBar):
 def close_graph():
     plt.close()
 
-#Fenetre de sélection
+#Fenetre de sélection..
 class Ui_MainWindowgraph(QtWidgets.QWidget):
 
     okSignal = pyqtSignal(int)
