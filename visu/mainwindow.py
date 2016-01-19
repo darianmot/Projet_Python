@@ -204,6 +204,7 @@ class MyTableWidget(QtWidgets.QTableWidget):
         QtWidgets.QTableWidget.closeEditor(self, editor, hint)
         self.read_input.emit(self.currentRow(), self.currentColumn(), self.currentItem().text())
         self.print_input.emit(self.currentRow(), self.currentColumn())
+        self.network.saved = False
 
     # Synchronise le input lorsque l'utilsateur change de cellule avec le clavier, et supprime la selection en cas de 'Suppr'
     def keyPressEvent(self, event):
@@ -250,6 +251,9 @@ class Ui_MainWindow(QtWidgets.QWidget):
     def setTable(self, network):
         self.tableWidget = MyTableWidget(self.centralwidget, network)
         self.tableWidget.setObjectName("tableWidget")
+
+    #def closeEvent(self, QCloseEvent):
+
 
     def setupUi(self, MainWindow, network):
         # La fenetre
