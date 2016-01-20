@@ -84,7 +84,7 @@ def windowsave():  # to open the window save....
 
 def export():
     extension = "(*.xls *.csv)" if record.HASXLWT else "(*.csv)"
-    fileWindow = QtWidgets.QFileDialog.getSaveFileName(MainWindow, 'Enregistrer', '', extension)
+    fileWindow = QtWidgets.QFileDialog.getSaveFileName(MainWindow, 'Exporter', '', extension)
     address = fileWindow[0]
     record.extensionwritter(address, network, ui_mainwindow)
 

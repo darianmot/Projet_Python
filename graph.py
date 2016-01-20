@@ -19,22 +19,13 @@ def barDiagramme(data):
 
 
 #Partie concernant la sélection des donnees
+
 def graph_selector(current_row,ui_mainwindow,statusBar,network,ui_graphwindow):
     ui_mainwindow.lineEdit.blockSignals(True) #Pour éviter les interactions de la lineEdit pendant la selection
-    if current_row==0:
-        ui_mainwindow.indicator.setText("<html>Sélectionnez la liste des <b>abscisses</b></html>")
-        btn_validate1 = QtWidgets.QPushButton("Valider")
-        btn_validate1.clicked.connect(lambda : abscisseSelection(btn_validate1, ui_mainwindow, statusBar, network,ui_graphwindow))
-        statusBar().addWidget(btn_validate1)
-        print('vous avez choisi les courbes')
-    elif current_row==1:
-        print('vous avez choisi l histogramme')
-        pass
-    elif current_row==2:
-        print('vous avez choisi ')
-        pass
-    else:
-        pass
+    ui_mainwindow.indicator.setText("<html>Sélectionnez la liste des <b>abscisses</b></html>")
+    btn_validate1 = QtWidgets.QPushButton("Valider")
+    btn_validate1.clicked.connect(lambda : abscisseSelection(btn_validate1, ui_mainwindow, statusBar, network,ui_graphwindow))
+    statusBar().addWidget(btn_validate1)
 
 def abscisseSelection(btn_validate1, ui_mainwindow, statusBar, network,graphwindow):
     data = []
@@ -82,9 +73,19 @@ def ordonneesSelection(btnList, data, ui_mainwindow, statusBar, network, graphwi
     btnList=[btn_ajouter,btn_tracer]
     ui_mainwindow.indicator.setText("<html>Pour tracer le graphique appuyez sur <b>Tracer</b> sinon pour superposer les graphiques, <i><font color='red'>effectuez une nouvelle sélection</font></i> puis appuyez sur <b>Ajouter</b></html>")
     btn_ajouter.clicked.connect(lambda : ordonneesSelection(btnList, data, ui_mainwindow, statusBar, network, graphwindow))
-    return data
+    btn_tracer.clicked.connect(lambda : draw(data, graphwindow.listView.currentRow(), ui_mainwindow, color_chooser(graphwindow.combobox), btnList, statusBar, network))
 
-
+def draw(data, currentrow, ui_mainwindow, color, btnList, statusBar, network):
+    newData=[]
+    for list in data:
+        newData.append([x.value for x in list])
+    ui_mainwindow.indicator.setText("")
+    ui_mainwindow.lineEdit.setText(network.getCell(ui_mainwindow.tableWidget.currentRow(),ui_mainwindow.tableWidget.currentColumn()).input)
+    ui_mainwindow.lineEdit.blockSignals(False)
+    for btn in btnList:
+            statusBar().removeWidget(btn)
+    if currentrow == 0:
+        mainGraphFunction(newData, color)
 
 #Tracé des courbes.
 def color_chooser(combobox):
@@ -103,27 +104,18 @@ def color_chooser(combobox):
         return 'purple'
     else:
         return 'green'
-def mainGraphFunction(L,ui_graphwindow,btn_List,statusBar, ui_mainwindow, network):
-    ui_mainwindow.indicator.setText("")
-    ui_mainwindow.lineEdit.setText(network.getCell(ui_mainwindow.tableWidget.currentRow(),ui_mainwindow.tableWidget.currentColumn()).input)
-    ui_mainwindow.lineEdit.blockSignals(False)
-    for btn in btn_List:
-            statusBar().removeWidget(btn)
-    New_list=[]
-    for list in L:
-        New_list.append([x.value for x in list])
-    if len(L)==2:
-        color=color_chooser(ui_graphwindow.combobox)
-        plt.plot(New_list[0],New_list[1],color)
-        print(New_list)
+
+def mainGraphFunction(data,color):
+    if len(data)==2:
+        #color=color_chooser(ui_graphwindow.combobox)
+        plt.plot(data[0],data[1],color)
     else:
-        New_list_2=[New_list[0],New_list[1]]
-        for j in range(2,len(New_list)):
-            New_list_2.append(New_list[0])
-            New_list_2.append(New_list[j])
-        for i in range(0,int((len(New_list_2)/2))):
-            plt.plot(New_list_2[2*i],New_list_2[2*i+1])
-            print(i)
+        data_2=[data[0],data[1]]
+        for j in range(2,len(data)):
+            data_2.append(data[0])
+            data_2.append(data[j])
+        for i in range(0,int((len(data_2)/2))):
+            plt.plot(data_2[2*i],data_2[2*i+1])
     plt.show()
 def close_graph():
     plt.close()
@@ -154,12 +146,12 @@ class Ui_MainWindowgraph(QtWidgets.QWidget):
         self.listView = QtWidgets.QListWidget()
         self.listView.setObjectName("listView")
         self.courbe=QtWidgets.QListWidgetItem()
-        self.courbe.setText('courbe')
+        self.courbe.setText('Nuage de point')
         self.listView.addItem(self.courbe)
 
         self.histogramme=QtWidgets.QListWidgetItem()
         self.listView.addItem(self.histogramme)
-        self.histogramme.setText('histogramme')
+        self.histogramme.setText('Diagramme en bâton')
         self.camembert=QtWidgets.QListWidgetItem()
         self.listView.addItem(self.camembert)
         self.camembert.setText('camembert')
