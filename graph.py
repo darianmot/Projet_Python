@@ -37,14 +37,14 @@ def graph_selector(current_row,ui_mainwindow,statusBar,network,ui_graphwindow):
         pass
 
 def abscisseSelection(btn_validate1, ui_mainwindow, statusBar, network,graphwindow):
-    L = []
-    L1 = []
+    data = []
+    abscisse = []
     for item in ui_mainwindow.tableWidget.selectedItems():
-        L1.append(network.getCell(item.row(), item.column()))
-    L.append(L1)
+        abscisse.append(network.getCell(item.row(), item.column()))
+    data.append(abscisse)
     b = True
-    for i in range(1, len(L1)):
-        if L1[0].x == L1[i].x or L1[0].y == L1[i].y:
+    for i in range(1, len(abscisse)):
+        if abscisse[0].x == abscisse[i].x or abscisse[0].y == abscisse[i].y:
             pass
         else:
             ui_mainwindow.indicator.setText("Erreur: veuillez selectionner une seule ligne ou colonne")
@@ -54,20 +54,20 @@ def abscisseSelection(btn_validate1, ui_mainwindow, statusBar, network,graphwind
         ui_mainwindow.indicator.setText("<html>Sélectionnez la liste des <b>ordonnées</b></html>")
         statusBar().removeWidget(btn_validate1)
         btn_validate = QtWidgets.QPushButton("Valider")
-        btn_validate.clicked.connect(lambda : ordonneesSelection([btn_validate], L, ui_mainwindow, statusBar, network, graphwindow))
+        btn_validate.clicked.connect(lambda : ordonneesSelection([btn_validate], data, ui_mainwindow, statusBar, network, graphwindow))
         statusBar().addWidget(btn_validate)
     statusBar().removeWidget(btn_validate1)
 
-def ordonneesSelection(btnList, L, ui_mainwindow, statusBar, network, graphwindow):
+def ordonneesSelection(btnList, data, ui_mainwindow, statusBar, network, graphwindow):
     for btn in btnList:
         statusBar().removeWidget(btn)
-    L1 = []
+    ordonnee = []
     for item in ui_mainwindow.tableWidget.selectedItems():
-        L1.append(network.getCell(item.row(), item.column()))
-    L.append(L1)
+        ordonnee.append(network.getCell(item.row(), item.column()))
+    data.append(ordonnee)
     b = True
-    for i in range(1, len(L1)):
-        if L1[0].x == L1[i].x or L1[0].y == L1[i].y:
+    for i in range(1, len(ordonnee)):
+        if ordonnee[0].x == ordonnee[i].x or ordonnee[0].y == ordonnee[i].y:
             pass
         else:
             ui_mainwindow.indicator.setText("Erreur: veuillez selectionner une seule ligne ou colonne")
@@ -81,8 +81,8 @@ def ordonneesSelection(btnList, L, ui_mainwindow, statusBar, network, graphwindo
     statusBar().addWidget(btn_ajouter)
     btnList=[btn_ajouter,btn_tracer]
     ui_mainwindow.indicator.setText("<html>Pour tracer le graphique appuyez sur <b>Tracer</b> sinon pour superposer les graphiques, <i><font color='red'>effectuez une nouvelle sélection</font></i> puis appuyez sur <b>Ajouter</b></html>")
-    btn_ajouter.clicked.connect(lambda : ordonneesSelection(btnList, L, ui_mainwindow, statusBar, network, graphwindow))
-    btn_tracer.clicked.connect(lambda : mainGraphFunction(L, graphwindow,btnList,statusBar, ui_mainwindow, network))
+    btn_ajouter.clicked.connect(lambda : ordonneesSelection(btnList, data, ui_mainwindow, statusBar, network, graphwindow))
+    return data
 
 
 
