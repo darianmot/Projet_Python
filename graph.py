@@ -132,7 +132,10 @@ def courbe(L, ui_graphwindow, A):
 
         for i in range(1,len(L)):
             plt.plot(L[0],L[i])
-        plt.show()
+    plt.ylabel(ui_graphwindow.lineEdit.text())
+    plt.xlabel(ui_graphwindow.lineEdit_2.text())
+    plt.title(ui_graphwindow.lineEdit_3.text())
+    plt.show()
 
 def close_graph():
     plt.close()
