@@ -4,22 +4,7 @@ from mpl_toolkits.mplot3d import axes3d
 import matplotlib.pyplot as plt
 from matplotlib import cm
 
-def barDiagramme(data):
-    plt.clf()
-    colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k']
-    abscisse = data[0]
-    ordonnee = data[1:]
-    for i in range(len(ordonnee)):
-        for j in range(len(ordonnee[i])):
-            ordonnee[i][j] = float(ordonnee[i][j])
-    barWidth = .5/len(ordonnee)
-    x0 = range(len(abscisse))
-    for k in range(len(ordonnee)):
-        couleur = colors[k%len(colors)]
-        x = [i + barWidth*k for i in x0]
-        plt.bar(x, ordonnee[k], width = barWidth, color = couleur, linewidth = 1)
-    plt.xticks([i + .5/2 for i in range(len(abscisse))], abscisse, rotation = 45)
-    plt.show()
+
 
 #Partie concernant la sélection des donnees
 def graph_selector(current_row,ui_mainwindow,statusBar,network,ui_graphwindow):
@@ -121,7 +106,7 @@ def mainGraphFunction(L,ui_graphwindow,btn_List,statusBar, ui_mainwindow, networ
     if A == 0:
         courbe(New_list, ui_graphwindow, A)
     if A == 1:
-        barDiagramme(New_list)
+        barDiagramme(New_list, ui_graphwindow)
 
 def courbe(L, ui_graphwindow, A):
     if len(L)==2:
@@ -132,6 +117,26 @@ def courbe(L, ui_graphwindow, A):
 
         for i in range(1,len(L)):
             plt.plot(L[0],L[i])
+    plt.ylabel(ui_graphwindow.lineEdit.text())
+    plt.xlabel(ui_graphwindow.lineEdit_2.text())
+    plt.title(ui_graphwindow.lineEdit_3.text())
+    plt.show()
+
+def barDiagramme(data, ui_graphwindow):
+    plt.clf()
+    colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k']
+    abscisse = data[0]
+    ordonnee = data[1:]
+    for i in range(len(ordonnee)):
+        for j in range(len(ordonnee[i])):
+            ordonnee[i][j] = float(ordonnee[i][j])
+    barWidth = .5/len(ordonnee)
+    x0 = range(len(abscisse))
+    for k in range(len(ordonnee)):
+        couleur = colors[k%len(colors)]
+        x = [i + barWidth*k for i in x0]
+        plt.bar(x, ordonnee[k], width = barWidth, color = couleur, linewidth = 1)
+    plt.xticks([i + .5/2 for i in range(len(abscisse))], abscisse, rotation = 45)
     plt.ylabel(ui_graphwindow.lineEdit.text())
     plt.xlabel(ui_graphwindow.lineEdit_2.text())
     plt.title(ui_graphwindow.lineEdit_3.text())
