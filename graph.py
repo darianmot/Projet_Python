@@ -3,9 +3,7 @@ from PyQt5.QtCore import pyqtSignal
 from mpl_toolkits.mplot3d import axes3d
 import matplotlib.pyplot as plt
 from matplotlib import cm
-
-
-
+import numpy as np
 #Partie concernant la sélection des donnees
 def graph_selector(current_row,ui_mainwindow,statusBar,network,ui_graphwindow):
     ui_mainwindow.lineEdit.blockSignals(True) #Pour éviter les interactions de la lineEdit pendant la selection
@@ -22,8 +20,11 @@ def graph_selector(current_row,ui_mainwindow,statusBar,network,ui_graphwindow):
         btn_validate1.clicked.connect(lambda : abscisseSelection(btn_validate1, ui_mainwindow, statusBar, network, ui_graphwindow, current_row))
         statusBar().addWidget(btn_validate1)
     elif current_row==2:
-        print('vous avez choisi ')
-        pass
+        print('vous avez choisi le diagramme circulaire')
+        ui_mainwindow.indicator.setText("<html>Sélectionnez la liste des <b>labels</b></html>")
+        btn_validate1 = QtWidgets.QPushButton("Valider")
+        btn_validate1.clicked.connect(lambda : abscisseSelection(btn_validate1, ui_mainwindow, statusBar, network, ui_graphwindow, current_row))
+        statusBar().addWidget(btn_validate1)
     else:
         pass
 
@@ -65,15 +66,29 @@ def ordonneesSelection(btnList, data, ui_mainwindow, statusBar, network, graphwi
             b = False
             break
     if b:
-        ui_mainwindow.indicator.setText("<html>Sélectionnez la liste des <b>ordonnées</b></html>")
-    btn_tracer=QtWidgets.QPushButton("Tracer")
-    statusBar().addWidget(btn_tracer)
-    btn_ajouter=QtWidgets.QPushButton("Ajouter")
-    statusBar().addWidget(btn_ajouter)
-    btnList=[btn_ajouter,btn_tracer]
-    ui_mainwindow.indicator.setText("<html>Pour tracer le graphique appuyez sur <b>Tracer</b> sinon pour superposer les graphiques, <i><font color='red'>effectuez une nouvelle sélection</font></i> puis appuyez sur <b>Ajouter</b></html>")
-    btn_ajouter.clicked.connect(lambda : ordonneesSelection(btnList, data, ui_mainwindow, statusBar, network, graphwindow, current_row))
-    btn_tracer.clicked.connect(lambda : mainGraphFunction(data, graphwindow,btnList,statusBar, ui_mainwindow, network, current_row))
+        if current_row == 2:
+            values = []
+            lab = []
+            l = len(data[1])
+            colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k']
+            for i in range(l):
+                values.append(float(data[1][i].value))
+            for i in range(len(data[0])):
+                lab.append((data[0][i].value))
+            plt.pie(values, labels = lab, colors=colors)
+            plt.axis('equal')
+            plt.title(graphwindow.lineEdit_3.text())
+            plt.show()
+            ui_mainwindow.indicator.setText("")
+        else:
+            btn_tracer=QtWidgets.QPushButton("Tracer")
+            statusBar().addWidget(btn_tracer)
+            btn_ajouter=QtWidgets.QPushButton("Ajouter")
+            statusBar().addWidget(btn_ajouter)
+            btnList=[btn_ajouter,btn_tracer]
+            ui_mainwindow.indicator.setText("<html>Pour tracer le graphique appuyez sur <b>Tracer</b> sinon pour superposer les graphiques, <i><font color='red'>effectuez une nouvelle sélection</font></i> puis appuyez sur <b>Ajouter</b></html>")
+            btn_ajouter.clicked.connect(lambda : ordonneesSelection(btnList, data, ui_mainwindow, statusBar, network, graphwindow, current_row))
+            btn_tracer.clicked.connect(lambda : mainGraphFunction(data, graphwindow,btnList,statusBar, ui_mainwindow, network, current_row))
 
 
 
