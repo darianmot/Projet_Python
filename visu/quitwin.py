@@ -9,6 +9,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_quitwin(object):
     def setupUi(self, quitwin):
         quitwin.setObjectName("quitwin")
@@ -34,7 +35,8 @@ class Ui_quitwin(object):
         self.verticalLayout_2.addLayout(self.verticalLayout)
         self.buttonBox = QtWidgets.QDialogButtonBox(self.widget)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Discard|QtWidgets.QDialogButtonBox.Save)
+        self.buttonBox.setStandardButtons(
+            QtWidgets.QDialogButtonBox.Cancel | QtWidgets.QDialogButtonBox.Discard | QtWidgets.QDialogButtonBox.Save)
         self.buttonBox.setObjectName("buttonBox")
         self.verticalLayout_2.addWidget(self.buttonBox)
 
@@ -48,4 +50,3 @@ class Ui_quitwin(object):
         quitwin.setWindowTitle(_translate("quitwin", "Enacell - Avertissement"))
         self.label.setText(_translate("quitwin", "Votre travail n\'est pas enregistré."))
         self.label_2.setText(_translate("quitwin", "Que voulez vous faire ?"))
-

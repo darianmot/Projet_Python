@@ -6,9 +6,9 @@ CELLWIDTH = 100
 CELLHEIGHT = 30
 
 
-
 class MyMainWindow(QtWidgets.QMainWindow):
     asked_quit = pyqtSignal()
+
     def __init__(self):
         super().__init__()
         self.network = None
@@ -19,7 +19,6 @@ class MyMainWindow(QtWidgets.QMainWindow):
             self.asked_quit.emit()
         else:
             QCloseEvent.accept()
-
 
 
 class MyRect(Qt.QRect):
@@ -59,7 +58,8 @@ class MyDelegate(QtWidgets.QItemDelegate):
         if event.type() == 6 and event.key() == QtCore.Qt.Key_Tab:
             print("Tab press")
             return False
-        return QtWidgets.QItemDelegate.eventFilter(self,QObject,event)
+        return QtWidgets.QItemDelegate.eventFilter(self, QObject, event)
+
 
 class EventEater(QtCore.QObject):
     cellExpended = pyqtSignal(list)
@@ -84,7 +84,6 @@ class EventEater(QtCore.QObject):
             else:
                 self.target.coin.isUnder = False
         return False
-
 
 
 class MyItem(QtWidgets.QTableWidgetItem):
@@ -175,9 +174,8 @@ class MyTableWidget(QtWidgets.QTableWidget):
         width = self.columnWidth(self.currentColumn())
         height = self.rowHeight(self.currentRow())
 
-
         # dessine les rectangles verts de la tirette
-        if self.coin.isSelected :
+        if self.coin.isSelected:
             print('Entering green rect mode')
             cells_selected = self.selectedRanges()[0]
             if cells_selected.columnCount() == 1 or cells_selected.rowCount() == 1:
@@ -267,8 +265,6 @@ class Ui_MainWindow(QtWidgets.QWidget):
     def setTable(self, network):
         self.tableWidget = MyTableWidget(self.centralwidget, network)
         self.tableWidget.setObjectName("tableWidget")
-
-
 
     def setupUi(self, MainWindow, network):
         # La fenetre
@@ -394,7 +390,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.retranslate(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-    # Signaux et slots
+        # Signaux et slots
         # Change la valeur affichée d'une cellule
         def changeCellValue(x, y, value):
             try:

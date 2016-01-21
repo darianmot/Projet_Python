@@ -32,7 +32,7 @@ def chainEvaluation(network, chaine, knownFunctions, stringDict):
     except ZeroDivisionError:
         raise decomposition.Error('Division par 0')
     except NameError as e:
-        stringDict[str(e).split("'")[1]]=str(e).split("'")[1]
+        stringDict[str(e).split("'")[1]] = str(e).split("'")[1]
         return chainEvaluation(network, ''.join(elementList), knownFunctions, stringDict)
     except Exception as e:
         print("Can't evaluate '{0}'".format(''.join(elementList)), end='')
@@ -91,7 +91,7 @@ def cellEvaluation(x, y, string, network, ui_mainwindow, knownFunctions):
     if len(string) > 0:
         print('Evaluation de {0} et de ses cellules filles ... '.format(cell.name, len(cell.children_cells)), end='')
         ui_mainwindow.indicator.setText(
-            'Evaluation de {0} et de ses cellules filles ... '.format(cell.name, len(cell.children_cells)))
+                'Evaluation de {0} et de ses cellules filles ... '.format(cell.name, len(cell.children_cells)))
         try:
             if string[0] == '=':
                 for parentCell in cell.parent_cells:
@@ -108,7 +108,7 @@ def cellEvaluation(x, y, string, network, ui_mainwindow, knownFunctions):
             try:
                 order = tritopologique.evalOrder(cell)
                 for child in order:
-                    child.value = str(chainEvaluation(network, child.input[1:], knownFunctions,{}))
+                    child.value = str(chainEvaluation(network, child.input[1:], knownFunctions, {}))
                     ui_mainwindow.tableWidget.return_value.emit(child.x, child.y, child.value)
             except decomposition.Error as e:
                 for child in tritopologique.childrenCellsRec(cell)[1:]:
@@ -124,7 +124,8 @@ def cellEvaluation(x, y, string, network, ui_mainwindow, knownFunctions):
         ui_mainwindow.indicator.setText(ui_mainwindow.indicator.text() + 'Done : ({}s)'.format(t_end - t_init))
     else:
         cell.value = None
-        ui_mainwindow.tableWidget.takeItem(x,y)
+        ui_mainwindow.tableWidget.takeItem(x, y)
         order = tritopologique.evalOrder(cell)
         for child in order:
-            ui_mainwindow.tableWidget.return_value.emit(child.x, child.y, "#Error : la cellule {} est vide".format(cell.name))
+            ui_mainwindow.tableWidget.return_value.emit(child.x, child.y,
+                                                        "#Error : la cellule {} est vide".format(cell.name))
