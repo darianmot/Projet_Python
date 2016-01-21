@@ -121,14 +121,13 @@ def color_chooser(combobox):
 
 def mainGraphFunction(L, ui_graphwindow, btn_List, statusBar, ui_mainwindow, network, A):
     ui_mainwindow.indicator.setText("")
-    ui_mainwindow.lineEdit.setText(
-        network.getCell(ui_mainwindow.tableWidget.currentRow(), ui_mainwindow.tableWidget.currentColumn()).input)
+    ui_mainwindow.lineEdit.setText(network.getCell(ui_mainwindow.tableWidget.currentRow(), ui_mainwindow.tableWidget.currentColumn()).input)
     ui_mainwindow.lineEdit.blockSignals(False)
     for btn in btn_List:
         statusBar().removeWidget(btn)
     New_list = []
     for list in L:
-        New_list.append([x.value for x in list])
+        New_list.append([x.value for x in list if x.value != None])
     if A == 0:
         courbe(New_list, ui_graphwindow)
     if A == 1:
@@ -140,6 +139,8 @@ def courbe(L, ui_graphwindow):
         color = color_chooser(ui_graphwindow.combobox)
         plt.plot(L[0], L[1], color + 'o-')
         print(L)
+        L[0] = [value for value in L[0] if (value not in [None, ''])]
+        L[1] = [value for value in L[1] if (value not in [None, ''])]
     else:
         for i in range(1, len(L)):
             plt.plot(L[0], L[i], 'o-')

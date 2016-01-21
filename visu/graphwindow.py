@@ -116,8 +116,6 @@ class Ui_MainWindowgraph(QtWidgets.QWidget):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         #selecteur d'image
-
-
         def image():
             A=self.listView.currentRow()
             print(A)
@@ -127,23 +125,19 @@ class Ui_MainWindowgraph(QtWidgets.QWidget):
             DD=QtGui.QPixmap('visu/icons/DD.png')
             A=self.listView.currentRow()
             if A==0:
-                print('you chose courbe','image')
                 self.images.setPixmap(courbe)
             elif A==1:
-                print('you chose histogramme','image')
                 self.images.setPixmap(histogramme)
             elif A==2:
                 self.images.setPixmap(camembert)
-                print('you chose a camembert','image')
-            elif A==3:
-                self.images.setPixmap(DD)
-                print('you chose a 2D representation')
         def quit():
             print('closing')
             MainWindow.close()
 
         def okGraph():
             self.okSignal.emit(self.listView.currentRow())
+
+
         #les connexions
         self.listView.itemSelectionChanged.connect(image)
         self.buttonBox.rejected.connect(quit)

@@ -10,7 +10,7 @@ try:
     HASXLWT = True
 except ImportError:
     HASXLWT = False
-import csv, pickle, os
+import csv, pickle, os, re
 from PyQt5 import QtWidgets
 
 
@@ -71,18 +71,20 @@ def reader_csv(file, ui_mainwindow, network):
     f.seek(0)
     columns = len(next(sheet))
     f.seek(0)
-    network.addRows(rows)
-    network.addColumns(columns)
+    network.reset(rows, columns)
     ui_mainwindow.tableWidget.recalc(network)
     i = 0
     for row in sheet:
+        row = re.split('; |,', ','.join(row))
         for j in range(0, len(row)):  # for each content or cell, a new QtWidget item is created
             content = row[j]
             network.getCell(i, j).input = content
             network.getCell(i, j).value = None if content == "" else content
             ui_mainwindow.tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(content))
         i += 1
+    f.close()
     print(network.getCellByName('B2').value)
+    ui_mainwindow.indicator.setText("Ouvert")
 
 
 def writter_marshalling(network, name, ui_mainwindow):

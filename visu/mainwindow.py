@@ -38,11 +38,13 @@ class MyDelegate(QtWidgets.QItemDelegate):
         self.filter = EventEater(self)
         self.installEventFilter(self.filter)
 
+    #Fonction qui s'active lorsque l'editeur de celulle s'ouvre
     def createEditor(self, QWidget, QStyleOptionViewItem, QModelIndex):
         print('Editor created')
         self.editorcreated.emit()
         return QtWidgets.QItemDelegate.createEditor(self, QWidget, QStyleOptionViewItem, QModelIndex)
 
+    #Permet de dessiner les rectangles verts lorsqu'on tire sur la tirrete
     def paint(self, QPainter, QStyleOptionViewItem, QModelIndex):
         QtWidgets.QItemDelegate.paint(self, QPainter, QStyleOptionViewItem, QModelIndex)
         try:
@@ -54,6 +56,7 @@ class MyDelegate(QtWidgets.QItemDelegate):
         except:
             print("Fatal error painting background")
 
+    #Supprime un bug lorsqu'on appuie sur 'tab' pendant l'edition d'une celulle
     def eventFilter(self, QObject, event):
         if event.type() == 6 and event.key() == QtCore.Qt.Key_Tab:
             print("Tab press")
@@ -176,7 +179,6 @@ class MyTableWidget(QtWidgets.QTableWidget):
 
         # dessine les rectangles verts de la tirette
         if self.coin.isSelected:
-            print('Entering green rect mode')
             cells_selected = self.selectedRanges()[0]
             if cells_selected.columnCount() == 1 or cells_selected.rowCount() == 1:
                 pen.setColor(QtGui.QColor(0, 225, 0))
@@ -230,9 +232,7 @@ class MyTableWidget(QtWidgets.QTableWidget):
     def itemeditoropened(self):
         self.editorcount += 1
 
-    def isTapping(self):
-        return self.editorcount != 0
-
+     #Redessine la table pour un network donné
     def recalc(self, network):
         self.clearContents()
         matrix = network.matrix

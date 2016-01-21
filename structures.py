@@ -45,35 +45,6 @@ class Cell(object):  # caractéristiques et organisation d'une cellule
             return '{0}({1},{2}):{3}'.format(self.name, self.x, self.y, self.children_cells)
 
 
-# class reseau(object):  #On classe par name
-#     def __init__(self):
-#         self.labels=columns_labels.generate(1)
-#         self.dict={self.labels[0]+str(1):Cell(1,1,None)}
-#         self.rows=1
-#         self.columns=1
-#
-#     def addCell(self,x,y,name):
-#         self.dict[name]=Cell(x,y,None)
-#
-#     def addRow(self):
-#         for c in range(self.columns):
-#             self.addCell(c+1,self.rows+1,self.labels[c]+str(self.rows+1))
-#         self.rows+=1
-#
-#     def addRows(self,n):
-#         for _ in range(n):
-#             self.addRow()
-#
-#     def addColumn(self):
-#         columns_labels.add(self.labels,1)
-#         for r in range(self.rows):
-#             self.addCell(self.columns+1,r+1,self.labels[self.columns]+str(r+1))
-#         self.columns+=1
-#
-#     def addColumns(self,n):
-#         for _ in range(n):
-#             self.addColumn()
-
 class network(object):  # On classe par coordonnées
     def __init__(self):
         self.labels = columns_labels.generate(1)  # Noms des colonnes
@@ -157,6 +128,7 @@ class network(object):  # On classe par coordonnées
 
     def reset(self, initalRows, initalColumns):
         self.__init__()
+        self.subsitute([[Cell(0, 0)]])
         self.addColumns(initalColumns - 1)
         self.addRows(initalRows - 1)
 

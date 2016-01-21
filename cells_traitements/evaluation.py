@@ -10,7 +10,7 @@ def chainEvaluation(network, chaine, knownFunctions, stringDict):
     while i < len(elementList):
         if elementType[i] == 'cell':
             try:
-                elementList[i] = str(network.getCellByName(elementList[i]).value)
+                elementList[i] = str(network.getCellByName(elementList[i]).value.replace(' ',''))
             except decomposition.Error as e:
                 raise decomposition.Error(e.reason)
         elif elementType[i] == 'function' and elementList[i] not in stringDict:
