@@ -1,10 +1,12 @@
 try:
     import xlrd
+
     HASXLRD = True
 except ImportError:
     HASXLRD = False
 try:
     from xlwt import Workbook
+
     HASXLWT = True
 except ImportError:
     HASXLWT = False
@@ -17,7 +19,7 @@ def etatXls(window):
     if (not HASXLRD) and (not HASXLWT):
         window.indicator.setText("<html><head/><body>{0} - <font color='red'>Les modules 'xlrd' et 'xlwt' n'étant pas installés,\
         l'ouverture et l'exportation des fichiers en .xls sont impossibles.</font></body></html>".format(
-            window.indicator.text()))
+                window.indicator.text()))
     elif not HASXLRD and HASXLWT:
         window.indicator.setText("<html><head/><body>{0} - <font color='red'>Le module 'xlrd' n'étant pas installé,\
         l'ouverture des fichiers en .xls est impossible.</font></body></html>".format(window.indicator.text()))
@@ -86,10 +88,9 @@ def reader_csv(file, ui_mainwindow, network):
 def writter_marshalling(network, name, ui_mainwindow):
     pickle.dump(network.matrix, open('{}.p'.format(name), 'wb'))
     print('saved')
-    network.saved=True
+    network.saved = True
     network.title = '{}.p'.format(name)
     ui_mainwindow.rename(ui_mainwindow.Mainwindow)
-
 
 
 def reader_marshalling(file, ui_mainwindow, network):

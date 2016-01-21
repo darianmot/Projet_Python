@@ -10,20 +10,21 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSignal
 import cells_traitements.decomposition as decomposition
 
-class Ui_Dialog(QtWidgets.QWidget):
-    sendFunData=pyqtSignal(str,str,str,str)
 
-    def setupUi(self, Dialog,knownFunctions):
+class Ui_Dialog(QtWidgets.QWidget):
+    sendFunData = pyqtSignal(str, str, str, str)
+
+    def setupUi(self, Dialog, knownFunctions):
         Dialog.setObjectName("Dialog")
         Dialog.resize(537, 323)
 
-        #Layouts
+        # Layouts
         self.buttonsLayout = QtWidgets.QHBoxLayout(Dialog)
         self.buttonsLayout.setObjectName("buttonsLayout")
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
 
-        #Nom de la fonction
+        # Nom de la fonction
         self.nameLayout = QtWidgets.QHBoxLayout()
         self.nameLayout.setObjectName("nameLayout")
         self.Nom = QtWidgets.QLabel(Dialog)
@@ -34,13 +35,13 @@ class Ui_Dialog(QtWidgets.QWidget):
         self.nameLayout.addWidget(self.nameEdit)
         self.verticalLayout.addLayout(self.nameLayout)
 
-        #Label Error
+        # Label Error
         self.nameError = QtWidgets.QLabel()
         self.nameError.setObjectName("nameError")
         self.verticalLayout.addWidget(self.nameError)
         self.nameError.setMaximumHeight(40)
 
-        #Description
+        # Description
         self.decriptionLayout = QtWidgets.QHBoxLayout()
         self.decriptionLayout.setObjectName("decriptionLayout")
         self.description = QtWidgets.QLabel(Dialog)
@@ -51,7 +52,7 @@ class Ui_Dialog(QtWidgets.QWidget):
         self.decriptionLayout.addWidget(self.descriptionEdit)
         self.verticalLayout.addLayout(self.decriptionLayout)
 
-        #Evaluation
+        # Evaluation
         self.evaluationLayout = QtWidgets.QHBoxLayout()
         self.evaluationLayout.setObjectName("evaluationLayout")
         self.f_eval = QtWidgets.QLabel(Dialog)
@@ -62,20 +63,20 @@ class Ui_Dialog(QtWidgets.QWidget):
         self.evaluationLayout.addWidget(self.evalEdit)
         self.verticalLayout.addLayout(self.evaluationLayout)
 
-        #Evaluation error
+        # Evaluation error
         self.evalError = QtWidgets.QLabel()
         self.evalError.setObjectName("evalError")
         self.verticalLayout.addWidget(self.evalError)
         self.evalError.setMaximumHeight(40)
 
-        #Category
+        # Category
         self.categoryLayout = QtWidgets.QHBoxLayout()
         self.evaluationLayout.setObjectName("categoryLayout")
-        self.category=QtWidgets.QLabel(Dialog)
+        self.category = QtWidgets.QLabel(Dialog)
         self.category.setObjectName("category")
-        self.combobox=QtWidgets.QComboBox()
+        self.combobox = QtWidgets.QComboBox()
         self.combobox.setObjectName("combobox")
-        l=knownFunctions.getCategoryList()
+        l = knownFunctions.getCategoryList()
         l.remove('All')
         for category in l:
             self.combobox.addItem(category)
@@ -83,29 +84,30 @@ class Ui_Dialog(QtWidgets.QWidget):
         self.categoryLayout.addWidget(self.combobox)
         self.verticalLayout.addLayout(self.categoryLayout)
 
-        #Boutons Cancel/Ok
+        # Boutons Cancel/Ok
         self.buttonBox = QtWidgets.QDialogButtonBox(Dialog)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
+        self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel | QtWidgets.QDialogButtonBox.Ok)
         self.buttonBox.setObjectName("buttonBox")
         self.verticalLayout.addWidget(self.buttonBox)
         self.buttonsLayout.addLayout(self.verticalLayout)
 
         self.retranslateUi(Dialog)
-        
+
         def quitok():
-            name=self.nameEdit.text()
-            description=self.descriptionEdit.text()
-            evaluation=self.evalEdit.text()
-            category=self.combobox.currentText()
-            if knownFunctions.isFunValid(name,evaluation,decomposition.isfunction):
+            name = self.nameEdit.text()
+            description = self.descriptionEdit.text()
+            evaluation = self.evalEdit.text()
+            category = self.combobox.currentText()
+            if knownFunctions.isFunValid(name, evaluation, decomposition.isfunction):
                 self.retranslateUi(Dialog)
-                self.sendFunData.emit(name,description,evaluation,category)
+                self.sendFunData.emit(name, description, evaluation, category)
                 Dialog.accept()
                 Dialog.close()
             else:
                 if evaluation == "":
-                    self.evalError.setText("<font color='red' size=-1><i>L'expression de la fonction ne peut être vide<i/></font>")
+                    self.evalError.setText(
+                        "<font color='red' size=-1><i>L'expression de la fonction ne peut être vide<i/></font>")
                     self.evalError.show()
                 else:
                     self.evalError.hide()
@@ -131,6 +133,7 @@ class Ui_Dialog(QtWidgets.QWidget):
         def quitCancel():
             self.retranslateUi(Dialog)
             Dialog.reject()
+
         self.buttonBox.accepted.connect(quitok)
         self.buttonBox.rejected.connect(quitCancel)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -148,6 +151,3 @@ class Ui_Dialog(QtWidgets.QWidget):
         self.evalEdit.clear()
         self.evalError.hide()
         self.category.setText(_translate("Dialog", "Category : "))
-
-
-
