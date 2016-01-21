@@ -7,11 +7,7 @@ import pickle
 from PyQt5 import QtWidgets, Qt
 
 knownFunctions = pickle.load(open('knownFunctions.p', 'rb'))
-knownFunctions.addCategory("Date et heure")
-knownFunctions.addCategory("Texte")
-knownFunctions.addCategory("Physique")
 app = mainwindow.QtWidgets.QApplication(sys.argv)
-
 pixmap = Qt.QPixmap("visu/icons/Logo_ENAC.png")
 splash = Qt.QSplashScreen(pixmap)
 splash.show()
@@ -84,7 +80,7 @@ def windowsave():  # to open the window save....
 
 def export():
     extension = "(*.xls *.csv)" if record.HASXLWT else "(*.csv)"
-    fileWindow = QtWidgets.QFileDialog.getSaveFileName(MainWindow, 'Enregistrer', '', extension)
+    fileWindow = QtWidgets.QFileDialog.getSaveFileName(MainWindow, 'Exporter', '', extension)
     address = fileWindow[0]
     record.extensionwritter(address, network, ui_mainwindow)
 

@@ -34,15 +34,15 @@ def abscisseSelection(btn_validate1, ui_mainwindow, statusBar, network,graphwind
     for item in ui_mainwindow.tableWidget.selectedItems():
         abscisse.append(network.getCell(item.row(), item.column()))
     data.append(abscisse)
-    b = True
+    key = True
     for i in range(1, len(abscisse)):
         if abscisse[0].x == abscisse[i].x or abscisse[0].y == abscisse[i].y:
             pass
         else:
             ui_mainwindow.indicator.setText("Erreur: veuillez selectionner une seule ligne ou colonne")
-            b = False
+            key = False
             break
-    if b:
+    if key:
         ui_mainwindow.indicator.setText("<html>Sélectionnez la liste des <b>ordonnées</b></html>")
         statusBar().removeWidget(btn_validate1)
         btn_validate = QtWidgets.QPushButton("Valider")
@@ -57,15 +57,15 @@ def ordonneesSelection(btnList, data, ui_mainwindow, statusBar, network, graphwi
     for item in ui_mainwindow.tableWidget.selectedItems():
         ordonnee.append(network.getCell(item.row(), item.column()))
     data.append(ordonnee)
-    b = True
+    key = True
     for i in range(1, len(ordonnee)):
         if ordonnee[0].x == ordonnee[i].x or ordonnee[0].y == ordonnee[i].y:
             pass
         else:
             ui_mainwindow.indicator.setText("Erreur: veuillez selectionner une seule ligne ou colonne")
-            b = False
+            key = False
             break
-    if b:
+    if key:
         if current_row == 2:
             values = []
             lab = []
@@ -89,8 +89,6 @@ def ordonneesSelection(btnList, data, ui_mainwindow, statusBar, network, graphwi
             ui_mainwindow.indicator.setText("<html>Pour tracer le graphique appuyez sur <b>Tracer</b> sinon pour superposer les graphiques, <i><font color='red'>effectuez une nouvelle sélection</font></i> puis appuyez sur <b>Ajouter</b></html>")
             btn_ajouter.clicked.connect(lambda : ordonneesSelection(btnList, data, ui_mainwindow, statusBar, network, graphwindow, current_row))
             btn_tracer.clicked.connect(lambda : mainGraphFunction(data, graphwindow,btnList,statusBar, ui_mainwindow, network, current_row))
-
-
 
 #Tracé des courbes.
 def color_chooser(combobox):
@@ -139,7 +137,9 @@ def courbe(L, ui_graphwindow):
 
 def barDiagramme(data, ui_graphwindow):
     plt.clf()
+    color=color_chooser(ui_graphwindow.combobox)
     colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k']
+    colors = [color] + [c for c in colors if c!=color[0]]
     abscisse = data[0]
     ordonnee = data[1:]
     for i in range(len(ordonnee)):
@@ -157,8 +157,6 @@ def barDiagramme(data, ui_graphwindow):
     plt.title(ui_graphwindow.lineEdit_3.text())
     plt.show()
 
-def close_graph():
-    plt.close()
 
 #Fenetre de sélection..
 class Ui_MainWindowgraph(QtWidgets.QWidget):
@@ -188,7 +186,6 @@ class Ui_MainWindowgraph(QtWidgets.QWidget):
         self.courbe=QtWidgets.QListWidgetItem()
         self.courbe.setText('courbe')
         self.listView.addItem(self.courbe)
-
         self.histogramme=QtWidgets.QListWidgetItem()
         self.listView.addItem(self.histogramme)
         self.histogramme.setText('histogramme')
@@ -293,9 +290,7 @@ class Ui_MainWindowgraph(QtWidgets.QWidget):
             elif A==2:
                 self.images.setPixmap(camembert)
                 print('you chose a camembert','image')
-            elif A==3:
-                self.images.setPixmap(DD)
-                print('you chose a 2D representation')
+
         def quit():
             print('closing')
             MainWindow.close()
