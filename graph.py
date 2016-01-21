@@ -146,6 +146,7 @@ def courbe(L, ui_graphwindow):
     plt.ylabel(ui_graphwindow.lineEdit.text())
     plt.xlabel(ui_graphwindow.lineEdit_2.text())
     plt.title(ui_graphwindow.lineEdit_3.text())
+    plt.grid()
     plt.show()
 
 
