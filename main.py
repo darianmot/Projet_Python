@@ -1,6 +1,6 @@
 __authors__ = "Darian MOTAMED, Hugo CHOULY, Atime RONDA,Anas DARWICH"
 import sys, visu.mainwindow as mainwindow, visu.funwindow as funWindow, visu.addfunwindow as addfunwindow, visu.quitwin as quitWindow,  \
-    graph as graphic
+    graph as graphic, visu.graphwindow as graphWindow
 import structures, cells_traitements.functions as functions, record
 import cells_traitements.tirette as tirette, cells_traitements.evaluation as evalutation
 import pickle
@@ -30,7 +30,7 @@ ui_funWinfow = funWindow.Ui_funwindow()
 ui_funWinfow.setupUi(Funwindow, knownFunctions)
 # graphwindow
 graphwindow = QtWidgets.QDialog()
-ui_graphwindow = graphic.Ui_MainWindowgraph()
+ui_graphwindow = graphWindow.Ui_MainWindowgraph()
 ui_graphwindow.setupUi(graphwindow)
 # AddFunction Window
 AddFunwindow = QtWidgets.QDialog()

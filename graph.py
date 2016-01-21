@@ -1,11 +1,10 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import pyqtSignal
-from mpl_toolkits.mplot3d import axes3d
+from PyQt5 import QtWidgets
 import matplotlib.pyplot as plt
-from matplotlib import cm
-import numpy as np
+
 #Partie concernant la sélection des donnees
+
 def graph_selector(current_row,ui_mainwindow,statusBar,network,ui_graphwindow):
+    ###Selon le type de courbe choisi,
     ui_mainwindow.lineEdit.blockSignals(True) #Pour éviter les interactions de la lineEdit pendant la selection
     if current_row==0:
         ui_mainwindow.indicator.setText("<html>Sélectionnez la liste des <b>abscisses</b></html>")
