@@ -79,7 +79,7 @@ def windowsave():  # to open the window save....
     fileWindow = QtWidgets.QFileDialog.getSaveFileName(MainWindow, 'Enregistrer', '', "(*.p)")
     address = fileWindow[0]  # faut mettre l'extension du format genre fichier.pyc ou fichier.xls dans la barre de saisie
     name=record.fileName(address)
-    record.writter_marshalling(network,name)
+    record.writter_marshalling(network,name,ui_mainwindow)
 
 
 def export():

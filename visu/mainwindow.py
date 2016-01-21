@@ -445,3 +445,8 @@ class Ui_MainWindow(QtWidgets.QWidget):
         self.functionButton.setText(_translate("MainWindow", "F"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
         self.menuFichier.setTitle(_translate("MainWindow", "Fichier"))
+
+    def rename(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        title = "Enacell" + " - " + "[" + MainWindow.network.title + "]"
+        MainWindow.setWindowTitle(_translate("MainWindow", title))
