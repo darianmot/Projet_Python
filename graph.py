@@ -127,7 +127,7 @@ def courbe(L, ui_graphwindow):
         print(L)
     else:
         for i in range(1,len(L)):
-            plt.plot(L[0],L[i])
+            plt.plot(L[0], L[i], 'o-')
     plt.ylabel(ui_graphwindow.lineEdit.text())
     plt.xlabel(ui_graphwindow.lineEdit_2.text())
     plt.title(ui_graphwindow.lineEdit_3.text())
