@@ -92,19 +92,19 @@ def ordonneesSelection(btnList, data, ui_mainwindow, statusBar, network, graphwi
 def color_chooser(combobox):
     color=combobox.currentText()
     if color=='rouge':
-        return 'red'
+        return 'r'
     elif color=='bleu':
-        return 'blue'
-    elif color=='orange':
-        return 'orange'
+        return 'b'
+    elif color=='cyan':
+        return 'c'
     elif color=='jaune':
-        return 'yellow'
+        return 'y'
     elif color=='noir':
-        return 'black'
+        return 'k'
     elif color=='violet':
-        return 'purple'
+        return 'm'
     else:
-        return 'green'
+        return 'g'
 
 def mainGraphFunction(L,ui_graphwindow,btn_List,statusBar, ui_mainwindow, network, A):
     ui_mainwindow.indicator.setText("")
@@ -123,7 +123,7 @@ def mainGraphFunction(L,ui_graphwindow,btn_List,statusBar, ui_mainwindow, networ
 def courbe(L, ui_graphwindow):
     if len(L)==2:
         color=color_chooser(ui_graphwindow.combobox)
-        plt.plot(L[0],L[1],color)
+        plt.plot(L[0],L[1], color+'o-')
         print(L)
     else:
         for i in range(1,len(L)):

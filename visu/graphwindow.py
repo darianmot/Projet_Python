@@ -71,7 +71,7 @@ class Ui_MainWindowgraph(QtWidgets.QWidget):
 
         #la combobox  pour la couleur
         self.combobox=QtWidgets.QComboBox()
-        self.combobox.addItems(['rouge','bleu','jaune','orange','violet','noir','vert'])
+        self.combobox.addItems(['rouge','bleu','jaune','cyan','violet','noir','vert'])
         self.gridLayout.addWidget(self.combobox, 5, 0, 1, 1)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
