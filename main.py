@@ -1,6 +1,6 @@
 __authors__ = "Darian MOTAMED, Hugo CHOULY, Atime RONDA,Anas DARWICH"
 import sys, visu.mainwindow as mainwindow, visu.funwindow as funWindow, visu.addfunwindow as addfunwindow, visu.quitwin as quitWindow,  \
-    graph as graphic
+    graph as graphic, visu.graphwindow as graphWindow
 import structures, cells_traitements.functions as functions, record
 import cells_traitements.tirette as tirette, cells_traitements.evaluation as evalutation
 import pickle
@@ -30,7 +30,7 @@ ui_funWinfow = funWindow.Ui_funwindow()
 ui_funWinfow.setupUi(Funwindow, knownFunctions)
 # graphwindow
 graphwindow = QtWidgets.QDialog()
-ui_graphwindow = graphic.Ui_MainWindowgraph()
+ui_graphwindow = graphWindow.Ui_MainWindowgraph()
 ui_graphwindow.setupUi(graphwindow)
 # AddFunction Window
 AddFunwindow = QtWidgets.QDialog()
@@ -75,12 +75,12 @@ def windowsave():  # to open the window save....
     fileWindow = QtWidgets.QFileDialog.getSaveFileName(MainWindow, 'Enregistrer', '', "(*.p)")
     address = fileWindow[0]  # faut mettre l'extension du format genre fichier.pyc ou fichier.xls dans la barre de saisie
     name=record.fileName(address)
-    record.writter_marshalling(network,name)
+    record.writter_marshalling(network,name,ui_mainwindow)
 
 
 def export():
     extension = "(*.xls *.csv)" if record.HASXLWT else "(*.csv)"
-    fileWindow = QtWidgets.QFileDialog.getSaveFileName(MainWindow, 'Enregistrer', '', extension)
+    fileWindow = QtWidgets.QFileDialog.getSaveFileName(MainWindow, 'Exporter', '', extension)
     address = fileWindow[0]
     record.extensionwritter(address, network, ui_mainwindow)
 
@@ -141,13 +141,9 @@ ui_addfunwindow.sendFunData.connect(functionAdded)
 ui_mainwindow.graph.triggered.connect(graphwindow.show)
 def draw_graph(current_row):
     graphic.graph_selector(current_row,ui_mainwindow,MainWindow.statusBar,network,ui_graphwindow)
-
-
-
-
-
-
 ui_graphwindow.okSignal.connect(draw_graph)
+
+
 MainWindow.showMaximized()
 splash.finish(MainWindow)
 sys.exit(app.exec_())
