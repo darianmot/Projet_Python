@@ -109,6 +109,7 @@ def color_chooser(combobox):
         return 'purple'
     else:
         return 'green'
+
 def mainGraphFunction(L,ui_graphwindow,btn_List,statusBar, ui_mainwindow, network, A):
     ui_mainwindow.indicator.setText("")
     ui_mainwindow.lineEdit.setText(network.getCell(ui_mainwindow.tableWidget.currentRow(),ui_mainwindow.tableWidget.currentColumn()).input)
@@ -119,17 +120,16 @@ def mainGraphFunction(L,ui_graphwindow,btn_List,statusBar, ui_mainwindow, networ
     for list in L:
         New_list.append([x.value for x in list])
     if A == 0:
-        courbe(New_list, ui_graphwindow, A)
+        courbe(New_list, ui_graphwindow)
     if A == 1:
         barDiagramme(New_list, ui_graphwindow)
 
-def courbe(L, ui_graphwindow, A):
+def courbe(L, ui_graphwindow):
     if len(L)==2:
         color=color_chooser(ui_graphwindow.combobox)
         plt.plot(L[0],L[1],color)
         print(L)
     else:
-
         for i in range(1,len(L)):
             plt.plot(L[0],L[i])
     plt.ylabel(ui_graphwindow.lineEdit.text())
@@ -195,9 +195,6 @@ class Ui_MainWindowgraph(QtWidgets.QWidget):
         self.camembert=QtWidgets.QListWidgetItem()
         self.listView.addItem(self.camembert)
         self.camembert.setText('camembert')
-        self.fonction_DD=QtWidgets.QListWidgetItem()
-        self.fonction_DD.setText('F(X,Y)')
-        self.listView.addItem(self.fonction_DD)
         self.listView.setCurrentRow(0)
 
 
@@ -300,6 +297,7 @@ class Ui_MainWindowgraph(QtWidgets.QWidget):
                 self.images.setPixmap(DD)
                 print('you chose a 2D representation')
         def quit():
+            print('closing')
             MainWindow.close()
 
         def okGraph():
