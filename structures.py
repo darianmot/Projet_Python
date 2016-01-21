@@ -79,6 +79,7 @@ class network(object): #On classe par coordonnées
         self.columnNumber=1
         self.rowNumber=1
         self.saved = False
+        self.title = "Nouvelle feuille"
 
     #Ajoute une ligne au network
     def addRow(self):
