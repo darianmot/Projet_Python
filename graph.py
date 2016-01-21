@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 #Partie concernant la sélection des donnees
 
 def graph_selector(current_row,ui_mainwindow,statusBar,network,ui_graphwindow):
-    ###Selon le type de courbe choisi,
     ui_mainwindow.lineEdit.blockSignals(True) #Pour éviter les interactions de la lineEdit pendant la selection
     if current_row==0:
         ui_mainwindow.indicator.setText("<html>Sélectionnez la liste des <b>abscisses</b></html>")
