@@ -35,6 +35,7 @@ def writter_xls(network, name):
             sheet.write(y, x, network.getCell(y, x).value)
     binder.save(content)  # save file
     print('file saved')
+    network.title = content
 
 
 def reader_xls(file, ui_mainwindow, network):
@@ -51,6 +52,7 @@ def reader_xls(file, ui_mainwindow, network):
             network.getCell(i, j).input = content
             network.getCell(i, j).value = None if content == "" else content
             ui_mainwindow.tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(content))
+    network.title = file
 
 
 def writter_csv(network, name):
@@ -60,6 +62,7 @@ def writter_csv(network, name):
         sheet.writerow([network.getCell(x, y).value for y in
                         range(0, len(network.matrix[x]))])  # writting of each row in comprehension
     print('saved')
+    network.title = content
 
 
 def reader_csv(file, ui_mainwindow, network):
@@ -71,6 +74,7 @@ def reader_csv(file, ui_mainwindow, network):
     f.seek(0)
     network.addRows(rows)
     network.addColumns(columns)
+    network.title = file
     ui_mainwindow.tableWidget.recalc(network)
     i = 0
     for row in sheet:
@@ -86,12 +90,14 @@ def reader_csv(file, ui_mainwindow, network):
 def writter_marshalling(network, name):
     pickle.dump(network.matrix, open('{}.p'.format(name), 'wb'))
     print('saved')
+    network.title = '{}.p'.format(name)
     network.saved=True
 
 
 def reader_marshalling(file, ui_mainwindow, network):
     network.subsitute(pickle.load(open(file, 'rb')))
     ui_mainwindow.tableWidget.recalc(network)
+    network.title = file
 
 
 def extensionreader(a, ui_mainwindow, network):  # permet la lecture
@@ -109,6 +115,8 @@ def extensionreader(a, ui_mainwindow, network):  # permet la lecture
             reader_marshalling(a, ui_mainwindow, network)
             print('it is a binary file')
         ui_mainwindow.indicator.setText("Ouvert")
+        ui_mainwindow.retranslate(ui_mainwindow.Mainwindow)
+        network.saved = True
     except IndexError:
         pass
     finally:
@@ -131,6 +139,7 @@ def extensionwritter(a, network, ui_mainwindow):  # permet la lecture
             print("Can't open this file")
         ui_mainwindow.indicator.setText("Exporté")
         network.saved = True
+        ui_mainwindow.retranslate(ui_mainwindow.Mainwindow)
     except IndexError:
         pass
     finally:

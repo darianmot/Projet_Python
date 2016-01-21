@@ -260,6 +260,10 @@ class MyTableWidget(QtWidgets.QTableWidget):
 
 
 class Ui_MainWindow(QtWidgets.QWidget):
+    def __init__(self):
+        super().__init__()
+        self.Mainwindow = None
+
     def setTable(self, network):
         self.tableWidget = MyTableWidget(self.centralwidget, network)
         self.tableWidget.setObjectName("tableWidget")
@@ -270,6 +274,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         # La fenetre
         MainWindow.setObjectName("MainWindow")
         MainWindow.network = network
+        self.Mainwindow = MainWindow
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
@@ -431,7 +436,8 @@ class Ui_MainWindow(QtWidgets.QWidget):
 
     def retranslate(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "EnaCell"))
+        title = "Enacell" + " - " + "[" + MainWindow.network.title + "]"
+        MainWindow.setWindowTitle(_translate("MainWindow", title))
         appIcon = QtGui.QIcon()
         appIcon.addPixmap(QtGui.QPixmap("visu/icons/appIcon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(appIcon)
