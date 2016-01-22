@@ -11,11 +11,11 @@ def graph_selector(current_row, ui_mainwindow, statusBar, network, ui_graphwindo
     statusBar().addWidget(btn_validate1)
     if current_row == 0:
         ui_mainwindow.indicator.setText("<html>Sélectionnez la liste des <b>abscisses</b></html>")
-    elif current_row == 1:
-        ui_mainwindow.indicator.setText("<html>Sélectionnez la liste des <b>labels</b></html>")
     elif current_row == 2:
         ui_mainwindow.indicator.setText("<html>Sélectionnez la liste des <b>labels</b></html>")
     elif current_row == 3:
+        ui_mainwindow.indicator.setText("<html>Sélectionnez la liste des <b>labels</b></html>")
+    elif current_row == 1:
         ui_mainwindow.indicator.setText("<html>Sélectionnez la liste des <b>abscisses</b></html>")
 
 def abscisseSelection(btn_validate1, ui_mainwindow, statusBar, network, graphwindow, current_row):
@@ -57,15 +57,17 @@ def ordonneesSelection(btnList, data, ui_mainwindow, statusBar, network, graphwi
             key = False
             break
     if key:
-        if current_row == 2:
+        if current_row == 3:
             values = []
             lab = []
             l = len(data[1])
             colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k']
             for i in range(l):
-                values.append(float(data[1][i].value))
+                if data[1][i].value != None:
+                    values.append(float(data[1][i].value) )
             for i in range(len(data[0])):
-                lab.append((data[0][i].value))
+                if data[0][i].value != None:
+                    lab.append((data[0][i].value))
             plt.pie(values, labels=lab, colors=colors)
             plt.axis('equal')
             plt.title(graphwindow.lineEdit_3.text())
@@ -116,9 +118,9 @@ def mainGraphFunction(L, ui_graphwindow, btn_List, statusBar, ui_mainwindow, net
         New_list.append([x.value for x in list if x.value != None])
     if selectedgraph == 0:
         courbe(New_list, ui_graphwindow)
-    if selectedgraph == 3:
-        nuage(New_list, ui_graphwindow)
     if selectedgraph == 1:
+        nuage(New_list, ui_graphwindow)
+    if selectedgraph == 2:
         barDiagramme(New_list, ui_graphwindow)
     plt.ylabel(ui_graphwindow.lineEdit.text())
     plt.xlabel(ui_graphwindow.lineEdit_2.text())
@@ -163,5 +165,3 @@ def barDiagramme(data, ui_graphwindow):
         x = [i + barWidth * k for i in x0]
         plt.bar(x, ordonnee[k], width=barWidth, color = couleur, linewidth = 1)
     plt.xticks([i + .5 / 2 for i in range(len(abscisse))], abscisse, rotation = 45)
-
-# Trace un diagramme en bâton
