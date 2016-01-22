@@ -28,15 +28,14 @@ class Ui_MainWindowgraph(QtWidgets.QWidget):
         self.listView = QtWidgets.QListWidget()
         self.listView.setObjectName("listView")
         self.courbe=QtWidgets.QListWidgetItem()
-        self.courbe.setText('courbe')
+        self.courbe.setText('Nuage de point lié')
         self.listView.addItem(self.courbe)
-
         self.histogramme=QtWidgets.QListWidgetItem()
         self.listView.addItem(self.histogramme)
-        self.histogramme.setText('histogramme')
+        self.histogramme.setText('Diagramme en bâton')
         self.camembert=QtWidgets.QListWidgetItem()
         self.listView.addItem(self.camembert)
-        self.camembert.setText('camembert')
+        self.camembert.setText('Diagramme circulaire')
         self.listView.setCurrentRow(0)
 
 

@@ -6,29 +6,15 @@ import matplotlib.pyplot as plt
 
 def graph_selector(current_row, ui_mainwindow, statusBar, network, ui_graphwindow):
     ui_mainwindow.lineEdit.blockSignals(True)  # Pour éviter les interactions de la lineEdit pendant la selection
+    btn_validate1 = QtWidgets.QPushButton("Valider")
+    btn_validate1.clicked.connect(lambda: abscisseSelection(btn_validate1, ui_mainwindow, statusBar, network, ui_graphwindow, current_row))
+    statusBar().addWidget(btn_validate1)
     if current_row == 0:
         ui_mainwindow.indicator.setText("<html>Sélectionnez la liste des <b>abscisses</b></html>")
-        btn_validate1 = QtWidgets.QPushButton("Valider")
-        btn_validate1.clicked.connect(
-            lambda: abscisseSelection(btn_validate1, ui_mainwindow, statusBar, network, ui_graphwindow, current_row))
-        statusBar().addWidget(btn_validate1)
-        print('vous avez choisi les courbes')
     elif current_row == 1:
-        print('vous avez choisi l histogramme')
         ui_mainwindow.indicator.setText("<html>Sélectionnez la liste des <b>labels</b></html>")
-        btn_validate1 = QtWidgets.QPushButton("Valider")
-        btn_validate1.clicked.connect(
-            lambda: abscisseSelection(btn_validate1, ui_mainwindow, statusBar, network, ui_graphwindow, current_row))
-        statusBar().addWidget(btn_validate1)
     elif current_row == 2:
-        print('vous avez choisi le diagramme circulaire')
         ui_mainwindow.indicator.setText("<html>Sélectionnez la liste des <b>labels</b></html>")
-        btn_validate1 = QtWidgets.QPushButton("Valider")
-        btn_validate1.clicked.connect(
-            lambda: abscisseSelection(btn_validate1, ui_mainwindow, statusBar, network, ui_graphwindow, current_row))
-        statusBar().addWidget(btn_validate1)
-    else:
-        pass
 
 
 def abscisseSelection(btn_validate1, ui_mainwindow, statusBar, network, graphwindow, current_row):
@@ -138,9 +124,6 @@ def courbe(L, ui_graphwindow):
     if len(L) == 2:
         color = color_chooser(ui_graphwindow.combobox)
         plt.plot(L[0], L[1], color + 'o-')
-        print(L)
-        L[0] = [value for value in L[0] if (value not in [None, ''])]
-        L[1] = [value for value in L[1] if (value not in [None, ''])]
     else:
         for i in range(1, len(L)):
             plt.plot(L[0], L[i], 'o-')
