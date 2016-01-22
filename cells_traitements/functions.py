@@ -14,7 +14,7 @@ class Function():
 
     def value(self, args):
         try:
-            return eval(self.output)
+            return eval(self.output.replace('args',str(args)))
         except IndexError:
             return '#Index Error'
         except Exception as e:

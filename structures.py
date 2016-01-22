@@ -1,4 +1,5 @@
 import visu.columns_labels as columns_labels, cells_traitements.decomposition as decomposition
+import re
 from PyQt5 import QtWidgets
 
 
@@ -82,7 +83,7 @@ class network(object):  # On classe par coordonnées
             self.addColumn()
 
     # Renvoie la celulle de coordonnées (x,y)
-    def getCell(self, x, y):  # Renvoi la cellule (x,y) si elle existe, 0 sinon
+    def getCell(self, x, y):  # Renvoi la cellule (x,y) si elle existe, sinon la cellule Cell(-1,-1) d'erreur
         if x < 0 or y < 0: return Cell(-1, -1)
         try:
             return self.matrix[x][y]
@@ -95,7 +96,9 @@ class network(object):  # On classe par coordonnées
         letters = ""
         numbers = ""
         k = 0
-        try:
+        if not decomposition.isCell(name):
+            raise decomposition.Error('Format de cellule non valide')
+        else:
             while len(numbers) == 0:
                 if name[k].isalpha():
                     letters += name[k]
@@ -105,10 +108,6 @@ class network(object):  # On classe par coordonnées
             while k < len(name):
                 numbers += name[k]
                 k += 1
-        except Exception as e:
-            raise decomposition.Error('Format de cellule non valide')
-        if len(letters) == 0 or len(numbers) == 0:
-            raise decomposition.Error('Format de cellule non valide')
         try:
             return self.getCell(int(numbers) - 1, columns_labels.getColumn(letters) - 1)
         except Exception:
@@ -131,6 +130,7 @@ class network(object):  # On classe par coordonnées
     def reset(self, initalRows, initalColumns):
         self.__init__()
         self.subsitute([[Cell(0, 0)]])
+        self.getCell(0,0).name = columns_labels.getLabel(self.labels, 0) + str(1)
         self.addColumns(initalColumns - 1)
         self.addRows(initalRows - 1)
 

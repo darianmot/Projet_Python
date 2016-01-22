@@ -143,9 +143,7 @@ class Ui_funwindow(QtWidgets.QWidget):
                 self.descriptiontext.setText((_translate("funwindow",
                                                          "<html><head/><body><b>Description : </b><i>{}</i></body></html>".format(
                                                              self.functions[k].description))))
-                self.expr.setText(_translate("funwindow",
-                                             "<html><head/><body><b>Renvoie : </b> {1}</body></html>".format(
-                                                 self.functions[k].name, self.functions[k].output)))
+                self.expr.setText(_translate("funwindow", str(self.functions[k].output)))
                 self.funName.show()
                 self.descriptiontext.show()
                 self.expr.show()
