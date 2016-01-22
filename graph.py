@@ -35,9 +35,7 @@ def abscisseSelection(btn_validate1, ui_mainwindow, statusBar, network, graphwin
         ui_mainwindow.indicator.setText("<html>Sélectionnez la liste des <b>ordonnées</b></html>")
         statusBar().removeWidget(btn_validate1)
         btn_validate = QtWidgets.QPushButton("Valider")
-        btn_validate.clicked.connect(
-            lambda: ordonneesSelection([btn_validate], data, ui_mainwindow, statusBar, network, graphwindow,
-                                       current_row))
+        btn_validate.clicked.connect(lambda: ordonneesSelection([btn_validate], data, ui_mainwindow, statusBar, network, graphwindow, current_row))
         statusBar().addWidget(btn_validate)
     statusBar().removeWidget(btn_validate1)
 
@@ -86,7 +84,7 @@ def ordonneesSelection(btnList, data, ui_mainwindow, statusBar, network, graphwi
                 lambda: mainGraphFunction(data, graphwindow, btnList, statusBar, ui_mainwindow, network, current_row))
 
 
-# Tracé des courbes.
+# Choix de la couleur
 def color_chooser(combobox):
     color = combobox.currentText()
     if color == 'rouge':
@@ -105,7 +103,8 @@ def color_chooser(combobox):
         return 'g'
 
 
-def mainGraphFunction(L, ui_graphwindow, btn_List, statusBar, ui_mainwindow, network, A):
+# Tracé du graphique selon les options selectionnées
+def mainGraphFunction(L, ui_graphwindow, btn_List, statusBar, ui_mainwindow, network, selectedgraph):
     ui_mainwindow.indicator.setText("")
     ui_mainwindow.lineEdit.setText(network.getCell(ui_mainwindow.tableWidget.currentRow(), ui_mainwindow.tableWidget.currentColumn()).input)
     ui_mainwindow.lineEdit.blockSignals(False)
@@ -114,26 +113,27 @@ def mainGraphFunction(L, ui_graphwindow, btn_List, statusBar, ui_mainwindow, net
     New_list = []
     for list in L:
         New_list.append([x.value for x in list if x.value != None])
-    if A == 0:
+    if selectedgraph == 0:
         courbe(New_list, ui_graphwindow)
-    if A == 1:
+    if selectedgraph == 1:
         barDiagramme(New_list, ui_graphwindow)
-
-
-def courbe(L, ui_graphwindow):
-    if len(L) == 2:
-        color = color_chooser(ui_graphwindow.combobox)
-        plt.plot(L[0], L[1], color + 'o-')
-    else:
-        for i in range(1, len(L)):
-            plt.plot(L[0], L[i], 'o-')
     plt.ylabel(ui_graphwindow.lineEdit.text())
     plt.xlabel(ui_graphwindow.lineEdit_2.text())
     plt.title(ui_graphwindow.lineEdit_3.text())
-    plt.grid()
     plt.show()
 
+# Trace un nuage de point liée
+def courbe(data, ui_graphwindow):
+    if len(data) == 2:
+        color = color_chooser(ui_graphwindow.combobox)
+        plt.plot(data[0], data[1], color + 'o-')
+    else:
+        for i in range(1, len(data)):
+            plt.plot(data[0], data[i], 'o-')
+    plt.grid()
 
+
+# Trace un diagramme en bâton
 def barDiagramme(data, ui_graphwindow):
     plt.clf()
     color = color_chooser(ui_graphwindow.combobox)
@@ -149,9 +149,7 @@ def barDiagramme(data, ui_graphwindow):
     for k in range(len(ordonnee)):
         couleur = colors[k % len(colors)]
         x = [i + barWidth * k for i in x0]
-        plt.bar(x, ordonnee[k], width=barWidth, color=couleur, linewidth=1)
-    plt.xticks([i + .5 / 2 for i in range(len(abscisse))], abscisse, rotation=45)
-    plt.ylabel(ui_graphwindow.lineEdit.text())
-    plt.xlabel(ui_graphwindow.lineEdit_2.text())
-    plt.title(ui_graphwindow.lineEdit_3.text())
-    plt.show()
+        plt.bar(x, ordonnee[k], width=barWidth, color = couleur, linewidth = 1)
+    plt.xticks([i + .5 / 2 for i in range(len(abscisse))], abscisse, rotation = 45)
+
+# Trace un diagramme en bâton
