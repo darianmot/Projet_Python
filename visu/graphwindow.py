@@ -49,7 +49,7 @@ class Ui_MainWindowgraph(QtWidgets.QWidget):
         #images graphique et layout
         self.images = QtWidgets.QLabel()
         self.images.setObjectName("graphicsView")
-        nuage=QtGui.QPixmap('/home/idarwich/Bureau/Projet_Python/visu/icons/approximation3.png')
+        nuage=QtGui.QPixmap('visu/icons/approximation3.png')
         self.images.setPixmap(nuage)
         self.horizontalLayout_5.addWidget(self.images)
         self.gridLayout.addLayout(self.horizontalLayout_5, 0, 0, 1, 2)
@@ -121,10 +121,10 @@ class Ui_MainWindowgraph(QtWidgets.QWidget):
         def image():
             A=self.listView.currentRow()
             print(A)
-            nuage_lié=QtGui.QPixmap('/home/idarwich/Bureau/Projet_Python/visu/icons/approximation3.png')
-            histogramme=QtGui.QPixmap('/home/idarwich/Bureau/Projet_Python/visu/icons/diagramme_baton.png')
-            camembert=QtGui.QPixmap('/home/idarwich/Bureau/Projet_Python/visu/icons/diagramme_circulaire.png')
-            nuage_non_lié=QtGui.QPixmap('/home/idarwich/Bureau/Projet_Python/visu/icons/nuage_non_lié.png')
+            nuage_lié=QtGui.QPixmap('visu/icons/approximation3.png')
+            histogramme=QtGui.QPixmap('visu/icons/diagramme_baton.png')
+            camembert=QtGui.QPixmap('visu/icons/diagramme_circulaire.png')
+            nuage_non_lié=QtGui.QPixmap('visu/icons/nuage_non_lié.png')
 
             A=self.listView.currentRow()
             if A==0:
