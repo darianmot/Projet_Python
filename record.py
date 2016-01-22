@@ -10,7 +10,7 @@ try:
     HASXLWT = True
 except ImportError:
     HASXLWT = False
-import csv, pickle, os, re,structures
+import csv, pickle, os, re
 from PyQt5 import QtWidgets
 
 
@@ -30,19 +30,19 @@ def etatXls(window):
 
 def writter_xls(network, name):
     content = name + '.xls'
-    binder = Workbook()  # creation of the binder
-    sheet = binder.add_sheet('page')  # creation of the sheet
-    for x in range(0, len(network.matrix[0])):  # writting of each cell
+    binder = Workbook()
+    sheet = binder.add_sheet('page')
+    for x in range(0, len(network.matrix[0])):
         for y in range(0, len(network.matrix)):
             sheet.write(y, x, network.getCell(y, x).value)
-    binder.save(content)  # save file
+    binder.save(content)
     print('file saved')
 
 
 def reader_xls(file, ui_mainwindow, network):
-    binder = xlrd.open_workbook(file)  # opening of the file as a binder
-    sheets = binder.sheet_names()  # listing of sheet names
-    sheet = binder.sheet_by_name(sheets[0])  # recovering of the i eme sheet
+    binder = xlrd.open_workbook(file)
+    sheets = binder.sheet_names()
+    sheet = binder.sheet_by_name(sheets[0])
     network.reset(1, 1)
     network.addRows(sheet.nrows - 1)
     network.addColumns(sheet.ncols - 1)
@@ -83,7 +83,6 @@ def reader_csv(file, ui_mainwindow, network):
             ui_mainwindow.tableWidget.setItem(i, j, QtWidgets.QTableWidgetItem(content))
         i += 1
     f.close()
-    print(network.getCellByName('B2').value)
     ui_mainwindow.indicator.setText("Ouvert")
 
 
