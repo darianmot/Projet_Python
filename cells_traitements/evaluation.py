@@ -97,12 +97,7 @@ def cellEvaluation(x, y, string, network, ui_mainwindow, knownFunctions):
                 for parentCell in cell.parent_cells:
                     if parentCell.name == cell.name:
                         raise decomposition.Error('Dépendance récursive de la celulle {}'.format(cell.name))
-                newValue = str(chainEvaluation(network, string[1:], knownFunctions, {}))
-            else:
-
-                newValue = string
-            if string[0] == '=':
-                cell.value = newValue
+                cell.value = str(chainEvaluation(network, string[1:], knownFunctions, {}))
             else:
                 cell.value = string
             try:
@@ -112,12 +107,14 @@ def cellEvaluation(x, y, string, network, ui_mainwindow, knownFunctions):
                     ui_mainwindow.tableWidget.return_value.emit(child.x, child.y, child.value)
             except decomposition.Error as e:
                 for child in tritopologique.childrenCellsRec(cell)[1:]:
+                    network.getCell(child.x, child.y).value = e.disp
                     ui_mainwindow.tableWidget.return_value.emit(child.x, child.y, e.disp)
             except tritopologique.CycleError:
                 raise decomposition.Error("Dépendance cyclique")
             ui_mainwindow.tableWidget.return_value.emit(x, y, str(cell.value))
         except decomposition.Error as e:
             for child in tritopologique.childrenCellsRec(cell):
+                network.getCell(child.x, child.y).value = e.disp
                 ui_mainwindow.tableWidget.return_value.emit(child.x, child.y, e.disp)
         t_end = time.time()
         print('Done : ({}s)'.format(t_end - t_init))

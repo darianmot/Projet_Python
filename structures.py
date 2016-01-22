@@ -1,18 +1,15 @@
 import visu.columns_labels as columns_labels, cells_traitements.decomposition as decomposition
-import re
-from PyQt5 import QtWidgets
 
-
-class Cell(object):  # caractéristiques et organisation d'une cellule
+# Représente une cellule du tableau
+class Cell(object):
     def __init__(self, x, y):
         self.x = x
         self.y = y
         self.input = ""
         self.value = None
-        self.name = None  # chaine de caractères
-        self.children_cells = []  # liste des cellules filles
+        self.name = None
+        self.children_cells = []
         self.parent_cells = []
-        self.chainDict = {}
 
     def getRow(self):
         return self.x
