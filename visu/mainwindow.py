@@ -234,8 +234,9 @@ class MyTableWidget(QtWidgets.QTableWidget):
 
      #Redessine la table pour un network donné
     def recalc(self, network):
-        self.clearContents()
+        self.resetTable()
         matrix = network.matrix
+
         for _ in range(self.columnCount(), len(matrix[0])):
             self.insertColumn(self.columnCount())
             item = QtWidgets.QTableWidgetItem()
@@ -432,7 +433,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
 
     def retranslate(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        title = "Enacell" + " - " + "[" + MainWindow.network.title + "]"
+        title = "EnaCell" + " - " + "[" + MainWindow.network.title + "]"
         MainWindow.setWindowTitle(_translate("MainWindow", title))
         appIcon = QtGui.QIcon()
         appIcon.addPixmap(QtGui.QPixmap("visu/icons/appIcon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)

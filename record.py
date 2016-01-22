@@ -10,7 +10,7 @@ try:
     HASXLWT = True
 except ImportError:
     HASXLWT = False
-import csv, pickle, os, re
+import csv, pickle, os, re,structures
 from PyQt5 import QtWidgets
 
 

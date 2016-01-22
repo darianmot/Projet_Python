@@ -123,8 +123,10 @@ class network(object):  # On classe par coordonnées
             for cell in cellList:
                 self.getCellByName(cell.name).value = '#Error : cycle'
 
-    def subsitute(self, matrix):
-        self.matrix = matrix
+    def subsitute(self, newmatrix):
+        self.matrix = newmatrix
+        self.rowNumber = len(newmatrix)
+        self.columnNumber = len(newmatrix[0])
 
     def reset(self, initalRows, initalColumns):
         self.__init__()
