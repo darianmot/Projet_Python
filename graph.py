@@ -15,7 +15,8 @@ def graph_selector(current_row, ui_mainwindow, statusBar, network, ui_graphwindo
         ui_mainwindow.indicator.setText("<html>Sélectionnez la liste des <b>labels</b></html>")
     elif current_row == 2:
         ui_mainwindow.indicator.setText("<html>Sélectionnez la liste des <b>labels</b></html>")
-
+    elif current_row == 3:
+        ui_mainwindow.indicator.setText("<html>Sélectionnez la liste des <b>abscisses</b></html>")
 
 def abscisseSelection(btn_validate1, ui_mainwindow, statusBar, network, graphwindow, current_row):
     data = []
@@ -115,6 +116,8 @@ def mainGraphFunction(L, ui_graphwindow, btn_List, statusBar, ui_mainwindow, net
         New_list.append([x.value for x in list if x.value != None])
     if selectedgraph == 0:
         courbe(New_list, ui_graphwindow)
+    if selectedgraph == 3:
+        nuage(New_list, ui_graphwindow)
     if selectedgraph == 1:
         barDiagramme(New_list, ui_graphwindow)
     plt.ylabel(ui_graphwindow.lineEdit.text())
@@ -122,7 +125,7 @@ def mainGraphFunction(L, ui_graphwindow, btn_List, statusBar, ui_mainwindow, net
     plt.title(ui_graphwindow.lineEdit_3.text())
     plt.show()
 
-# Trace un nuage de point liée
+# Trace un nuage de point lié
 def courbe(data, ui_graphwindow):
     if len(data) == 2:
         color = color_chooser(ui_graphwindow.combobox)
@@ -132,6 +135,15 @@ def courbe(data, ui_graphwindow):
             plt.plot(data[0], data[i], 'o-')
     plt.grid()
 
+#Trace un nuage de point
+def nuage(data, ui_graphwindow):
+    if len(data) == 2:
+        color = color_chooser(ui_graphwindow.combobox)
+        plt.plot(data[0], data[1], color + 'o')
+    else:
+        for i in range(1, len(data)):
+            plt.plot(data[0], data[i], 'o')
+    plt.grid()
 
 # Trace un diagramme en bâton
 def barDiagramme(data, ui_graphwindow):

@@ -36,6 +36,9 @@ class Ui_MainWindowgraph(QtWidgets.QWidget):
         self.camembert=QtWidgets.QListWidgetItem()
         self.listView.addItem(self.camembert)
         self.camembert.setText('Diagramme circulaire')
+        self.nuage=QtWidgets.QListWidgetItem()
+        self.nuage.setText('Nuage de point')
+        self.listView.addItem(self.nuage)
         self.listView.setCurrentRow(0)
 
 
