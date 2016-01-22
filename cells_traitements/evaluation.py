@@ -39,7 +39,7 @@ def chainEvaluation(network, chaine, knownFunctions, stringDict):
         raise decomposition.Error(str(e))
 
 
-# Renvoie l'évaluation d'une fonction en position k dans une liste d'element
+# Renvoie l'évaluation d'une fonction en position k dans une liste d'element.
 def eval_function(network, elementList, elementType, k, knownFunctions):
     element = elementList[k]
     if element not in knownFunctions.dict:  # Si la fonction n'est pas connue, on renvoie une erreur
