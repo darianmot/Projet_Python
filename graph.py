@@ -63,11 +63,11 @@ def ordonneesSelection(btnList, data, ui_mainwindow, statusBar, network, graphwi
             l = len(data[1])
             colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k']
             for i in range(l):
-                if data[1][i].value != None:
+                if data[1][i].value is not None:
                     values.append(float(data[1][i].value) )
             for i in range(len(data[0])):
-                if data[0][i].value != None:
-                    lab.append((data[0][i].value))
+                if data[0][i].value is not None:
+                    lab.append(data[0][i].value)
             plt.pie(values, labels = lab, colors = colors)
             plt.axis('equal')
             plt.title(graphwindow.lineEdit_3.text())
@@ -116,7 +116,7 @@ def mainGraphFunction(L, ui_graphwindow, btn_List, statusBar, ui_mainwindow, net
         statusBar().removeWidget(btn)
     New_list = []
     for list in L:
-        New_list.append([x.value for x in list if x.value != None])
+        New_list.append([x.value for x in list if x.value is not None])
     if selectedgraph == 0:
         courbe(New_list, ui_graphwindow)
     if selectedgraph == 1:

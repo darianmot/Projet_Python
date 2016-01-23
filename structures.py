@@ -1,4 +1,6 @@
-import visu.columns_labels as columns_labels, cells_traitements.decomposition as decomposition
+import cells_traitements.decomposition as decomposition
+import visu.columns_labels as columns_labels
+
 
 # Représente une cellule du tableau
 class Cell(object):
@@ -25,7 +27,7 @@ class Cell(object):
         try:
             self.children_cells.remove(cell)
         except:
-            pass
+            print('Can not remove {}'.format(cell))
 
     def updateParents(self, network):
         newparents = decomposition.parentCells(network, self.input)
@@ -37,7 +39,7 @@ class Cell(object):
         self.parent_cells = newparents
 
     def __repr__(self):
-        if self.children_cells == []:
+        if not self.children_cells:
             return '{0}({1},{2})'.format(self.name, self.x, self.y)
         else:
             return '{0}({1},{2}):{3}'.format(self.name, self.x, self.y, self.children_cells)

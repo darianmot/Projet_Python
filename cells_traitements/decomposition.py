@@ -19,7 +19,7 @@ class Error(Exception):
 
 # Permet de savoir si la chaine match le patern
 def matchpattern(chaine, patern):
-    return not patern.match(chaine) == None
+    return not patern.match(chaine) is None
 
 
 # Renvoie True si l'entrée correspond à une celulle du type A1, $A1, A$1 ou $A$1

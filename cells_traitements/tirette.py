@@ -46,7 +46,7 @@ def formuleExpanse(cells_selected, network, ui_mainwindow):
             pass
         elif input[0] != '=':
             for i in range(r0 + 1, cells_selected.bottomRow() + 1):
-                if ui_mainwindow.tableWidget.item(i, column) == None:
+                if ui_mainwindow.tableWidget.item(i, column) is None:
                     ui_mainwindow.tableWidget.setItem(i, column, QtWidgets.QTableWidgetItem())
                 ui_mainwindow.tableWidget.read_input.emit(i, column, input)
         else:
@@ -54,7 +54,7 @@ def formuleExpanse(cells_selected, network, ui_mainwindow):
             for i in range(r0 + 1, cells_selected.bottomRow() + 1):
                 rows = i - r0
                 newinput = verticalPull(decomposition0, rows)
-                if ui_mainwindow.tableWidget.item(i, column) == None:
+                if ui_mainwindow.tableWidget.item(i, column) is None:
                     ui_mainwindow.tableWidget.setItem(i, column, QtWidgets.QTableWidgetItem())
                 ui_mainwindow.tableWidget.read_input.emit(i, column, newinput)
     elif cells_selected.topRow() == cells_selected.bottomRow():
@@ -65,7 +65,7 @@ def formuleExpanse(cells_selected, network, ui_mainwindow):
             pass
         elif input[0] != '=':
             for i in range(c0 + 1, cells_selected.rightColumn() + 1):
-                if ui_mainwindow.tableWidget.item(row, i) == None:
+                if ui_mainwindow.tableWidget.item(row, i) is None:
                     ui_mainwindow.tableWidget.setItem(row, i, QtWidgets.QTableWidgetItem())
                 ui_mainwindow.tableWidget.read_input.emit(row, i, input)
         else:
@@ -73,7 +73,7 @@ def formuleExpanse(cells_selected, network, ui_mainwindow):
             for i in range(c0 + 1, cells_selected.rightColumn() + 1):
                 columns = i - c0
                 newinput = horizontalPull(decomposition0, columns, ui_mainwindow.tableWidget.columnsLabels)
-                if ui_mainwindow.tableWidget.item(row, i) == None:
+                if ui_mainwindow.tableWidget.item(row, i) is None:
                     ui_mainwindow.tableWidget.setItem(row, i, QtWidgets.QTableWidgetItem())
                 ui_mainwindow.tableWidget.read_input.emit(row, i, newinput)
 

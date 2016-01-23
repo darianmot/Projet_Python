@@ -426,7 +426,7 @@ class Ui_MainWindow(QtWidgets.QWidget):
         def cellDoubleClicked():
             x = self.tableWidget.currentRow()
             y = self.tableWidget.currentColumn()
-            if self.tableWidget.item(x, y) != None:
+            if self.tableWidget.item(x, y) is not None:
                 self.tableWidget.item(x, y).setText(network.getCell(x, y).input)
 
         self.tableWidget.doubleClicked.connect(cellDoubleClicked)
