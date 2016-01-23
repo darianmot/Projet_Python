@@ -1,3 +1,5 @@
+""" Module qui gère les labels des colonnes """
+
 import string
 
 ALPHABET = string.ascii_uppercase
@@ -13,14 +15,15 @@ def add(labels, n):  # Ajoute n labels a la liste labels
         labels.append(label)
 
 
-def generate(n):  # Genere une liste de n labels
+# Genere une liste des n premiers labels
+def generate(n):
     l = []
     add(l, n)
     return l
 
 
-def getLabel(labels,
-             c):  # Renvoie le label de la colonne c à partir de la liste de labels déja crées pour minimiser les calculs
+ # Renvoie le label de la colonne c à partir de la liste de labels déja crées pour minimiser les calculs
+def getLabel(labels, c):
     try:
         return labels[c - 1]
     except IndexError:
@@ -28,7 +31,8 @@ def getLabel(labels,
         return labels[c - 1]
 
 
-def getColumn(n):  # Renvoie le numero de colonne ayant pour label n
+# Renvoie le numero de colonne ayant pour label n
+def getColumn(n):
     if len(n) == 0:
         return 0
     if len(n) == 1:

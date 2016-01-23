@@ -1,4 +1,4 @@
-import visu.columns_labels as columns_labels, cells_traitements.functions as functions, copy, re
+import visu.columns_labels as columns_labels, re
 
 OPERATEUR_MATH = ['+', '-', '*', '/', '//', '**']
 OPERATEUR_LOG = ['<', '>', '==', '<=', '>=', '!=']

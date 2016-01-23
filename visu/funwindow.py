@@ -50,10 +50,17 @@ class Ui_funwindow(QtWidgets.QWidget):
         self.frameLayout.addWidget(self.descriptiontext)
 
         # L'exrpression de la fonction
+        self.returnLabel = QtWidgets.QLabel()
+        self.returnLabel.setObjectName("expr")
         self.expr = QtWidgets.QLabel()
         self.expr.setObjectName("expr")
-        self.expr.setWordWrap(True)
-        self.frameLayout.addWidget(self.expr)
+        self.exprLayout = QtWidgets.QHBoxLayout()
+        self.exprLayout.addWidget(self.returnLabel)
+        self.exprLayout.addWidget(self.expr)
+        spacerItem = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.exprLayout.addSpacerItem(spacerItem)
+
+        self.frameLayout.addLayout(self.exprLayout)
 
         # Organisation des layout dans le cadre droit
         self.frameLayout.addStretch()
@@ -143,14 +150,17 @@ class Ui_funwindow(QtWidgets.QWidget):
                 self.descriptiontext.setText((_translate("funwindow",
                                                          "<html><head/><body><b>Description : </b><i>{}</i></body></html>".format(
                                                              self.functions[k].description))))
+                self.returnLabel.setText((_translate("funwindow", "<html><b>Return :</b></html>")))
                 self.expr.setText(_translate("funwindow", str(self.functions[k].output)))
                 self.funName.show()
                 self.descriptiontext.show()
+                self.returnLabel.show()
                 self.expr.show()
             except IndexError:
                 self.funName.setText(_translate("funwindow",
                                                 "<html><head/><body><h2><p align=\"center\"><b><i>No functions<i/><b/></h2></p></body></html>"))
                 self.descriptiontext.clear()
+                self.returnLabel.hide()
                 self.expr.hide()
 
         self.listFun.itemSelectionChanged.connect(funSelected)

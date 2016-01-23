@@ -1,3 +1,5 @@
+""" Module concernant les actions de la tirette """
+
 import cells_traitements.decomposition as decomposition
 import visu.columns_labels as columns_labels
 import copy

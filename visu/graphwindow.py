@@ -28,14 +28,14 @@ class Ui_MainWindowgraph(QtWidgets.QWidget):
         self.listView = QtWidgets.QListWidget()
         self.listView.setObjectName("listView")
         self.courbe=QtWidgets.QListWidgetItem()
-        self.courbe.setText('Nuage de point lié')
+        self.courbe.setText('Nuage de points liés')
         self.listView.addItem(self.courbe)
         self.nuage=QtWidgets.QListWidgetItem()
-        self.nuage.setText('Nuage de point')
+        self.nuage.setText('Nuage de points')
         self.listView.addItem(self.nuage)
         self.histogramme=QtWidgets.QListWidgetItem()
         self.listView.addItem(self.histogramme)
-        self.histogramme.setText('Diagramme en bâton')
+        self.histogramme.setText('Diagramme en bâtons')
         self.camembert=QtWidgets.QListWidgetItem()
         self.listView.addItem(self.camembert)
         self.camembert.setText('Diagramme circulaire')
@@ -135,9 +135,11 @@ class Ui_MainWindowgraph(QtWidgets.QWidget):
                 self.images.setPixmap(histogramme)
             elif A==3:
                 self.images.setPixmap(camembert)
+
+
         def quit():
-            print('closing')
             MainWindow.close()
+
 
         def okGraph():
             self.okSignal.emit(self.listView.currentRow())

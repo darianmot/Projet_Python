@@ -68,7 +68,7 @@ def ordonneesSelection(btnList, data, ui_mainwindow, statusBar, network, graphwi
             for i in range(len(data[0])):
                 if data[0][i].value != None:
                     lab.append((data[0][i].value))
-            plt.pie(values, labels=lab, colors=colors)
+            plt.pie(values, labels = lab, colors = colors)
             plt.axis('equal')
             plt.title(graphwindow.lineEdit_3.text())
             plt.show()
@@ -108,6 +108,7 @@ def color_chooser(combobox):
 
 # Tracé du graphique selon les options selectionnées
 def mainGraphFunction(L, ui_graphwindow, btn_List, statusBar, ui_mainwindow, network, selectedgraph):
+    plt.interactive(True)
     ui_mainwindow.indicator.setText("")
     ui_mainwindow.lineEdit.setText(network.getCell(ui_mainwindow.tableWidget.currentRow(), ui_mainwindow.tableWidget.currentColumn()).input)
     ui_mainwindow.lineEdit.blockSignals(False)
@@ -127,7 +128,7 @@ def mainGraphFunction(L, ui_graphwindow, btn_List, statusBar, ui_mainwindow, net
     plt.title(ui_graphwindow.lineEdit_3.text())
     plt.show()
 
-# Trace un nuage de point lié
+# Trace un nuage de points liés
 def courbe(data, ui_graphwindow):
     if len(data) == 2:
         color = color_chooser(ui_graphwindow.combobox)
