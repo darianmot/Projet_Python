@@ -43,7 +43,9 @@ def reader_xls(file, ui_mainwindow, network):
     binder = xlrd.open_workbook(file)
     sheets = binder.sheet_names()
     sheet = binder.sheet_by_name(sheets[0])
-    network.reset(ui_mainwindow.tableWidget.initialRowsNumber, ui_mainwindow.tableWidget.initialColumnsNumber)
+    row = max(ui_mainwindow.tableWidget.initialRowsNumber, sheet.nrows)
+    column =  max(ui_mainwindow.tableWidget.initialColumnsNumber, sheet.ncols)
+    network.reset(row, column)
     ui_mainwindow.tableWidget.recalc(network)
     for i in range(sheet.nrows):
         for j in range(sheet.ncols):
@@ -69,7 +71,9 @@ def reader_csv(file, ui_mainwindow, network):
     f.seek(0)
     columns = len(next(sheet))
     f.seek(0)
-    network.reset(rows, columns)
+    row = max(ui_mainwindow.tableWidget.initialRowsNumber, rows)
+    column =  max(ui_mainwindow.tableWidget.initialColumnsNumber, columns)
+    network.reset(row, column)
     ui_mainwindow.tableWidget.recalc(network)
     i = 0
     for row in sheet:
