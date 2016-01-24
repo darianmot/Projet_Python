@@ -23,6 +23,7 @@ def abscisseSelection(btn_validate1, ui_mainwindow, statusBar, network, graphwin
     abscisse = []
     for item in ui_mainwindow.tableWidget.selectedItems():
         abscisse.append(network.getCell(item.row(), item.column()))
+        print(item.row(), item.column())
     data.append(abscisse)
     key = True
     for i in range(1, len(abscisse)):

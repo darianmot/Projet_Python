@@ -236,7 +236,6 @@ class MyTableWidget(QtWidgets.QTableWidget):
     def recalc(self, network):
         self.resetTable()
         matrix = network.matrix
-
         for _ in range(self.columnCount(), len(matrix[0])):
             self.insertColumn(self.columnCount())
             item = QtWidgets.QTableWidgetItem()

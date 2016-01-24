@@ -132,6 +132,8 @@ class network(object):  # On classe par coordonnées
         self.getCell(0,0).name = columns_labels.getLabel(self.labels, 0) + str(1)
         self.addColumns(initalColumns - 1)
         self.addRows(initalRows - 1)
+        self.columnNumber = initalColumns
+        self.rowNumber = initalRows
 
     def __repr__(self):
         return str(self.matrix)

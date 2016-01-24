@@ -43,9 +43,7 @@ def reader_xls(file, ui_mainwindow, network):
     binder = xlrd.open_workbook(file)
     sheets = binder.sheet_names()
     sheet = binder.sheet_by_name(sheets[0])
-    network.reset(1, 1)
-    network.addRows(sheet.nrows - 1)
-    network.addColumns(sheet.ncols - 1)
+    network.reset(ui_mainwindow.tableWidget.initialRowsNumber, ui_mainwindow.tableWidget.initialColumnsNumber)
     ui_mainwindow.tableWidget.recalc(network)
     for i in range(sheet.nrows):
         for j in range(sheet.ncols):
