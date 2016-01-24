@@ -1,4 +1,3 @@
-__authors__ = "Darian MOTAMED, Hugo CHOULY, Atime RONDA, Anas DARWICH"
 import sys, visu.mainwindow as mainwindow, visu.funwindow as funWindow, visu.addfunwindow as addfunwindow, \
     visu.quitwin as quitWindow, \
     graph as graphic, visu.graphwindow as graphWindow
