@@ -113,6 +113,7 @@ def reset_table():
 def quit_enacell():
     if ui_mainwindow.tableWidget.network.saved:
         MainWindow.close()
+        graphwindow.close()
     else:
         Quitwindow.show()
 

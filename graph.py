@@ -108,7 +108,6 @@ def color_chooser(combobox):
 
 # Tracé du graphique selon les options selectionnées
 def mainGraphFunction(L, ui_graphwindow, btn_List, statusBar, ui_mainwindow, network, selectedgraph):
-    plt.interactive(True)
     ui_mainwindow.indicator.setText("")
     ui_mainwindow.lineEdit.setText(network.getCell(ui_mainwindow.tableWidget.currentRow(), ui_mainwindow.tableWidget.currentColumn()).input)
     ui_mainwindow.lineEdit.blockSignals(False)
