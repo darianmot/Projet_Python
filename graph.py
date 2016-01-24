@@ -33,6 +33,7 @@ def abscisseSelection(btn_validate1, ui_mainwindow, statusBar, network, graphwin
             ui_mainwindow.indicator.setText("Erreur: veuillez selectionner une seule ligne ou colonne")
             key = False
             break
+
     if key:
         ui_mainwindow.indicator.setText("<html>Sélectionnez la liste des <b>ordonnées</b></html>")
         statusBar().removeWidget(btn_validate1)
