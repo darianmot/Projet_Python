@@ -113,9 +113,8 @@ def cellEvaluation(x, y, string, network, ui_mainwindow, knownFunctions):
                 raise decomposition.Error("Dépendance cyclique")
             ui_mainwindow.tableWidget.return_value.emit(x, y, str(cell.value))
         except decomposition.Error as e:
-            for child in tritopologique.childrenCellsRec(cell):
-                network.getCell(child.x, child.y).value = e.disp
-                ui_mainwindow.tableWidget.return_value.emit(child.x, child.y, e.disp)
+            cell.value = e.disp
+            ui_mainwindow.tableWidget.return_value.emit(x, y, e.disp)
         t_end = time.time()
         print('Done : ({}s)'.format(t_end - t_init))
         ui_mainwindow.indicator.setText(ui_mainwindow.indicator.text() + 'Done : ({}s)'.format(t_end - t_init))
