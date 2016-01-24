@@ -163,7 +163,10 @@ def parentCells(network, chaine):
         return []
     else:
         (elementList, elementType) = decompo(chaine)
-        doublePoint(elementList, elementType, network)
+        try:
+            doublePoint(elementList, elementType, network)
+        except Error as e:
+            raise Error(e.reason)
         l = []
         for k in range(len(elementList)):
             if elementType[k] == 'cell':

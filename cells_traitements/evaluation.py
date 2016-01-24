@@ -86,13 +86,13 @@ def eval_function(network, elementList, elementType, k, knownFunctions):
 def cellEvaluation(x, y, string, network, ui_mainwindow, knownFunctions):
     cell = network.getCell(x, y)
     cell.input = string
-    cell.updateParents(network)
     t_init = time.time()
     if len(string) > 0:
         print('Evaluation de {0} et de ses cellules filles ... '.format(cell.name, len(cell.children_cells)), end='')
         ui_mainwindow.indicator.setText(
                 'Evaluation de {0} et de ses cellules filles ... '.format(cell.name, len(cell.children_cells)))
         try:
+            cell.updateParents(network)
             if string[0] == '=':
                 for parentCell in cell.parent_cells:
                     if parentCell.name == cell.name:
@@ -119,6 +119,7 @@ def cellEvaluation(x, y, string, network, ui_mainwindow, knownFunctions):
         print('Done : ({}s)'.format(t_end - t_init))
         ui_mainwindow.indicator.setText(ui_mainwindow.indicator.text() + 'Done : ({}s)'.format(t_end - t_init))
     else:
+        cell.updateParents(network)
         cell.value = None
         ui_mainwindow.tableWidget.takeItem(x, y)
         order = tritopologique.evalOrder(cell)
